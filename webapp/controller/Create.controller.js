@@ -2,10 +2,12 @@ sap.ui.define([
 "sap/ui/core/mvc/Controller",
 "sap/ui/core/routing/History",
 "sap/m/MessageBox",
-"sap/m/MessageToast"
-], (Controller, History, MessageBox, MessageToast) => {
+"sap/m/MessageToast",
+"schedaricognizione/model/formatter"
+], (Controller, History, MessageBox, MessageToast, formatter) => {
 "use strict";
 return Controller.extend("schedaricognizione.controller.Create", {
+formatter: formatter,
 onInit: function() {
 var oModel = this.getOwnerComponent().getModel("scheme");
 var oOAModel = this.getOwnerComponent().getModel("oa");
@@ -28,36 +30,28 @@ onSelectAllOA: function() {
 var oTable = this.getView().byId("tableOA");
 var aItems = oTable.getItems();
 aItems.forEach(function(oItem) {
-oItem.getCells()[0].setSelected(true);
+var aSelectedIndices = oTable.getSelectedIndices();
+oTable.selectAll();
 });
 },
 onDeselectAllOA: function() {
 var oTable = this.getView().byId("tableOA");
-var aItems = oTable.getItems();
-aItems.forEach(function(oItem) {
-oItem.getCells()[0].setSelected(false);
-});
+oTable.clearSelection();
 },
 onRemoveOA: function() {
 var oTable = this.getView().byId("tableOA");
-var aItems = oTable.getItems();
-var aToRemove = [];
-aItems.forEach(function(oItem) {
-if (oItem.getCells()[0].getSelected()) {
-aToRemove.push(oItem.getBindingContext("oa").getPath());
-}
-});
-if (aToRemove.length === 0) {
+var aSelectedIndices = oTable.getSelectedIndices();
+if (aSelectedIndices.length === 0) {
 MessageToast.show("Selezionare almeno una riga");
 return;
 }
 var oModel = this.getView().getModel("oa");
 var aData = oModel.getData();
-aToRemove.reverse().forEach(function(sPath) {
-var iIndex = parseInt(sPath.split("/")[1]);
+aSelectedIndices.reverse().forEach(function(iIndex) {
 aData.splice(iIndex, 1);
 });
 oModel.refresh(true);
+oTable.clearSelection();
 },
 onSave: function() {
 var oModel = this.getView().getModel("scheme");
