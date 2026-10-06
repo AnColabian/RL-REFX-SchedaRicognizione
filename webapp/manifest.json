@@ -51,6 +51,14 @@
         "settings": {
           "bundleName": "schedaricognizione.i18n.i18n"
         }
+      },
+      "scheme": {
+        "type": "sap.ui.model.json.JSONModel",
+        "preload": true
+      },
+      "oa": {
+        "type": "sap.ui.model.json.JSONModel",
+        "preload": true
       }
     },
     "resources": {
@@ -74,17 +82,61 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
+          "name": "RouteMain",
+          "pattern": "",
           "target": [
-            "TargetView1"
+            "TargetMain"
+          ]
+        },
+        {
+          "name": "RouteCreate",
+          "pattern": "create",
+          "target": [
+            "TargetCreate"
+          ]
+        },
+        {
+          "name": "RouteTemplate",
+          "pattern": "template/{idscheda}",
+          "target": [
+            "TargetTemplate"
+          ]
+        },
+        {
+          "name": "RouteEdit",
+          "pattern": "edit",
+          "target": [
+            "TargetEdit"
+          ]
+        },
+        {
+          "name": "RouteView",
+          "pattern": "view",
+          "target": [
+            "TargetView"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
+        "TargetMain": {
+          "id": "Main",
+          "name": "Main"
+        },
+        "TargetCreate": {
+          "id": "Create",
+          "name": "Create"
+        },
+        "TargetTemplate": {
+          "id": "Template",
+          "name": "Template"
+        },
+        "TargetEdit": {
+          "id": "Edit",
+          "name": "Edit"
+        },
+        "TargetView": {
+          "id": "View",
+          "name": "View"
         }
       }
     },
