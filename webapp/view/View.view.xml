@@ -1,0 +1,246 @@
+<mvc:View controllerName="schedaricognizione.controller.View" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m">
+<Page id="pageView" title="{i18n>appTitle}" showNavButton="true" navButtonPress=".onNavBack">
+<content>
+<ScrollContainer vertical="true" horizontal="false" focusable="false">
+<VBox class="sapUiMediumMargin">
+<Panel id="panelIdenti" expandable="true" expanded="true" headerText="{i18n>sectionIdenti}" class="sapUiSmallMarginBottom">
+<content>
+<f:SimpleForm editable="false" layout="ResponsiveGridLayout">
+<f:content>
+<Label text="{i18n>lblIdScheda}"/>
+<Text text="{scheme>idscheda}"/>
+<Label text="{i18n>lblStato}"/>
+<Text text="{scheme>stato}"/>
+<Label text="{i18n>lblIdSchedaModello}"/>
+<Text text="{scheme>idsc_mdl}"/>
+<Label text="{i18n>lblDtcomp}"/>
+<Text text="{scheme>dtcomp}"/>
+<Label text="{i18n>lblErnam}"/>
+<Text text="{scheme>ernam}"/>
+<Label text="{i18n>lblErdat}"/>
+<Text text="{scheme>erdat}"/>
+<Label text="{i18n>lblErzet}"/>
+<Text text="{scheme>erzet}"/>
+<Label text="{i18n>lblAenam}"/>
+<Text text="{scheme>aenam}"/>
+<Label text="{i18n>lblAedat}"/>
+<Text text="{scheme>aedat}"/>
+<Label text="{i18n>lblAezet}"/>
+<Text text="{scheme>aezet}"/>
+</f:content>
+</f:SimpleForm>
+</content>
+</Panel>
+<Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOA}" class="sapUiSmallMarginBottom">
+<content>
+<Table id="tableOA" items="{oa>/}" class="sapUiSmallMargin">
+<columns>
+<Column>
+<header>
+<Text text="{i18n>lblBukrs}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblSwenr}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblSgrnr}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblSgenr}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblAoid}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblZztpca}"/>
+</header>
+</Column>
+<Column>
+<header>
+<Text text="{i18n>lblZzfogl}"/>
+</header>
+</Column>
+</columns>
+<items>
+<ColumnListItem>
+<cells>
+<Text text="{oa>bukrs}"/>
+<Text text="{oa>swenr}"/>
+<Text text="{oa>sgrnr}"/>
+<Text text="{oa>sgenr}"/>
+<Text text="{oa>aoid}"/>
+<Text text="{oa>zztpca}"/>
+<Text text="{oa>zzfogl}"/>
+</cells>
+</ColumnListItem>
+</items>
+</Table>
+</content>
+</Panel>
+<Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestata}" class="sapUiSmallMarginBottom">
+<content>
+<f:SimpleForm editable="false" layout="ResponsiveGridLayout">
+<f:content>
+<Label text="{i18n>lblDocval}"/>
+<Text text="{scheme>docval}"/>
+<Label text="{i18n>lblIdbene}"/>
+<Text text="{scheme>idbene}"/>
+<Label text="{i18n>lblEnteprop}"/>
+<Text text="{scheme>entepr}"/>
+<Label text="{i18n>lblTxbene}"/>
+<Text text="{scheme>txbene}"/>
+<Label text="{i18n>lblCoogis}"/>
+<Text text="{scheme>coogis}"/>
+<Label text="{i18n>lblFabter}"/>
+<Text text="{scheme>fabter}"/>
+<Label text="{i18n>lblUsofab}"/>
+<Text text="{scheme>usofab}"/>
+<Label text="{i18n>lblUsoter}"/>
+<Text text="{scheme>usoter}"/>
+<Label text="{i18n>lblSuplut}"/>
+<Text text="{scheme>suplut}"/>
+<Label text="{i18n>lblSupfon}"/>
+<Text text="{scheme>supfon}"/>
+<Label text="{i18n>lblAccess}"/>
+<Text text="{scheme>access}"/>
+<Label text="{i18n>lblPorzed}"/>
+<Text text="{scheme>porzed}"/>
+<Label text="{i18n>lblNumedi}"/>
+<Text text="{scheme>numedi}"/>
+<Label text="{i18n>lblNumfuo}"/>
+<Text text="{scheme>numfuo}"/>
+<Label text="{i18n>lblNument}"/>
+<Text text="{scheme>nument}"/>
+<Label text="{i18n>lblColleg}"/>
+<Text text="{scheme>colleg}"/>
+<Label text="{i18n>lblStport}"/>
+<Text text="{scheme>stport}"/>
+<Label text="{i18n>lblTampon}"/>
+<Text text="{scheme>tampon}"/>
+<Label text="{i18n>lblCopert}"/>
+<Text text="{scheme>copert}"/>
+<Label text="{i18n>lblSerram}"/>
+<Text text="{scheme>serram}"/>
+<Label text="{i18n>lblPartiz}"/>
+<Text text="{scheme>partiz}"/>
+<Label text="{i18n>lblFinitu}"/>
+<Text text="{scheme>finitu}"/>
+<Label text="{i18n>lblImpian}"/>
+<Text text="{scheme>impian}"/>
+<Label text="{i18n>lblPertin}"/>
+<Text text="{scheme>pertin}"/>
+<Label text="{i18n>lblSupcop}"/>
+<Text text="{scheme>supcop}"/>
+<Label text="{i18n>lblSupsco}"/>
+<Text text="{scheme>supsco}"/>
+<Label text="{i18n>lblZonomi}"/>
+<Text text="{scheme>zonomi}"/>
+<Label text="{i18n>lblApe}"/>
+<Text text="{scheme>ape}"/>
+<Label text="{i18n>lblClsene}"/>
+<Text text="{scheme>clsene}"/>
+<Label text="{i18n>lblTitolo}"/>
+<Text text="{scheme>titolo}"/>
+<Label text="{i18n>lblAnnopr}"/>
+<Text text="{scheme>annopr}"/>
+<Label text="{i18n>lblLimiti}"/>
+<Text text="{scheme>limiti}"/>
+<Label text="{i18n>lblAnnocs}"/>
+<Text text="{scheme>annocs}"/>
+<Label text="{i18n>lblStgene}"/>
+<Text text="{scheme>stgene}"/>
+<Label text="{i18n>lblStspor}"/>
+<Text text="{scheme>stspor}"/>
+<Label text="{i18n>lblStcope}"/>
+<Text text="{scheme>stcope}"/>
+<Label text="{i18n>lblSttamp}"/>
+<Text text="{scheme>sttamp}"/>
+<Label text="{i18n>lblStches}"/>
+<Text text="{scheme>stches}"/>
+<Label text="{i18n>lblStpart}"/>
+<Text text="{scheme>stpart}"/>
+<Label text="{i18n>lblStfini}"/>
+<Text text="{scheme>stfini}"/>
+<Label text="{i18n>lblStimpi}"/>
+<Text text="{scheme>stimpi}"/>
+<Label text="{i18n>lblStnote}"/>
+<Text text="{scheme>stnote}"/>
+<Label text="{i18n>lblStoccu}"/>
+<Text text="{scheme>stoccu}"/>
+<Label text="{i18n>lblSogocc}"/>
+<Text text="{scheme>sogocc}"/>
+<Label text="{i18n>lblNatocc}"/>
+<Text text="{scheme>natocc}"/>
+<Label text="{i18n>lblTipocc}"/>
+<Text text="{scheme>tipocc}"/>
+<Label text="{i18n>lblVincol}"/>
+<Text text="{scheme>vincol}"/>
+<Label text="{i18n>lblIntcul}"/>
+<Text text="{scheme>intcul}"/>
+<Label text="{i18n>lblAutali}"/>
+<Text text="{scheme>autali}"/>
+<Label text="{i18n>lblDsturb}"/>
+<Text text="{scheme>dsturb}"/>
+<Label text="{i18n>lblIterur}"/>
+<Text text="{scheme>iterur}"/>
+<Label text="{i18n>lblTitori}"/>
+<Text text="{scheme>titori}"/>
+<Label text="{i18n>lblAnte67}"/>
+<Text text="{scheme>ante67}"/>
+<Label text="{i18n>lblAnte42}"/>
+<Text text="{scheme>ante42}"/>
+<Label text="{i18n>lblCorcat}"/>
+<Text text="{scheme>corcat}"/>
+<Label text="{i18n>lblCeragi}"/>
+<Text text="{scheme>ceragi}"/>
+<Label text="{i18n>lblCollst}"/>
+<Text text="{scheme>collst}"/>
+<Label text="{i18n>lblDocamb}"/>
+<Text text="{scheme>docamb}"/>
+<Label text="{i18n>lblVulssm}"/>
+<Text text="{scheme>vulssm}"/>
+<Label text="{i18n>lblVulamb}"/>
+<Text text="{scheme>vulamb}"/>
+<Label text="{i18n>lblStimav}"/>
+<Text text="{scheme>stimav}"/>
+<Label text="{i18n>lblStimnt}"/>
+<Text text="{scheme>stimnt}"/>
+<Label text="{i18n>lblAnnovl}"/>
+<Text text="{scheme>annovl}"/>
+<Label text="{i18n>lblCanloc}"/>
+<Text text="{scheme>canloc}"/>
+<Label text="{i18n>lblPrgprc}"/>
+<Text text="{scheme>prgprc}"/>
+<Label text="{i18n>lblDelibe}"/>
+<Text text="{scheme>delibe}"/>
+<Label text="{i18n>lblEspgar}"/>
+<Text text="{scheme>espgar}"/>
+<Label text="{i18n>lblEsitoa}"/>
+<Text text="{scheme>esitoa}"/>
+</f:content>
+</f:SimpleForm>
+</content>
+</Panel>
+</VBox>
+</ScrollContainer>
+</content>
+<footer>
+<OverflowToolbar>
+<ToolbarSpacer/>
+<Button id="btnExportPDF" text="{i18n>btnExportPDF}" type="Default" press=".onExportPDF"/>
+<Button id="btnExportExcel" text="{i18n>btnExportExcel}" type="Default" press=".onExportExcel"/>
+<Button id="btnBack" text="Indietro" type="Default" press=".onNavBack"/>
+</OverflowToolbar>
+</footer>
+</Page>
+</mvc:View>
