@@ -1,0 +1,21 @@
+<mvc:View controllerName="schedaricognizione.controller.Edit" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m">
+<Page id="pageEditSelect" title="{i18n>appTitle}" showNavButton="true" navButtonPress=".onNavBack">
+<content>
+<VBox class="sapUiMediumMargin">
+<Panel headerText="Selezione Scheda" expandable="false">
+<content>
+<f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+<f:content>
+<Label text="ID Scheda"/>
+<Select id="selectScheme" items="{scheme>/}" width="100%">
+<core:Item key="{scheme>idscheda}" text="{scheme>idscheda} - {scheme>txbene} ({scheme>stato})"/>
+</Select>
+</f:content>
+</f:SimpleForm>
+</content>
+</Panel>
+<Button id="btnProceed" text="Procedi" type="Emphasized" press=".onProceed" class="sapUiMediumMarginTop"/>
+</VBox>
+</content>
+</Page>
+</mvc:View>
