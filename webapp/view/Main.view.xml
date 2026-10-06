@@ -1,15 +1,17 @@
-<mvc:View controllerName="schedaricognizione.controller.Main" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns="sap.m">
-<Page id="pageMain" title="{i18n>appTitle}" showNavButton="false">
-<content>
-<VBox class="sapUiMediumMargin">
-<Title level="H2" text="{i18n>appTitle}"/>
-<Text text="Selezionare un'operazione dalla barra dei pulsanti sottostante" class="sapUiSmallMarginTop"/>
-</VBox>
-<VBox class="sapUiMediumMargin" alignItems="Center">
-<Button id="btnNewScheme" text="{i18n>btnNew}" type="Emphasized" press=".onNewScheme" width="250px" class="sapUiSmallMarginTop"/>
-<Button id="btnEditScheme" text="{i18n>btnEdit}" type="Default" press=".onEditScheme" width="250px" class="sapUiSmallMarginTop"/>
-<Button id="btnViewScheme" text="{i18n>btnView}" type="Default" press=".onViewScheme" width="250px" class="sapUiSmallMarginTop"/>
-</VBox>
-</content>
-</Page>
+<mvc:View controllerName="schedaricognizione.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m">
+    <Page id="pageMain" title="{i18n>appTitle}" showNavButton="false">
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <Text text="Selezionare un'operazione dalla barra dei pulsanti sottostante" class="sapUiSmallMarginTop"/>
+            </VBox>
+            <VBox class="sapUiMediumMargin" alignItems="Center">
+                <Button id="btnNewScheme" text="{i18n>btnNew}" type="Emphasized" press=".onNewScheme" width="250px" class="sapUiSmallMarginTop"/>
+                <Button id="btnEditScheme" text="{i18n>btnEdit}" type="Default" press=".onEditScheme" width="250px" class="sapUiSmallMarginTop"/>
+                <Button id="btnViewScheme" text="{i18n>btnView}" type="Default" press=".onViewScheme" width="250px" class="sapUiSmallMarginTop"/>
+            </VBox>
+        </content>
+    </Page>
 </mvc:View>
