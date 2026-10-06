@@ -1,0 +1,37 @@
+<mvc:View controllerName="schedaricognizione.controller.Template"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Page id="pageTemplate" title="{i18n>titleTemplate}" showNavButton="true" navButtonPress=".onNavBack">
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <Panel id="panelTemplateSelection" headerText="{i18n>titleTemplateSelection}">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="{i18n>lblIdSchedaModello}" labelFor="selectTemplateScheme" required="true"/>
+                            <Select id="selectTemplateScheme" items="{scheme>/}" selectedKey="{templateSelection>/idscheda}" forceSelection="false" width="100%">
+                                <core:Item key="{scheme>idscheda}" text="{scheme>idscheda} - {scheme>txbene} ({scheme>stato})"/>
+                            </Select>
+                            <Button id="btnPrepareTemplate" text="{i18n>btnPrepareTemplate}" type="Emphasized" press=".onPrepareTemplate" class="sapUiSmallMarginTop"/>
+                        </VBox>
+                    </content>
+                </Panel>
+                <Panel id="panelTemplatePreview" headerText="{i18n>titleTemplatePreview}" visible="{template>/pronto}" expandable="true" expanded="true" class="sapUiSmallMarginTop">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="{i18n>lblIdSchedaModello}"/>
+                            <Text text="{template>/scheda/idsc_mdl}"/>
+                            <Label text="{i18n>lblTxbene}" class="sapUiSmallMarginTop"/>
+                            <Text text="{template>/scheda/txbene}"/>
+                            <Label text="{i18n>sectionOA}" class="sapUiSmallMarginTop"/>
+                            <List id="listTemplatePositions" items="{template>/posizioni}" noDataText="{i18n>msgTemplateNoPositions}">
+                                <StandardListItem title="{template>aoid}" description="{template>bukrs} / {template>swenr} / {template>sgenr}"/>
+                            </List>
+                            <MessageStrip text="{i18n>msgTemplatePrepared}" type="Information" showIcon="true" class="sapUiSmallMarginTop"/>
+                        </VBox>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

@@ -352,6 +352,30 @@ sap.ui.define([
             var oModel = new JSONModel(aOA);
             oModel.setDefaultBindingMode("TwoWay");
             return oModel;
+        },
+
+        createTemplateModel: function (oScheme, aPositions) {
+            var oNewScheme = JSON.parse(JSON.stringify(oScheme));
+            var aNewPositions = aPositions.filter(function (oPosition) {
+                return oPosition.idscheda === oScheme.idscheda && oPosition.statopos === "A";
+            }).map(function (oPosition) {
+                var oNewPosition = JSON.parse(JSON.stringify(oPosition));
+                ["idscheda", "idpos", "ernam", "erdat", "erzet", "aenam", "aedat", "aezet"].forEach(function (sProperty) {
+                    oNewPosition[sProperty] = "";
+                });
+                return oNewPosition;
+            });
+            ["idscheda", "stato", "ernam", "erdat", "erzet", "aenam", "aedat", "aezet", "dtcomp"].forEach(function (sProperty) {
+                oNewScheme[sProperty] = "";
+            });
+            oNewScheme.idsc_mdl = oScheme.idscheda;
+            var oModel = new JSONModel({
+                scheda: oNewScheme,
+                posizioni: aNewPositions,
+                pronto: true
+            });
+            oModel.setDefaultBindingMode("TwoWay");
+            return oModel;
         }
     };
 });
