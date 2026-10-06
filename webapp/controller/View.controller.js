@@ -1,10 +1,12 @@
 sap.ui.define([
 "sap/ui/core/mvc/Controller",
 "sap/ui/core/routing/History",
-"sap/m/MessageToast"
-], (Controller, History, MessageToast) => {
+"sap/m/MessageToast",
+"schedaricognizione/model/formatter"
+], (Controller, History, MessageToast, formatter) => {
 "use strict";
 return Controller.extend("schedaricognizione.controller.View", {
+formatter: formatter,
 onInit: function() {
 var oRouter = this.getOwnerComponent().getRouter();
 oRouter.getRoute("RouteView").attachPatternMatched(this._onRouteMatched, this);
