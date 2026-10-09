@@ -102,171 +102,174 @@
 </content>
 </Panel>
 <Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestata}" class="sapUiSmallMarginBottom">
-<content>
-<f:SimpleForm editable="true" layout="ResponsiveGridLayout">
-<f:content>
-<Label text="{i18n>lblDocval}"/>
-<Input id="inputDocval" value="{scheme>docval}" width="100%"/>
-<Label text="{i18n>lblIdbene}"/>
-<Input id="inputIdbene" value="{scheme>idbene}" width="100%"/>
-<Label text="{i18n>lblEnteprop}"/>
-<Input id="inputEntepr" value="{scheme>entepr}" width="100%"/>
-<Input id="inputTxbene" value="{scheme>txbene}" width="100%"/>
-<Label text="{i18n>lblCoogis}"/>
-<Input id="inputCoogis" value="{scheme>coogis}" width="100%"/>
-<Label text="{i18n>lblFabter}"/>
-<Select id="selectFabter" selectedKey="{scheme>fabter}" width="100%">
-<core:Item key="01" text="Edificato"/>
-<core:Item key="02" text="Non Edificato"/>
-</Select>
-<Label text="{i18n>lblUsofab}"/>
-<Input id="inputUsofab" value="{scheme>usofab}" width="100%"/>
-<Label text="{i18n>lblUsoter}"/>
-<Input id="inputUsoter" value="{scheme>usoter}" width="100%"/>
-<Label text="{i18n>lblSuplut}"/>
-<Input id="inputSuplut" value="{scheme>suplut}" type="Number" width="100%"/>
-<Label text="{i18n>lblSupfon}"/>
-<Input id="inputSupfon" value="{scheme>supfon}" type="Number" width="100%"/>
-<Label text="{i18n>lblAccess}"/>
-<Input id="inputAccess" value="{scheme>access}" width="100%"/>
-<Label text="{i18n>lblPorzed}"/>
-<Input id="inputPorzed" value="{scheme>porzed}" width="100%"/>
-<Label text="{i18n>lblNumedi}"/>
-<Input id="inputNumedi" value="{scheme>numedi}" type="Number" width="100%"/>
-<Label text="{i18n>lblNumfuo}"/>
-<Input id="inputNumfuo" value="{scheme>numfuo}" type="Number" width="100%"/>
-<Label text="{i18n>lblNument}"/>
-<Input id="inputNument" value="{scheme>nument}" type="Number" width="100%"/>
-<Label text="{i18n>lblColleg}"/>
-<Input id="inputColleg" value="{scheme>colleg}" width="100%"/>
-<Label text="{i18n>lblStport}"/>
-<Input id="inputStport" value="{scheme>stport}" width="100%"/>
-<Label text="{i18n>lblTampon}"/>
-<Input id="inputTampon" value="{scheme>tampon}" width="100%"/>
-<Label text="{i18n>lblCopert}"/>
-<Input id="inputCopert" value="{scheme>copert}" width="100%"/>
-<Label text="{i18n>lblSerram}"/>
-<Input id="inputSerram" value="{scheme>serram}" width="100%"/>
-<Label text="{i18n>lblPartiz}"/>
-<Input id="inputPartiz" value="{scheme>partiz}" width="100%"/>
-<Label text="{i18n>lblFinitu}"/>
-<Input id="inputFinitu" value="{scheme>finitu}" width="100%"/>
-<Label text="{i18n>lblImpian}"/>
-<Input id="inputImpian" value="{scheme>impian}" width="100%"/>
-<Label text="{i18n>lblPertin}"/>
-<Input id="inputPertin" value="{scheme>pertin}" width="100%"/>
-<Label text="{i18n>lblSupcop}"/>
-<Input id="inputSupcop" value="{scheme>supcop}" type="Number" width="100%"/>
-<Label text="{i18n>lblSupsco}"/>
-<Input id="inputSupsco" value="{scheme>supsco}" type="Number" width="100%"/>
-<Label text="{i18n>lblZonomi}"/>
-<Input id="inputZonomi" value="{scheme>zonomi}" width="100%"/>
-<Label text="{i18n>lblApe}"/>
-<Select id="selectApe" selectedKey="{scheme>ape}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblClsene}"/>
-<Input id="inputClsene" value="{scheme>clsene}" width="100%"/>
-<Label text="{i18n>lblTitolo}"/>
-<Input id="inputTitolo" value="{scheme>titolo}" width="100%"/>
-<Label text="{i18n>lblAnnopr}"/>
-<Input id="inputAnnopr" value="{scheme>annopr}" type="Number" width="100%"/>
-<Label text="{i18n>lblLimiti}"/>
-<Input id="inputLimiti" value="{scheme>limiti}" width="100%"/>
-<Label text="{i18n>lblAnnocs}"/>
-<Input id="inputAnnocs" value="{scheme>annocs}" type="Number" width="100%"/>
-<Label text="{i18n>lblStgene}"/>
-<Input id="inputStgene" value="{scheme>stgene}" width="100%"/>
-<Label text="{i18n>lblStspor}"/>
-<Input id="inputStspor" value="{scheme>stspor}" width="100%"/>
-<Label text="{i18n>lblStcope}"/>
-<Input id="inputStcope" value="{scheme>stcope}" width="100%"/>
-<Label text="{i18n>lblSttamp}"/>
-<Input id="inputSttamp" value="{scheme>sttamp}" width="100%"/>
-<Label text="{i18n>lblStches}"/>
-<Input id="inputStches" value="{scheme>stches}" width="100%"/>
-<Label text="{i18n>lblStpart}"/>
-<Input id="inputStpart" value="{scheme>stpart}" width="100%"/>
-<Label text="{i18n>lblStfini}"/>
-<Input id="inputStfini" value="{scheme>stfini}" width="100%"/>
-<Label text="{i18n>lblStimpi}"/>
-<Input id="inputStimpi" value="{scheme>stimpi}" width="100%"/>
-<Label text="{i18n>lblStnote}"/>
-<Input id="inputStnote" value="{scheme>stnote}" width="100%"/>
-<Label text="{i18n>lblStoccu}"/>
-<Input id="inputStoccu" value="{scheme>stoccu}" width="100%"/>
-<Label text="{i18n>lblSogocc}"/>
-<Input id="inputSogocc" value="{scheme>sogocc}" width="100%"/>
-<Label text="{i18n>lblNatocc}"/>
-<Input id="inputNatocc" value="{scheme>natocc}" width="100%"/>
-<Label text="{i18n>lblTipocc}"/>
-<Input id="inputTipocc" value="{scheme>tipocc}" width="100%"/>
-<Label text="{i18n>lblVincol}"/>
-<Input id="inputVincol" value="{scheme>vincol}" width="100%"/>
-<Label text="{i18n>lblIntcul}"/>
-<Input id="inputIntcul" value="{scheme>intcul}" width="100%"/>
-<Label text="{i18n>lblAutali}"/>
-<Input id="inputAutali" value="{scheme>autali}" width="100%"/>
-<Label text="{i18n>lblDsturb}"/>
-<Input id="inputDsturb" value="{scheme>dsturb}" width="100%"/>
-<Label text="{i18n>lblIterur}"/>
-<Input id="inputIterur" value="{scheme>iterur}" width="100%"/>
-<Label text="{i18n>lblTitori}"/>
-<Select id="selectTitori" selectedKey="{scheme>titori}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblAnte67}"/>
-<Select id="selectAnte67" selectedKey="{scheme>ante67}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblAnte42}"/>
-<Select id="selectAnte42" selectedKey="{scheme>ante42}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblCorcat}"/>
-<Select id="selectCorcat" selectedKey="{scheme>corcat}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblCeragi}"/>
-<Input id="inputCeragi" value="{scheme>ceragi}" width="100%"/>
-<Label text="{i18n>lblCollst}"/>
-<Input id="inputCollst" value="{scheme>collst}" width="100%"/>
-<Label text="{i18n>lblDocamb}"/>
-<Input id="inputDocamb" value="{scheme>docamb}" width="100%"/>
-<Label text="{i18n>lblVulssm}"/>
-<Select id="selectVulssm" selectedKey="{scheme>vulssm}" width="100%">
-<core:Item key="00" text="No"/>
-<core:Item key="01" text="Sì"/>
-</Select>
-<Label text="{i18n>lblVulamb}"/>
-<Select id="selectVulamb" selectedKey="{scheme>vulamb}" width="100%">
-<core:Item key="00" text="No"/>
-<core:Item key="01" text="Sì"/>
-</Select>
-<Label text="{i18n>lblStimav}"/>
-<Input id="inputStimav" value="{scheme>stimav}" type="Number" width="100%"/>
-<Label text="{i18n>lblStimnt}"/>
-<Input id="inputStimnt" value="{scheme>stimnt}" width="100%"/>
-<Label text="{i18n>lblAnnovl}"/>
-<Input id="inputAnnovl" value="{scheme>annovl}" type="Number" width="100%"/>
-<Label text="{i18n>lblCanloc}"/>
-<Input id="inputCanloc" value="{scheme>canloc}" width="100%"/>
-<Label text="{i18n>lblPrgprc}"/>
-<Input id="inputPrgprc" value="{scheme>prgprc}" width="100%"/>
-<Label text="{i18n>lblDelibe}"/>
-<Input id="inputDelibe" value="{scheme>delibe}" width="100%"/>
-<Label text="{i18n>lblEspgar}"/>
-<Input id="inputEspgar" value="{scheme>espgar}" width="100%"/>
-<Label text="{i18n>lblEsitoa}"/>
-<Input id="inputEsitoa" value="{scheme>esitoa}" width="100%"/>
-</f:content>
-</f:SimpleForm>
-</content>
+    <content>
+        <HBox width="100%" justifyContent="SpaceBetween" alignItems="Start">
+            <VBox width="48%">
+                <Label text="{i18n>lblDocval}" labelFor="inputDocval"/>
+                <Input id="inputDocval" value="{scheme>docval}" width="100%"/>
+                <Label text="{i18n>lblEnteprop}" labelFor="inputEntepr" class="sapUiSmallMarginTop"/>
+                <Input id="inputEntepr" value="{scheme>entepr}" width="100%"/>
+                <Label text="{i18n>lblCoogis}" labelFor="inputCoogis" class="sapUiSmallMarginTop"/>
+                <Input id="inputCoogis" value="{scheme>coogis}" width="100%"/>
+                <Label text="{i18n>lblUsofab}" labelFor="inputUsofab" class="sapUiSmallMarginTop"/>
+                <Input id="inputUsofab" value="{scheme>usofab}" width="100%"/>
+                <Label text="{i18n>lblSuplut}" labelFor="inputSuplut" class="sapUiSmallMarginTop"/>
+                <Input id="inputSuplut" value="{scheme>suplut}" type="Number" width="100%"/>
+                <Label text="{i18n>lblAccess}" labelFor="inputAccess" class="sapUiSmallMarginTop"/>
+                <Input id="inputAccess" value="{scheme>access}" width="100%"/>
+                <Label text="{i18n>lblNumedi}" labelFor="inputNumedi" class="sapUiSmallMarginTop"/>
+                <Input id="inputNumedi" value="{scheme>numedi}" type="Number" width="100%"/>
+                <Label text="{i18n>lblNument}" labelFor="inputNument" class="sapUiSmallMarginTop"/>
+                <Input id="inputNument" value="{scheme>nument}" type="Number" width="100%"/>
+                <Label text="{i18n>lblStport}" labelFor="inputStport" class="sapUiSmallMarginTop"/>
+                <Input id="inputStport" value="{scheme>stport}" width="100%"/>
+                <Label text="{i18n>lblCopert}" labelFor="inputCopert" class="sapUiSmallMarginTop"/>
+                <Input id="inputCopert" value="{scheme>copert}" width="100%"/>
+                <Label text="{i18n>lblPartiz}" labelFor="inputPartiz" class="sapUiSmallMarginTop"/>
+                <Input id="inputPartiz" value="{scheme>partiz}" width="100%"/>
+                <Label text="{i18n>lblImpian}" labelFor="inputImpian" class="sapUiSmallMarginTop"/>
+                <Input id="inputImpian" value="{scheme>impian}" width="100%"/>
+                <Label text="{i18n>lblSupcop}" labelFor="inputSupcop" class="sapUiSmallMarginTop"/>
+                <Input id="inputSupcop" value="{scheme>supcop}" type="Number" width="100%"/>
+                <Label text="{i18n>lblZonomi}" labelFor="inputZonomi" class="sapUiSmallMarginTop"/>
+                <Input id="inputZonomi" value="{scheme>zonomi}" width="100%"/>
+                <Label text="{i18n>lblClsene}" labelFor="inputClsene" class="sapUiSmallMarginTop"/>
+                <Input id="inputClsene" value="{scheme>clsene}" width="100%"/>
+                <Label text="{i18n>lblAnnopr}" labelFor="inputAnnopr" class="sapUiSmallMarginTop"/>
+                <Input id="inputAnnopr" value="{scheme>annopr}" type="Number" width="100%"/>
+                <Label text="{i18n>lblAnnocs}" labelFor="inputAnnocs" class="sapUiSmallMarginTop"/>
+                <Input id="inputAnnocs" value="{scheme>annocs}" type="Number" width="100%"/>
+                <Label text="{i18n>lblStspor}" labelFor="inputStspor" class="sapUiSmallMarginTop"/>
+                <Input id="inputStspor" value="{scheme>stspor}" width="100%"/>
+                <Label text="{i18n>lblSttamp}" labelFor="inputSttamp" class="sapUiSmallMarginTop"/>
+                <Input id="inputSttamp" value="{scheme>sttamp}" width="100%"/>
+                <Label text="{i18n>lblStpart}" labelFor="inputStpart" class="sapUiSmallMarginTop"/>
+                <Input id="inputStpart" value="{scheme>stpart}" width="100%"/>
+                <Label text="{i18n>lblStimpi}" labelFor="inputStimpi" class="sapUiSmallMarginTop"/>
+                <Input id="inputStimpi" value="{scheme>stimpi}" width="100%"/>
+                <Label text="{i18n>lblStoccu}" labelFor="inputStoccu" class="sapUiSmallMarginTop"/>
+                <Input id="inputStoccu" value="{scheme>stoccu}" width="100%"/>
+                <Label text="{i18n>lblNatocc}" labelFor="inputNatocc" class="sapUiSmallMarginTop"/>
+                <Input id="inputNatocc" value="{scheme>natocc}" width="100%"/>
+                <Label text="{i18n>lblVincol}" labelFor="inputVincol" class="sapUiSmallMarginTop"/>
+                <Input id="inputVincol" value="{scheme>vincol}" width="100%"/>
+                <Label text="{i18n>lblAutali}" labelFor="inputAutali" class="sapUiSmallMarginTop"/>
+                <Input id="inputAutali" value="{scheme>autali}" width="100%"/>
+                <Label text="{i18n>lblIterur}" labelFor="inputIterur" class="sapUiSmallMarginTop"/>
+                <Input id="inputIterur" value="{scheme>iterur}" width="100%"/>
+                <Label text="{i18n>lblAnte67}" labelFor="selectAnte67" class="sapUiSmallMarginTop"/>
+                <Select id="selectAnte67" selectedKey="{scheme>ante67}" width="100%">
+                    <core:Item key="SI" text="Sì"/>
+                    <core:Item key="NO" text="No"/>
+                </Select>
+                <Label text="{i18n>lblCorcat}" labelFor="selectCorcat" class="sapUiSmallMarginTop"/>
+                <Select id="selectCorcat" selectedKey="{scheme>corcat}" width="100%">
+                    <core:Item key="SI" text="Sì"/>
+                    <core:Item key="NO" text="No"/>
+                </Select>
+                <Label text="{i18n>lblCollst}" labelFor="inputCollst" class="sapUiSmallMarginTop"/>
+                <Input id="inputCollst" value="{scheme>collst}" width="100%"/>
+                <Label text="{i18n>lblVulssm}" labelFor="selectVulssm" class="sapUiSmallMarginTop"/>
+                <Select id="selectVulssm" selectedKey="{scheme>vulssm}" width="100%">
+                    <core:Item key="00" text="No"/>
+                    <core:Item key="01" text="Sì"/>
+                </Select>
+                <Label text="{i18n>lblStimav}" labelFor="inputStimav" class="sapUiSmallMarginTop"/>
+                <Input id="inputStimav" value="{scheme>stimav}" type="Number" width="100%"/>
+                <Label text="{i18n>lblAnnovl}" labelFor="inputAnnovl" class="sapUiSmallMarginTop"/>
+                <Input id="inputAnnovl" value="{scheme>annovl}" type="Number" width="100%"/>
+                <Label text="{i18n>lblPrgprc}" labelFor="inputPrgprc" class="sapUiSmallMarginTop"/>
+                <Input id="inputPrgprc" value="{scheme>prgprc}" width="100%"/>
+                <Label text="{i18n>lblEspgar}" labelFor="inputEspgar" class="sapUiSmallMarginTop"/>
+                <Input id="inputEspgar" value="{scheme>espgar}" width="100%"/>
+            </VBox>
+            <VBox width="48%">
+                <Label text="{i18n>lblIdbene}" labelFor="inputIdbene"/>
+                <Input id="inputIdbene" value="{scheme>idbene}" width="100%"/>
+                <Label text="{i18n>lblTxbene}" labelFor="inputTxbene" class="sapUiSmallMarginTop"/>
+                <Input id="inputTxbene" value="{scheme>txbene}" width="100%"/>
+                <Label text="{i18n>lblFabter}" labelFor="selectFabter" class="sapUiSmallMarginTop"/>
+                <Select id="selectFabter" selectedKey="{scheme>fabter}" width="100%">
+                    <core:Item key="01" text="Edificato"/>
+                    <core:Item key="02" text="Non Edificato"/>
+                </Select>
+                <Label text="{i18n>lblUsoter}" labelFor="inputUsoter" class="sapUiSmallMarginTop"/>
+                <Input id="inputUsoter" value="{scheme>usoter}" width="100%"/>
+                <Label text="{i18n>lblSupfon}" labelFor="inputSupfon" class="sapUiSmallMarginTop"/>
+                <Input id="inputSupfon" value="{scheme>supfon}" type="Number" width="100%"/>
+                <Label text="{i18n>lblPorzed}" labelFor="inputPorzed" class="sapUiSmallMarginTop"/>
+                <Input id="inputPorzed" value="{scheme>porzed}" width="100%"/>
+                <Label text="{i18n>lblNumfuo}" labelFor="inputNumfuo" class="sapUiSmallMarginTop"/>
+                <Input id="inputNumfuo" value="{scheme>numfuo}" type="Number" width="100%"/>
+                <Label text="{i18n>lblColleg}" labelFor="inputColleg" class="sapUiSmallMarginTop"/>
+                <Input id="inputColleg" value="{scheme>colleg}" width="100%"/>
+                <Label text="{i18n>lblTampon}" labelFor="inputTampon" class="sapUiSmallMarginTop"/>
+                <Input id="inputTampon" value="{scheme>tampon}" width="100%"/>
+                <Label text="{i18n>lblSerram}" labelFor="inputSerram" class="sapUiSmallMarginTop"/>
+                <Input id="inputSerram" value="{scheme>serram}" width="100%"/>
+                <Label text="{i18n>lblFinitu}" labelFor="inputFinitu" class="sapUiSmallMarginTop"/>
+                <Input id="inputFinitu" value="{scheme>finitu}" width="100%"/>
+                <Label text="{i18n>lblPertin}" labelFor="inputPertin" class="sapUiSmallMarginTop"/>
+                <Input id="inputPertin" value="{scheme>pertin}" width="100%"/>
+                <Label text="{i18n>lblSupsco}" labelFor="inputSupsco" class="sapUiSmallMarginTop"/>
+                <Input id="inputSupsco" value="{scheme>supsco}" type="Number" width="100%"/>
+                <Label text="{i18n>lblApe}" labelFor="selectApe" class="sapUiSmallMarginTop"/>
+                <Select id="selectApe" selectedKey="{scheme>ape}" width="100%">
+                    <core:Item key="SI" text="Sì"/>
+                    <core:Item key="NO" text="No"/>
+                </Select>
+                <Label text="{i18n>lblTitolo}" labelFor="inputTitolo" class="sapUiSmallMarginTop"/>
+                <Input id="inputTitolo" value="{scheme>titolo}" width="100%"/>
+                <Label text="{i18n>lblLimiti}" labelFor="inputLimiti" class="sapUiSmallMarginTop"/>
+                <Input id="inputLimiti" value="{scheme>limiti}" width="100%"/>
+                <Label text="{i18n>lblStgene}" labelFor="inputStgene" class="sapUiSmallMarginTop"/>
+                <Input id="inputStgene" value="{scheme>stgene}" width="100%"/>
+                <Label text="{i18n>lblStcope}" labelFor="inputStcope" class="sapUiSmallMarginTop"/>
+                <Input id="inputStcope" value="{scheme>stcope}" width="100%"/>
+                <Label text="{i18n>lblStches}" labelFor="inputStches" class="sapUiSmallMarginTop"/>
+                <Input id="inputStches" value="{scheme>stches}" width="100%"/>
+                <Label text="{i18n>lblStfini}" labelFor="inputStfini" class="sapUiSmallMarginTop"/>
+                <Input id="inputStfini" value="{scheme>stfini}" width="100%"/>
+                <Label text="{i18n>lblStnote}" labelFor="inputStnote" class="sapUiSmallMarginTop"/>
+                <Input id="inputStnote" value="{scheme>stnote}" width="100%"/>
+                <Label text="{i18n>lblSogocc}" labelFor="inputSogocc" class="sapUiSmallMarginTop"/>
+                <Input id="inputSogocc" value="{scheme>sogocc}" width="100%"/>
+                <Label text="{i18n>lblTipocc}" labelFor="inputTipocc" class="sapUiSmallMarginTop"/>
+                <Input id="inputTipocc" value="{scheme>tipocc}" width="100%"/>
+                <Label text="{i18n>lblIntcul}" labelFor="inputIntcul" class="sapUiSmallMarginTop"/>
+                <Input id="inputIntcul" value="{scheme>intcul}" width="100%"/>
+                <Label text="{i18n>lblDsturb}" labelFor="inputDsturb" class="sapUiSmallMarginTop"/>
+                <Input id="inputDsturb" value="{scheme>dsturb}" width="100%"/>
+                <Label text="{i18n>lblTitori}" labelFor="selectTitori" class="sapUiSmallMarginTop"/>
+                <Select id="selectTitori" selectedKey="{scheme>titori}" width="100%">
+                    <core:Item key="SI" text="Sì"/>
+                    <core:Item key="NO" text="No"/>
+                </Select>
+                <Label text="{i18n>lblAnte42}" labelFor="selectAnte42" class="sapUiSmallMarginTop"/>
+                <Select id="selectAnte42" selectedKey="{scheme>ante42}" width="100%">
+                    <core:Item key="SI" text="Sì"/>
+                    <core:Item key="NO" text="No"/>
+                </Select>
+                <Label text="{i18n>lblCeragi}" labelFor="inputCeragi" class="sapUiSmallMarginTop"/>
+                <Input id="inputCeragi" value="{scheme>ceragi}" width="100%"/>
+                <Label text="{i18n>lblDocamb}" labelFor="inputDocamb" class="sapUiSmallMarginTop"/>
+                <Input id="inputDocamb" value="{scheme>docamb}" width="100%"/>
+                <Label text="{i18n>lblVulamb}" labelFor="selectVulamb" class="sapUiSmallMarginTop"/>
+                <Select id="selectVulamb" selectedKey="{scheme>vulamb}" width="100%">
+                    <core:Item key="00" text="No"/>
+                    <core:Item key="01" text="Sì"/>
+                </Select>
+                <Label text="{i18n>lblStimnt}" labelFor="inputStimnt" class="sapUiSmallMarginTop"/>
+                <Input id="inputStimnt" value="{scheme>stimnt}" width="100%"/>
+                <Label text="{i18n>lblCanloc}" labelFor="inputCanloc" class="sapUiSmallMarginTop"/>
+                <Input id="inputCanloc" value="{scheme>canloc}" width="100%"/>
+                <Label text="{i18n>lblDelibe}" labelFor="inputDelibe" class="sapUiSmallMarginTop"/>
+                <Input id="inputDelibe" value="{scheme>delibe}" width="100%"/>
+                <Label text="{i18n>lblEsitoa}" labelFor="inputEsitoa" class="sapUiSmallMarginTop"/>
+                <Input id="inputEsitoa" value="{scheme>esitoa}" width="100%"/>
+            </VBox>
+        </HBox>
+    </content>
 </Panel>
 </VBox>
 </ScrollContainer>
