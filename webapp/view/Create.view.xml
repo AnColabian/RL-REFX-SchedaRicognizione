@@ -1,282 +1,287 @@
-<mvc:View controllerName="schedaricognizione.controller.Create" xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core" xmlns="sap.m">
-<Page id="pageCreate" title="{i18n>appTitle}" showNavButton="true" navButtonPress=".onNavBack">
-<content>
-<ScrollContainer vertical="true" horizontal="false" focusable="false">
-<VBox class="sapUiMediumMargin">
-<Panel id="panelIdenti" expandable="true" expanded="true" headerText="{i18n>sectionIdenti}" class="sapUiSmallMarginBottom">
-<content>
-<f:SimpleForm editable="true" layout="ResponsiveGridLayout">
-<f:content>
-<Label text="{i18n>lblIdScheda}"/>
-<Text text="{scheme>/0/idscheda}"/>
-<Label text="{i18n>lblStato}"/>
-<Text text="{scheme>/0/stato}"/>
-<Label text="{i18n>lblIdSchedaModello}"/>
-<Input id="inputIdSchedaModello" value="{scheme>/0/idsc_mdl}" width="100%"/>
-<Label text="{i18n>lblDtcomp}"/>
-<Text text="{path: 'scheme>/0/dtcomp', formatter: '.formatter.formatDate'}"/>
-</f:content>
-</f:SimpleForm>
-</content>
-</Panel>
-<Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOA}" class="sapUiSmallMarginBottom">
-<content>
-<VBox class="sapUiSmallMargin">
-<HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-<VBox>
-<Label text="{i18n>lblSwenr}"/>
-<Input id="inputSwenr" value="" width="200px" placeholder="UE"/>
-</VBox>
-<VBox>
-<Label text="{i18n>lblSgrnr}"/>
-<Input id="inputSgrnr" value="" width="200px" placeholder="Terreno"/>
-</VBox>
-<VBox>
-<Label text="{i18n>lblSgenr}"/>
-<Input id="inputSgenr" value="" width="200px" placeholder="Edificio"/>
-</VBox>
-</HBox>
-<HBox class="sapUiSmallMarginBottom">
-<Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
-</HBox>
-<Table id="tableOA" items="{oa>/}" mode="MultiSelect" class="sapUiSmallMarginTop">
-<columns>
-<Column>
-<header>
-<Text text="{i18n>lblBukrs}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblSwenr}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblSgrnr}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblSgenr}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblAoid}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblZztpca}"/>
-</header>
-</Column>
-<Column>
-<header>
-<Text text="{i18n>lblZzfogl}"/>
-</header>
-</Column>
-</columns>
-<items>
-<ColumnListItem>
-<cells>
-<Text text="{oa>bukrs}"/>
-<Text text="{oa>swenr}"/>
-<Text text="{oa>sgrnr}"/>
-<Text text="{oa>sgenr}"/>
-<Text text="{oa>aoid}"/>
-<Text text="{oa>zztpca}"/>
-<Text text="{oa>zzfogl}"/>
-</cells>
-</ColumnListItem>
-</items>
-</Table>
-<HBox class="sapUiSmallMarginTop" justifyContent="SpaceBetween">
-<HBox spacing="0.5rem" class="sapUiTinyMarginBeginEnd">
-<Button id="btnSelectAll" text="{i18n>btnSelectAll}" type="Default" press=".onSelectAllOA" width="120px"/>
-<Button id="btnDeselectAll" text="{i18n>btnDeselectAll}" type="Default" press=".onDeselectAllOA" width="140px"/>
-<Button id="btnRemoveOA" text="{i18n>btnRemove}" type="Reject" press=".onRemoveOA" width="140px"/>
-</HBox>
-</HBox>
-</VBox>
-</content>
-</Panel>
-<Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestata}" class="sapUiSmallMarginBottom">
-<content>
-<f:SimpleForm editable="true" layout="ResponsiveGridLayout">
-<f:content>
-<Label text="{i18n>lblDocval}"/>
-<Input id="inputDocval" value="{scheme>/0/docval}" width="100%"/>
-<Label text="{i18n>lblIdbene}"/>
-<Input id="inputIdbene" value="{scheme>/0/idbene}" width="100%"/>
-<Label text="{i18n>lblEnteprop}"/>
-<Input id="inputEntepr" value="{scheme>/0/entepr}" width="100%"/>
-<Input id="inputTxbene" value="{scheme>/0/txbene}" width="100%"/>
-<Label text="{i18n>lblCoogis}"/>
-<Input id="inputCoogis" value="{scheme>/0/coogis}" width="100%"/>
-<Label text="{i18n>lblFabter}"/>
-<Select id="selectFabter" selectedKey="{scheme>/0/fabter}" width="100%">
-<core:Item key="01" text="Edificato"/>
-<core:Item key="02" text="Non Edificato"/>
-</Select>
-<Label text="{i18n>lblUsofab}"/>
-<Input id="inputUsofab" value="{scheme>/0/usofab}" width="100%"/>
-<Label text="{i18n>lblUsoter}"/>
-<Input id="inputUsoter" value="{scheme>/0/usoter}" width="100%"/>
-<Label text="{i18n>lblSuplut}"/>
-<Input id="inputSuplut" value="{scheme>/0/suplut}" type="Number" width="100%"/>
-<Label text="{i18n>lblSupfon}"/>
-<Input id="inputSupfon" value="{scheme>/0/supfon}" type="Number" width="100%"/>
-<Label text="{i18n>lblAccess}"/>
-<Input id="inputAccess" value="{scheme>/0/access}" width="100%"/>
-<Label text="{i18n>lblPorzed}"/>
-<Input id="inputPorzed" value="{scheme>/0/porzed}" width="100%"/>
-<Label text="{i18n>lblNumedi}"/>
-<Input id="inputNumedi" value="{scheme>/0/numedi}" type="Number" width="100%"/>
-<Label text="{i18n>lblNumfuo}"/>
-<Input id="inputNumfuo" value="{scheme>/0/numfuo}" type="Number" width="100%"/>
-<Label text="{i18n>lblNument}"/>
-<Input id="inputNument" value="{scheme>/0/nument}" type="Number" width="100%"/>
-<Label text="{i18n>lblColleg}"/>
-<Input id="inputColleg" value="{scheme>/0/colleg}" width="100%"/>
-<Label text="{i18n>lblStport}"/>
-<Input id="inputStport" value="{scheme>/0/stport}" width="100%"/>
-<Label text="{i18n>lblTampon}"/>
-<Input id="inputTampon" value="{scheme>/0/tampon}" width="100%"/>
-<Label text="{i18n>lblCopert}"/>
-<Input id="inputCopert" value="{scheme>/0/copert}" width="100%"/>
-<Label text="{i18n>lblSerram}"/>
-<Input id="inputSerram" value="{scheme>/0/serram}" width="100%"/>
-<Label text="{i18n>lblPartiz}"/>
-<Input id="inputPartiz" value="{scheme>/0/partiz}" width="100%"/>
-<Label text="{i18n>lblFinitu}"/>
-<Input id="inputFinitu" value="{scheme>/0/finitu}" width="100%"/>
-<Label text="{i18n>lblImpian}"/>
-<Input id="inputImpian" value="{scheme>/0/impian}" width="100%"/>
-<Label text="{i18n>lblPertin}"/>
-<Input id="inputPertin" value="{scheme>/0/pertin}" width="100%"/>
-<Label text="{i18n>lblSupcop}"/>
-<Input id="inputSupcop" value="{scheme>/0/supcop}" type="Number" width="100%"/>
-<Label text="{i18n>lblSupsco}"/>
-<Input id="inputSupsco" value="{scheme>/0/supsco}" type="Number" width="100%"/>
-<Label text="{i18n>lblZonomi}"/>
-<Input id="inputZonomi" value="{scheme>/0/zonomi}" width="100%"/>
-<Label text="{i18n>lblApe}"/>
-<Select id="selectApe" selectedKey="{scheme>/0/ape}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblClsene}"/>
-<Input id="inputClsene" value="{scheme>/0/clsene}" width="100%"/>
-<Label text="{i18n>lblTitolo}"/>
-<Input id="inputTitolo" value="{scheme>/0/titolo}" width="100%"/>
-<Label text="{i18n>lblAnnopr}"/>
-<Input id="inputAnnopr" value="{scheme>/0/annopr}" type="Number" width="100%"/>
-<Label text="{i18n>lblLimiti}"/>
-<Input id="inputLimiti" value="{scheme>/0/limiti}" width="100%"/>
-<Label text="{i18n>lblAnnocs}"/>
-<Input id="inputAnnocs" value="{scheme>/0/annocs}" type="Number" width="100%"/>
-<Label text="{i18n>lblStgene}"/>
-<Input id="inputStgene" value="{scheme>/0/stgene}" width="100%"/>
-<Label text="{i18n>lblStspor}"/>
-<Input id="inputStspor" value="{scheme>/0/stspor}" width="100%"/>
-<Label text="{i18n>lblStcope}"/>
-<Input id="inputStcope" value="{scheme>/0/stcope}" width="100%"/>
-<Label text="{i18n>lblSttamp}"/>
-<Input id="inputSttamp" value="{scheme>/0/sttamp}" width="100%"/>
-<Label text="{i18n>lblStches}"/>
-<Input id="inputStches" value="{scheme>/0/stches}" width="100%"/>
-<Label text="{i18n>lblStpart}"/>
-<Input id="inputStpart" value="{scheme>/0/stpart}" width="100%"/>
-<Label text="{i18n>lblStfini}"/>
-<Input id="inputStfini" value="{scheme>/0/stfini}" width="100%"/>
-<Label text="{i18n>lblStimpi}"/>
-<Input id="inputStimpi" value="{scheme>/0/stimpi}" width="100%"/>
-<Label text="{i18n>lblStnote}"/>
-<Input id="inputStnote" value="{scheme>/0/stnote}" width="100%"/>
-<Label text="{i18n>lblStoccu}"/>
-<Input id="inputStoccu" value="{scheme>/0/stoccu}" width="100%"/>
-<Label text="{i18n>lblSogocc}"/>
-<Input id="inputSogocc" value="{scheme>/0/sogocc}" width="100%"/>
-<Label text="{i18n>lblNatocc}"/>
-<Input id="inputNatocc" value="{scheme>/0/natocc}" width="100%"/>
-<Label text="{i18n>lblTipocc}"/>
-<Input id="inputTipocc" value="{scheme>/0/tipocc}" width="100%"/>
-<Label text="{i18n>lblVincol}"/>
-<Input id="inputVincol" value="{scheme>/0/vincol}" width="100%"/>
-<Label text="{i18n>lblIntcul}"/>
-<Input id="inputIntcul" value="{scheme>/0/intcul}" width="100%"/>
-<Label text="{i18n>lblAutali}"/>
-<Input id="inputAutali" value="{scheme>/0/autali}" width="100%"/>
-<Label text="{i18n>lblDsturb}"/>
-<Input id="inputDsturb" value="{scheme>/0/dsturb}" width="100%"/>
-<Label text="{i18n>lblIterur}"/>
-<Input id="inputIterur" value="{scheme>/0/iterur}" width="100%"/>
-<Label text="{i18n>lblTitori}"/>
-<Select id="selectTitori" selectedKey="{scheme>/0/titori}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblAnte67}"/>
-<Select id="selectAnte67" selectedKey="{scheme>/0/ante67}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblAnte42}"/>
-<Select id="selectAnte42" selectedKey="{scheme>/0/ante42}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblCorcat}"/>
-<Select id="selectCorcat" selectedKey="{scheme>/0/corcat}" width="100%">
-<core:Item key="SI" text="Sì"/>
-<core:Item key="NO" text="No"/>
-</Select>
-<Label text="{i18n>lblCeragi}"/>
-<Input id="inputCeragi" value="{scheme>/0/ceragi}" width="100%"/>
-<Label text="{i18n>lblCollst}"/>
-<Input id="inputCollst" value="{scheme>/0/collst}" width="100%"/>
-<Label text="{i18n>lblDocamb}"/>
-<Input id="inputDocamb" value="{scheme>/0/docamb}" width="100%"/>
-<Label text="{i18n>lblVulssm}"/>
-<Select id="selectVulssm" selectedKey="{scheme>/0/vulssm}" width="100%">
-<core:Item key="00" text="No"/>
-<core:Item key="01" text="Sì"/>
-</Select>
-<Label text="{i18n>lblVulamb}"/>
-<Select id="selectVulamb" selectedKey="{scheme>/0/vulamb}" width="100%">
-<core:Item key="00" text="No"/>
-<core:Item key="01" text="Sì"/>
-</Select>
-<Label text="{i18n>lblStimav}"/>
-<Input id="inputStimav" value="{scheme>/0/stimav}" type="Number" width="100%"/>
-<Label text="{i18n>lblStimnt}"/>
-<Input id="inputStimnt" value="{scheme>/0/stimnt}" width="100%"/>
-<Label text="{i18n>lblAnnovl}"/>
-<Input id="inputAnnovl" value="{scheme>/0/annovl}" type="Number" width="100%"/>
-<Label text="{i18n>lblCanloc}"/>
-<Input id="inputCanloc" value="{scheme>/0/canloc}" width="100%"/>
-<Label text="{i18n>lblPrgprc}"/>
-<Input id="inputPrgprc" value="{scheme>/0/prgprc}" width="100%"/>
-<Label text="{i18n>lblDelibe}"/>
-<Input id="inputDelibe" value="{scheme>/0/delibe}" width="100%"/>
-<Label text="{i18n>lblEspgar}"/>
-<Input id="inputEspgar" value="{scheme>/0/espgar}" width="100%"/>
-<Label text="{i18n>lblEsitoa}"/>
-<Input id="inputEsitoa" value="{scheme>/0/esitoa}" width="100%"/>
-</f:content>
-</f:SimpleForm>
-</content>
-</Panel>
-</VBox>
-</ScrollContainer>
-</content>
-<footer>
-<OverflowToolbar>
-<ToolbarSpacer/>
-<Button id="btnSave" text="{i18n>btnSave}" type="Emphasized" press=".onSave"/>
-<Button id="btnCancel" text="{i18n>btnCancel}" type="Default" press=".onCancel"/>
-</OverflowToolbar>
-</footer>
-</Page>
+<mvc:View controllerName="schedaricognizione.controller.Create"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Page id="pageCreate" title="{i18n>appTitle}" showNavButton="true" navButtonPress=".onNavBack">
+        <content>
+            <ScrollContainer vertical="true" horizontal="false" focusable="false">
+                <VBox class="sapUiMediumMargin">
+                    <Panel id="panelIdenti" expandable="true" expanded="true" headerText="{i18n>sectionIdenti}" class="sapUiSmallMarginBottom">
+                        <content>
+                            <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+                                <f:content>
+                                    <Label text="{i18n>lblIdScheda}"/>
+                                    <Text text="{scheme>/0/idscheda}"/>
+                                    <Label text="{i18n>lblStato}"/>
+                                    <Text text="{scheme>/0/stato}"/>
+                                    <Label text="{i18n>lblIdSchedaModello}"/>
+                                    <Input id="inputIdSchedaModello" value="{scheme>/0/idsc_mdl}" width="100%"/>
+                                    <Label text="{i18n>lblDtcomp}"/>
+                                    <Text text="{path: 'scheme>/0/dtcomp', formatter: '.formatter.formatDate'}"/>
+                                </f:content>
+                            </f:SimpleForm>
+                        </content>
+                    </Panel>
+                    <Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOA}" class="sapUiSmallMarginBottom">
+                        <content>
+                            <VBox class="sapUiSmallMargin">
+                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+                                    <VBox>
+                                        <Label text="{i18n>lblSwenr}"/>
+                                        <Input id="inputSwenr" value="" width="200px" placeholder="UE"/>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="{i18n>lblSgrnr}"/>
+                                        <Input id="inputSgrnr" value="" width="200px" placeholder="Terreno"/>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="{i18n>lblSgenr}"/>
+                                        <Input id="inputSgenr" value="" width="200px" placeholder="Edificio"/>
+                                    </VBox>
+                                </HBox>
+                                <HBox class="sapUiSmallMarginBottom">
+                                    <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
+                                </HBox>
+                                <Table id="tableOA" items="{oa>/}" mode="MultiSelect" class="sapUiSmallMarginTop">
+                                    <columns>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblBukrs}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSwenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgrnr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblAoid}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblZztpca}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblZzfogl}"/>
+                                            </header>
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{oa>bukrs}"/>
+                                                <Text text="{oa>swenr}"/>
+                                                <Text text="{oa>sgrnr}"/>
+                                                <Text text="{oa>sgenr}"/>
+                                                <Text text="{oa>aoid}"/>
+                                                <Text text="{oa>zztpca}"/>
+                                                <Text text="{oa>zzfogl}"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                                <HBox class="sapUiSmallMarginTop" justifyContent="SpaceBetween">
+                                    <HBox spacing="0.5rem" class="sapUiTinyMarginBeginEnd">
+                                        <Button id="btnSelectAll" text="{i18n>btnSelectAll}" type="Default" press=".onSelectAllOA" width="120px"/>
+                                        <Button id="btnDeselectAll" text="{i18n>btnDeselectAll}" type="Default" press=".onDeselectAllOA" width="140px"/>
+                                        <Button id="btnRemoveOA" text="{i18n>btnRemove}" type="Reject" press=".onRemoveOA" width="140px"/>
+                                    </HBox>
+                                </HBox>
+                            </VBox>
+                        </content>
+                    </Panel>
+                    <Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestata}" class="sapUiSmallMarginBottom">
+                        <content>
+                        
+                            <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
+                                <f:content>
+                                    <Label text="{i18n>lblDocval}"/>
+                                    <Input id="inputDocval" value="{scheme>/0/docval}" width="100%"/>
+                                    <Label text="{i18n>lblIdbene}"/>
+                                    <Input id="inputIdbene" value="{scheme>/0/idbene}" width="100%"/>
+                                    <Label text="{i18n>lblEnteprop}"/>
+                                    <Input id="inputEntepr" value="{scheme>/0/entepr}" width="100%"/>
+                                    <Input id="inputTxbene" value="{scheme>/0/txbene}" width="100%"/>
+                                    <Label text="{i18n>lblCoogis}"/>
+                                    <Input id="inputCoogis" value="{scheme>/0/coogis}" width="100%"/>
+                                    <Label text="{i18n>lblFabter}"/>
+                                    <Select id="selectFabter" selectedKey="{scheme>/0/fabter}" width="100%">
+                                        <core:Item key="01" text="Edificato"/>
+                                        <core:Item key="02" text="Non Edificato"/>
+                                    </Select>
+                                    <Label text="{i18n>lblUsofab}"/>
+                                    <Input id="inputUsofab" value="{scheme>/0/usofab}" width="100%"/>
+                                    <Label text="{i18n>lblUsoter}"/>
+                                    <Input id="inputUsoter" value="{scheme>/0/usoter}" width="100%"/>
+                                    <Label text="{i18n>lblSuplut}"/>
+                                    <Input id="inputSuplut" value="{scheme>/0/suplut}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblSupfon}"/>
+                                    <Input id="inputSupfon" value="{scheme>/0/supfon}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblAccess}"/>
+                                    <Input id="inputAccess" value="{scheme>/0/access}" width="100%"/>
+                                    <Label text="{i18n>lblPorzed}"/>
+                                    <Input id="inputPorzed" value="{scheme>/0/porzed}" width="100%"/>
+                                    <Label text="{i18n>lblNumedi}"/>
+                                    <Input id="inputNumedi" value="{scheme>/0/numedi}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblNumfuo}"/>
+                                    <Input id="inputNumfuo" value="{scheme>/0/numfuo}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblNument}"/>
+                                    <Input id="inputNument" value="{scheme>/0/nument}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblColleg}"/>
+                                    <Input id="inputColleg" value="{scheme>/0/colleg}" width="100%"/>
+                                    <Label text="{i18n>lblStport}"/>
+                                    <Input id="inputStport" value="{scheme>/0/stport}" width="100%"/>
+                                    <Label text="{i18n>lblTampon}"/>
+                                    <Input id="inputTampon" value="{scheme>/0/tampon}" width="100%"/>
+                                    <Label text="{i18n>lblCopert}"/>
+                                    <Input id="inputCopert" value="{scheme>/0/copert}" width="100%"/>
+                                    <Label text="{i18n>lblSerram}"/>
+                                    <Input id="inputSerram" value="{scheme>/0/serram}" width="100%"/>
+                                    <Label text="{i18n>lblPartiz}"/>
+                                    <Input id="inputPartiz" value="{scheme>/0/partiz}" width="100%"/>
+                                    <Label text="{i18n>lblFinitu}"/>
+                                    <Input id="inputFinitu" value="{scheme>/0/finitu}" width="100%"/>
+                                    <Label text="{i18n>lblImpian}"/>
+                                    <Input id="inputImpian" value="{scheme>/0/impian}" width="100%"/>
+                                    <Label text="{i18n>lblPertin}"/>
+                                    <Input id="inputPertin" value="{scheme>/0/pertin}" width="100%"/>
+                                    <Label text="{i18n>lblSupcop}"/>
+                                    <Input id="inputSupcop" value="{scheme>/0/supcop}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblSupsco}"/>
+                                    <Input id="inputSupsco" value="{scheme>/0/supsco}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblZonomi}"/>
+                                    <Input id="inputZonomi" value="{scheme>/0/zonomi}" width="100%"/>
+                                    <Label text="{i18n>lblApe}"/>
+                                    <Select id="selectApe" selectedKey="{scheme>/0/ape}" width="100%">
+                                        <core:Item key="SI" text="Sì"/>
+                                        <core:Item key="NO" text="No"/>
+                                    </Select>
+                                    <Label text="{i18n>lblClsene}"/>
+                                    <Input id="inputClsene" value="{scheme>/0/clsene}" width="100%"/>
+                                    <Label text="{i18n>lblTitolo}"/>
+                                    <Input id="inputTitolo" value="{scheme>/0/titolo}" width="100%"/>
+                                    <Label text="{i18n>lblAnnopr}"/>
+                                    <Input id="inputAnnopr" value="{scheme>/0/annopr}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblLimiti}"/>
+                                    <Input id="inputLimiti" value="{scheme>/0/limiti}" width="100%"/>
+                                    <Label text="{i18n>lblAnnocs}"/>
+                                    <Input id="inputAnnocs" value="{scheme>/0/annocs}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblStgene}"/>
+                                    <Input id="inputStgene" value="{scheme>/0/stgene}" width="100%"/>
+                                    <Label text="{i18n>lblStspor}"/>
+                                    <Input id="inputStspor" value="{scheme>/0/stspor}" width="100%"/>
+                                    <Label text="{i18n>lblStcope}"/>
+                                    <Input id="inputStcope" value="{scheme>/0/stcope}" width="100%"/>
+                                    <Label text="{i18n>lblSttamp}"/>
+                                    <Input id="inputSttamp" value="{scheme>/0/sttamp}" width="100%"/>
+                                    <Label text="{i18n>lblStches}"/>
+                                    <Input id="inputStches" value="{scheme>/0/stches}" width="100%"/>
+                                    <Label text="{i18n>lblStpart}"/>
+                                    <Input id="inputStpart" value="{scheme>/0/stpart}" width="100%"/>
+                                    <Label text="{i18n>lblStfini}"/>
+                                    <Input id="inputStfini" value="{scheme>/0/stfini}" width="100%"/>
+                                    <Label text="{i18n>lblStimpi}"/>
+                                    <Input id="inputStimpi" value="{scheme>/0/stimpi}" width="100%"/>
+                                    <Label text="{i18n>lblStnote}"/>
+                                    <Input id="inputStnote" value="{scheme>/0/stnote}" width="100%"/>
+                                    <Label text="{i18n>lblStoccu}"/>
+                                    <Input id="inputStoccu" value="{scheme>/0/stoccu}" width="100%"/>
+                                    <Label text="{i18n>lblSogocc}"/>
+                                    <Input id="inputSogocc" value="{scheme>/0/sogocc}" width="100%"/>
+                                    <Label text="{i18n>lblNatocc}"/>
+                                    <Input id="inputNatocc" value="{scheme>/0/natocc}" width="100%"/>
+                                    <Label text="{i18n>lblTipocc}"/>
+                                    <Input id="inputTipocc" value="{scheme>/0/tipocc}" width="100%"/>
+                                    <Label text="{i18n>lblVincol}"/>
+                                    <Input id="inputVincol" value="{scheme>/0/vincol}" width="100%"/>
+                                    <Label text="{i18n>lblIntcul}"/>
+                                    <Input id="inputIntcul" value="{scheme>/0/intcul}" width="100%"/>
+                                    <Label text="{i18n>lblAutali}"/>
+                                    <Input id="inputAutali" value="{scheme>/0/autali}" width="100%"/>
+                                    <Label text="{i18n>lblDsturb}"/>
+                                    <Input id="inputDsturb" value="{scheme>/0/dsturb}" width="100%"/>
+                                    <Label text="{i18n>lblIterur}"/>
+                                    <Input id="inputIterur" value="{scheme>/0/iterur}" width="100%"/>
+                                    <Label text="{i18n>lblTitori}"/>
+                                    <Select id="selectTitori" selectedKey="{scheme>/0/titori}" width="100%">
+                                        <core:Item key="SI" text="Sì"/>
+                                        <core:Item key="NO" text="No"/>
+                                    </Select>
+                                    <Label text="{i18n>lblAnte67}"/>
+                                    <Select id="selectAnte67" selectedKey="{scheme>/0/ante67}" width="100%">
+                                        <core:Item key="SI" text="Sì"/>
+                                        <core:Item key="NO" text="No"/>
+                                    </Select>
+                                    <Label text="{i18n>lblAnte42}"/>
+                                    <Select id="selectAnte42" selectedKey="{scheme>/0/ante42}" width="100%">
+                                        <core:Item key="SI" text="Sì"/>
+                                        <core:Item key="NO" text="No"/>
+                                    </Select>
+                                    <Label text="{i18n>lblCorcat}"/>
+                                    <Select id="selectCorcat" selectedKey="{scheme>/0/corcat}" width="100%">
+                                        <core:Item key="SI" text="Sì"/>
+                                        <core:Item key="NO" text="No"/>
+                                    </Select>
+                                    <Label text="{i18n>lblCeragi}"/>
+                                    <Input id="inputCeragi" value="{scheme>/0/ceragi}" width="100%"/>
+                                    <Label text="{i18n>lblCollst}"/>
+                                    <Input id="inputCollst" value="{scheme>/0/collst}" width="100%"/>
+                                    <Label text="{i18n>lblDocamb}"/>
+                                    <Input id="inputDocamb" value="{scheme>/0/docamb}" width="100%"/>
+                                    <Label text="{i18n>lblVulssm}"/>
+                                    <Select id="selectVulssm" selectedKey="{scheme>/0/vulssm}" width="100%">
+                                        <core:Item key="00" text="No"/>
+                                        <core:Item key="01" text="Sì"/>
+                                    </Select>
+                                    <Label text="{i18n>lblVulamb}"/>
+                                    <Select id="selectVulamb" selectedKey="{scheme>/0/vulamb}" width="100%">
+                                        <core:Item key="00" text="No"/>
+                                        <core:Item key="01" text="Sì"/>
+                                    </Select>
+                                    <Label text="{i18n>lblStimav}"/>
+                                    <Input id="inputStimav" value="{scheme>/0/stimav}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblStimnt}"/>
+                                    <Input id="inputStimnt" value="{scheme>/0/stimnt}" width="100%"/>
+                                    <Label text="{i18n>lblAnnovl}"/>
+                                    <Input id="inputAnnovl" value="{scheme>/0/annovl}" type="Number" width="100%"/>
+                                    <Label text="{i18n>lblCanloc}"/>
+                                    <Input id="inputCanloc" value="{scheme>/0/canloc}" width="100%"/>
+                                    <Label text="{i18n>lblPrgprc}"/>
+                                    <Input id="inputPrgprc" value="{scheme>/0/prgprc}" width="100%"/>
+                                    <Label text="{i18n>lblDelibe}"/>
+                                    <Input id="inputDelibe" value="{scheme>/0/delibe}" width="100%"/>
+                                    <Label text="{i18n>lblEspgar}"/>
+                                    <Input id="inputEspgar" value="{scheme>/0/espgar}" width="100%"/>
+                                    <Label text="{i18n>lblEsitoa}"/>
+                                    <Input id="inputEsitoa" value="{scheme>/0/esitoa}" width="100%"/>
+                                </f:content>
+                            </f:SimpleForm>
+                        </content>
+                    </Panel>
+                </VBox>
+            </ScrollContainer>
+        </content>
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer/>
+                <Button id="btnSave" text="{i18n>btnSave}" type="Emphasized" press=".onSave"/>
+                <Button id="btnCancel" text="{i18n>btnCancel}" type="Default" press=".onCancel"/>
+            </OverflowToolbar>
+        </footer>
+    </Page>
 </mvc:View>

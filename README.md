@@ -9,7 +9,7 @@
 |**Service Type**<br>None|
 |**Service URL**<br>N/A|
 |**Module Name**<br>schedaricognizione|
-|**Application Title**<br>RE-FX – Scheda Ricognizione|
+|**Application Title**<br>  Scheda Ricognizione|
 |**Namespace**<br>|
 |**UI5 Theme**<br>sap_horizon|
 |**UI5 Version**<br>1.153.0|
