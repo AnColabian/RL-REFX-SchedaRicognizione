@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZRE_SCHEDARICO_SRV" xml:lang="it" sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.SchemaVersion" String="1.0.0"
+                xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <EntityType Name="helpEdif" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="soc"/>
+                    <PropertyRef Name="uEco"/>
+                    <PropertyRef Name="edif"/>
+                </Key>
+                <Property Name="oggEdif" Type="Edm.String" Nullable="false" MaxLength="22" sap:unicode="false" sap:label="Numero oggetto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uEco" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità economica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="edif" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Edificio" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="helpTerr" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="soc"/>
+                    <PropertyRef Name="uEco"/>
+                </Key>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uEco" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità economica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="terr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Terreno" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="defTerr" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Def. terreno" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tipoUso" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Tipo uso prev." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="responsabile" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Responsabile" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="helpUEco" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="soc"/>
+                    <PropertyRef Name="uEco"/>
+                </Key>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uEco" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità economica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="defUEco" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Definizione UE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="responsabile" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Responsabile" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="oggettoArch" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="soc"/>
+                    <PropertyRef Name="uEco"/>
+                    <PropertyRef Name="terr"/>
+                    <PropertyRef Name="edif"/>
+                    <PropertyRef Name="idOggArch"/>
+                </Key>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="uEco" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità economica" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="terr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Terreno" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="edif" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Edificio" sap:creatable="false" sap:updatable="false"/>
+                <Property Name="idOggArch" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="ID ogg. arch." sap:creatable="false" sap:updatable="false" sap:filterable="false"/>
+                <Property Name="indirVia" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Via" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numCivico" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero civico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="localita" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Località" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="provincia" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Regione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="scheda" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="idScheda"/>
+                </Key>
+                <Property Name="idScheda" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Numero ID scheda" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="via" Type="Edm.String" Nullable="false" MaxLength="60" sap:unicode="false" sap:label="Via" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numCivico" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero civico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="cap" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="CAP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="localita" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Località" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="provincia" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Regione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stato" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Stato scheda" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="autore" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Autore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="dtCreaz" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data cr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="oraCreaz" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Ora" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="autModif" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Autore modifica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="dtModif" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data modifica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="oraModif" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Ora di modifica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="idSchModel" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Scheda modello" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="docValorizz" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Doc. valorizz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="dtCompil" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data compilazione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="idBene" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="ID bene inv.reg." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="entePropr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Ente Propr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="denomBene" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Denomin. Bene" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="coorGIS" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Coord.GIS" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tipologia" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Tipologia" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="usoEdif" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Destin.Uso" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="usoTerr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Destin.Uso" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="supLU" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Sup.lorda utile FT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="supFond" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Sup.fondiaria (mq)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="accessib" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Accessibilita" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="porzEdif" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Edif.totale o parz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numEdif" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Numero edifici" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numLivFuo" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Livelli fuori terra" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numLivEnt" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Livelli entro terra" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="collegam" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Collegamenti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="strPort" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Struttura portante" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tampon" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Tamponamenti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="copert" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Copertura" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="serram" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Serr.est. e int." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="partInt" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Partizioni interne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="finiture" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Finiture" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="impianti" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Impianti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="pertin" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="pertinenze" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="supCop" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Sup. coperta (mq)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="supScop" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="sup. scoperta (mq)" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="zonOMI" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Zona OMI" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="presApe" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Presenza APE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="clsEnerg" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Classe Energ." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="titProv" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Titolo proven." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="annoAcquis" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Anno acquisiz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="attiLimit" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Atti limitativi" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="annoCostr" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Anno di costruzione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stGener" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato generale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stStrPort" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Strutt.portant" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stCopert" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Copertura" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stTampon" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Tamponamenti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stChiusEst" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Chiusure ester" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stInter" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Interni" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stFinit" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Finiture" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stImpian" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato Impianti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stConsNote" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Stato conserv. Note" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stOccup" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stato di occupazione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="soggOccup" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Soggetto occupante" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="natOccup" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Nat giur occupaz" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tipOccup" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Tp occupaz e durata" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="vincoli" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Vincoli" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="intCultMIB" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Inter cult MIBACT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="autMibAli" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Aut MIBACT alienaz" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="destUrb" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Destin urban PGT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="iterUrb" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Iter urb.cambio uso" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="titOrig" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Titolo originario" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ante67" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Attestaz ante 1967" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ante42" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Attestaz ante 1942" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="corrCat" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Corr.catast.luoghi" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="certAgib" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Cert.agibilità SCA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="collStat" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Collaudo statico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="docAmbien" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Doc. ambientale" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="vulnRSism" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Vuln.rischio sismico" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="vulnRIdro" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Vuln.rischio idrogeo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stimaVal" Type="Edm.String" Nullable="false" MaxLength="16" sap:unicode="false" sap:label="Stima imm. Valore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stimaNote" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Stima imm. Note" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="annoValor" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Anno valorizzazione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="canLocaz" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Event.canone locaz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="progPrec" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Progetti precedenti" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="delinInsPDA" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Delibera ins.PDA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="garaVend" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Event.gara vendita" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="esitoAsta" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Esito asta" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="toPosizioni" Relationship="ZRE_SCHEDARICO_SRV.toPosizioni" FromRole="FromRole_toPosizioni" ToRole="ToRole_toPosizioni"/>
+            </EntityType>
+            <EntityType Name="posizione" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="idScheda"/>
+                    <PropertyRef Name="idOggArch"/>
+                </Key>
+                <Property Name="idScheda" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Num ID scheda" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="chIntOA" Type="Edm.String" Nullable="false" MaxLength="13" sap:unicode="false" sap:label="ChiaveInt Ogg. arch." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="idOggArch" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="ID ogg. arch." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="objnrOA" Type="Edm.String" Nullable="false" MaxLength="22" sap:unicode="false" sap:label="OBJNR OA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="objnrUL" Type="Edm.String" Nullable="false" MaxLength="22" sap:unicode="false" sap:label="OBJNR UL" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="chIntUL" Type="Edm.String" Nullable="false" MaxLength="13" sap:unicode="false" sap:label="ChiaveInt UnLocaz" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="uEco" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità economica" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="terr" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Terreno" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="edif" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Edificio" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="unitLocaz" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Unità Locaz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="numIndir" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Num Indirizzo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tpCatas" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Tipo Catasto" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tpEdTer" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tp.Ed.Ter." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="codBelf" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Cod.Belf." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="foglio" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Foglio" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="sezUrb" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Sez.Urb." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="partic" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Part." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="sub" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Sub" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="denom" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Denominatore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tpPart" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Tipo Part." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="codComCat" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Cod.Com.Cat." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="helpSoc" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="soc"/>
+                </Key>
+                <Property Name="soc" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Società" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="nomeSoc" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Nome della soc." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="localita" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Località" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="helpScheda" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="idScheda"/>
+                </Key>
+                <Property Name="idScheda" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Numero ID scheda" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="stato" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Stato scheda" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="idSchMdl" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="Scheda modello" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="docVal" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Doc. valorizz." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="dtComp" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data compilazione" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="idBene" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="ID bene inv.reg." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="entePr" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Ente Propr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="denBene" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="Denomin. Bene" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="autore" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Autore" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="dtCre" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Data cr." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="tipolog" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Tipologia" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="toPosizioni" sap:content-version="1">
+                <End Type="ZRE_SCHEDARICO_SRV.scheda" Multiplicity="1" Role="FromRole_toPosizioni"/>
+                <End Type="ZRE_SCHEDARICO_SRV.posizione" Multiplicity="*" Role="ToRole_toPosizioni"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_toPosizioni">
+                        <PropertyRef Name="idScheda"/>
+                    </Principal>
+                    <Dependent Role="ToRole_toPosizioni">
+                        <PropertyRef Name="idScheda"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZRE_SCHEDARICO_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="helpEdif" EntityType="ZRE_SCHEDARICO_SRV.helpEdif" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="helpTerr" EntityType="ZRE_SCHEDARICO_SRV.helpTerr" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="helpUEco" EntityType="ZRE_SCHEDARICO_SRV.helpUEco" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="oggettiArch" EntityType="ZRE_SCHEDARICO_SRV.oggettoArch" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="scheda" EntityType="ZRE_SCHEDARICO_SRV.scheda" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="posizioni" EntityType="ZRE_SCHEDARICO_SRV.posizione" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="helpSoc" EntityType="ZRE_SCHEDARICO_SRV.helpSoc" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="helpScheda" EntityType="ZRE_SCHEDARICO_SRV.helpScheda" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="toPosizioni" Association="ZRE_SCHEDARICO_SRV.toPosizioni" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="scheda" Role="FromRole_toPosizioni"/>
+                    <End EntitySet="posizioni" Role="ToRole_toPosizioni"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="https://vhazig4dci.sap.ariaspa.local:44300/sap/opu/odata/sap/ZRE_SCHEDARICO_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://vhazig4dci.sap.ariaspa.local:44300/sap/opu/odata/sap/ZRE_SCHEDARICO_SRV/$metadata"
+                xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

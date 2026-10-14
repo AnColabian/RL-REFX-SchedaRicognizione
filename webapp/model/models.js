@@ -376,6 +376,19 @@ sap.ui.define([
             });
             oModel.setDefaultBindingMode("TwoWay");
             return oModel;
+        },
+
+        readSchemeDetail: function (oSchemeModel, sIdScheda) {
+            return new Promise(function (resolve, reject) {
+                var oScheme = (oSchemeModel.getData() || []).find(function (oItem) {
+                    return oItem.idscheda === sIdScheda;
+                });
+                if (!oScheme) {
+                    reject(new Error("Scheda " + sIdScheda + " non trovata"));
+                    return;
+                }
+                resolve(JSON.parse(JSON.stringify(oScheme)));
+            });
         }
     };
 });

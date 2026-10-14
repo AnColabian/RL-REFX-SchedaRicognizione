@@ -1,0 +1,27 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Dialog id="dialogImportTemplate" title="Importare Scheda Modello" contentWidth="32rem" initialFocus="comboTemplateScheme">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Text text="Vuoi selezionare una Scheda Modello di Riferimento?"/>
+                <Label text="Scheda Modello" labelFor="comboTemplateScheme" class="sapUiSmallMarginTop"/>
+                <HBox alignItems="Center" width="100%">
+                    <ComboBox id="comboTemplateScheme" items="{templateOptions>/}" selectedKey="{templateSelection>/idscheda}" placeholder="Seleziona una scheda modello" width="100%">
+                        <layoutData>
+                            <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
+                        </layoutData>
+                        <items>
+                            <core:Item key="{templateOptions>idscheda}" text="{templateOptions>idscheda} - {templateOptions>txbene}"/>
+                        </items>
+                    </ComboBox>
+                    <Button icon="sap-icon://value-help" tooltip="Cerca Scheda Modello" press=".onTemplateValueHelp" class="sapUiTinyMarginBegin"/>
+                </HBox>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button id="btnImportTemplate" text="Importa" type="Emphasized" enabled="{= !!${templateSelection>/idscheda} }" press=".onImportTemplate"/>
+        </beginButton>
+        <endButton>
+            <Button id="btnCreateWithoutTemplate" text="Crea Nuova" press=".onCreateWithoutTemplate"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
