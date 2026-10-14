@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <SelectDialog id="dialogHelpUEco" title="{i18n>titleHelpUEco}" noDataText="{i18n>msgNoHelpValues}" search=".onSearchHelpUEco" liveChange=".onSearchHelpUEco" confirm=".onConfirmHelpUEco">
+        <items>
+            <StandardListItem title="{helpUEco>uEco}" description="{helpUEco>defUEco}" info="{helpUEco>responsabile}"/>
+        </items>
+    </SelectDialog>
+</core:FragmentDefinition>

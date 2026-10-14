@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
-    <SelectDialog id="dialogTemplateValueHelp" title="Seleziona Scheda Modello" items="{templateOptions>/}" noDataText="Nessuna scheda modello disponibile" search=".onSearchTemplateValueHelp" liveChange=".onSearchTemplateValueHelp" confirm=".onConfirmTemplateValueHelp">
+    <SelectDialog id="dialogTemplateValueHelp" title="Seleziona Scheda Modello" items="{create>/helpScheda}" noDataText="Nessuna scheda modello disponibile" search=".onSearchTemplateValueHelp" liveChange=".onSearchTemplateValueHelp" confirm=".onConfirmTemplateValueHelp">
         <items>
-            <StandardListItem title="{templateOptions>idscheda}" description="{templateOptions>txbene}"/>
+            <StandardListItem title="{create>idScheda}" description="{create>denBene}"/>
         </items>
     </SelectDialog>
 </core:FragmentDefinition>

@@ -10,6 +10,16 @@
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
     "resources": "resources.json",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZRE_SCHEDARICO_SRV/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0",
+          "localUri": "model/metadata_ZRE_SCHEDARICO_14-10-2026.xml"
+        }
+      }
+    },
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
       "version": "1.33.0",
@@ -59,19 +69,20 @@
       "cozy": true
     },
     "models": {
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "None",
+          "useBatch": false
+        }
+      },
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "schedaricognizione.i18n.i18n"
         }
-      },
-      "scheme": {
-        "type": "sap.ui.model.json.JSONModel",
-        "preload": true
-      },
-      "oa": {
-        "type": "sap.ui.model.json.JSONModel",
-        "preload": true
       }
     },
     "resources": {

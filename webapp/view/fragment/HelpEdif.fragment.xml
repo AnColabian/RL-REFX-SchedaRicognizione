@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <SelectDialog id="dialogHelpEdif" title="{i18n>titleHelpEdif}" noDataText="{i18n>msgNoHelpValues}" search=".onSearchHelpEdif" liveChange=".onSearchHelpEdif" confirm=".onConfirmHelpEdif">
+        <items>
+            <StandardListItem title="{helpEdif>edif}" description="{helpEdif>oggEdif}"/>
+        </items>
+    </SelectDialog>
+</core:FragmentDefinition>

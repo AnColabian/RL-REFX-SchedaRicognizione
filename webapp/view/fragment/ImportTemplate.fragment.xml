@@ -5,12 +5,12 @@
                 <Text text="Vuoi selezionare una Scheda Modello di Riferimento?"/>
                 <Label text="Scheda Modello" labelFor="comboTemplateScheme" class="sapUiSmallMarginTop"/>
                 <HBox alignItems="Center" width="100%">
-                    <ComboBox id="comboTemplateScheme" items="{templateOptions>/}" selectedKey="{templateSelection>/idscheda}" placeholder="Seleziona una scheda modello" width="100%">
+                    <ComboBox id="comboTemplateScheme" items="{create>/helpScheda}" selectedKey="{templateSelection>/idScheda}" placeholder="Seleziona una scheda modello" width="100%">
                         <layoutData>
                             <FlexItemData growFactor="1" shrinkFactor="1" baseSize="0%"/>
                         </layoutData>
                         <items>
-                            <core:Item key="{templateOptions>idscheda}" text="{templateOptions>idscheda} - {templateOptions>txbene}"/>
+                            <core:Item key="{create>idScheda}" text="{create>idScheda} - {create>denBene}"/>
                         </items>
                     </ComboBox>
                     <Button icon="sap-icon://value-help" tooltip="Cerca Scheda Modello" press=".onTemplateValueHelp" class="sapUiTinyMarginBegin"/>
@@ -18,7 +18,7 @@
             </VBox>
         </content>
         <beginButton>
-            <Button id="btnImportTemplate" text="Importa" type="Emphasized" enabled="{= !!${templateSelection>/idscheda} }" press=".onImportTemplate"/>
+            <Button id="btnImportTemplate" text="Importa" type="Emphasized" enabled="{= !!${templateSelection>/idScheda} }" press=".onImportTemplate"/>
         </beginButton>
         <endButton>
             <Button id="btnCreateWithoutTemplate" text="Crea Nuova" press=".onCreateWithoutTemplate"/>

@@ -3,7 +3,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="pageCreate" title="{i18n>appTitle}" showNavButton="true" navButtonPress=".onNavBack">
+    <Page id="pageCreate" title="{i18n>titleCreate}" showNavButton="true" navButtonPress=".onNavBack">
         <content>
             <ScrollContainer vertical="true" horizontal="false" focusable="false">
                 <VBox class="sapUiMediumMargin">
@@ -17,89 +17,8 @@
                             </f:SimpleForm>
                         </content>
                     </Panel>
-                    <Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOA}" class="sapUiSmallMarginBottom">
-                        <content>
-                            <VBox class="sapUiSmallMargin">
-                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-                                    <VBox>
-                                        <Label text="{i18n>lblSwenr}"/>
-                                        <Input id="inputSwenr" value="" width="200px" placeholder="UE"/>
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="{i18n>lblSgrnr}"/>
-                                        <Input id="inputSgrnr" value="" width="200px" placeholder="Terreno"/>
-                                    </VBox>
-                                    <VBox>
-                                        <Label text="{i18n>lblSgenr}"/>
-                                        <Input id="inputSgenr" value="" width="200px" placeholder="Edificio"/>
-                                    </VBox>
-                                </HBox>
-                                <HBox class="sapUiSmallMarginBottom">
-                                    <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
-                                </HBox>
-                                <Table id="tableOA" items="{oa>/}" mode="MultiSelect" class="sapUiSmallMarginTop">
-                                    <columns>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblBukrs}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblSwenr}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblSgrnr}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblSgenr}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblAoid}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblZztpca}"/>
-                                            </header>
-                                        </Column>
-                                        <Column>
-                                            <header>
-                                                <Text text="{i18n>lblZzfogl}"/>
-                                            </header>
-                                        </Column>
-                                    </columns>
-                                    <items>
-                                        <ColumnListItem>
-                                            <cells>
-                                                <Text text="{oa>bukrs}"/>
-                                                <Text text="{oa>swenr}"/>
-                                                <Text text="{oa>sgrnr}"/>
-                                                <Text text="{oa>sgenr}"/>
-                                                <Text text="{oa>aoid}"/>
-                                                <Text text="{oa>zztpca}"/>
-                                                <Text text="{oa>zzfogl}"/>
-                                            </cells>
-                                        </ColumnListItem>
-                                    </items>
-                                </Table>
-                                <HBox class="sapUiSmallMarginTop" justifyContent="SpaceBetween">
-                                    <HBox spacing="0.5rem" class="sapUiTinyMarginBeginEnd">
-                                        <Button id="btnSelectAll" text="{i18n>btnSelectAll}" type="Default" press=".onSelectAllOA" width="120px"/>
-                                        <Button id="btnDeselectAll" text="{i18n>btnDeselectAll}" type="Default" press=".onDeselectAllOA" width="140px"/>
-                                        <Button id="btnRemoveOA" text="{i18n>btnRemove}" type="Reject" press=".onRemoveOA" width="140px"/>
-                                    </HBox>
-                                </HBox>
-                            </VBox>
-                        </content>
-                    </Panel>
-                    <Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestata}" class="sapUiSmallMarginBottom">
+
+                    <Panel id="panelTestata" expandable="true" expanded="true" headerText="{i18n>sectionTestataNew}" class="sapUiSmallMarginBottom">
                         <content>
                             <VBox class="sapUiSmallMargin">
                                 <HBox class="sapUiSmallMarginBottom">
@@ -110,16 +29,16 @@
                                         <Input value="{scheme>/0/idbene}" width="100%"/>
                                         <Label text="{i18n>lblEnteprop}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/entepr}" width="100%"/>
-                                        <Label text="{i18n>lblCoogis}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblCoogis}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/coogis}" width="100%"/>
-                                        <Label text="{i18n>lblFabter}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblFabter}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/fabter}" width="100%">
                                             <core:Item key="01" text="Edificato"/>
                                             <core:Item key="02" text="Non Edificato"/>
                                         </Select>
-                                        <Label text="{i18n>lblUsofab}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblUsofab}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/usofab}" width="100%"/>
-                                        <Label text="{i18n>lblUsoter}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblUsoter}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/usoter}" width="100%"/>
                                         <Label text="{i18n>lblSuplut}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/suplut}" type="Number" width="100%"/>
@@ -129,11 +48,11 @@
                                         <Input value="{scheme>/0/access}" width="100%"/>
                                         <Label text="{i18n>lblPorzed}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/porzed}" width="100%"/>
-                                        <Label text="{i18n>lblNumedi}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblNumedi}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/numedi}" type="Number" width="100%"/>
-                                        <Label text="{i18n>lblNumfuo}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblNumfuo}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/numfuo}" type="Number" width="100%"/>
-                                        <Label text="{i18n>lblNument}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblNument}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/nument}" type="Number" width="100%"/>
                                         <Label text="{i18n>lblColleg}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/colleg}" width="100%"/>
@@ -157,18 +76,18 @@
                                         <Input value="{scheme>/0/impian}" width="100%"/>
                                         <Label text="{i18n>lblPertin}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/pertin}" width="100%"/>
-                                        <Label text="{i18n>lblSupcop}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblSupcop}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/supcop}" type="Number" width="100%"/>
-                                        <Label text="{i18n>lblSupsco}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblSupsco}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/supsco}" type="Number" width="100%"/>
                                         <Label text="{i18n>lblZonomi}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/zonomi}" width="100%"/>
-                                        <Label text="{i18n>lblApe}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblApe}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/ape}" width="100%">
                                             <core:Item key="SI" text="Sì"/>
                                             <core:Item key="NO" text="No"/>
                                         </Select>
-                                        <Label text="{i18n>lblClsene}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblClsene}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/clsene}" width="100%"/>
                                         <Label text="{i18n>lblTitolo}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/titolo}" width="100%"/>
@@ -178,21 +97,21 @@
                                         <Input value="{scheme>/0/limiti}" width="100%"/>
                                         <Label text="{i18n>lblAnnocs}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/annocs}" type="Number" width="100%"/>
-                                        <Label text="{i18n>lblStgene}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStgene}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stgene}" width="100%"/>
-                                        <Label text="{i18n>lblStspor}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStspor}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stspor}" width="100%"/>
-                                        <Label text="{i18n>lblStcope}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStcope}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stcope}" width="100%"/>
-                                        <Label text="{i18n>lblSttamp}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblSttamp}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/sttamp}" width="100%"/>
-                                        <Label text="{i18n>lblStches}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStches}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stches}" width="100%"/>
-                                        <Label text="{i18n>lblStpart}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStpart}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stpart}" width="100%"/>
-                                        <Label text="{i18n>lblStfini}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStfini}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stfini}" width="100%"/>
-                                        <Label text="{i18n>lblStimpi}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStimpi}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stimpi}" width="100%"/>
                                     </VBox>
                                 </HBox>
@@ -200,15 +119,15 @@
                                     <VBox class="sapUiSmallMarginEnd" width="50%">
                                         <Label text="{i18n>lblStnote}"/>
                                         <Input value="{scheme>/0/stnote}" width="100%"/>
-                                        <Label text="{i18n>lblStoccu}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblStoccu}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/stoccu}" width="100%"/>
                                         <Label text="{i18n>lblSogocc}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/sogocc}" width="100%"/>
-                                        <Label text="{i18n>lblNatocc}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblNatocc}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/natocc}" width="100%"/>
-                                        <Label text="{i18n>lblTipocc}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblTipocc}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/tipocc}" width="100%"/>
-                                        <Label text="{i18n>lblVincol}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblVincol}" class="sapUiSmallMarginTop" required="true"/>
                                         <Input value="{scheme>/0/vincol}" width="100%"/>
                                         <Label text="{i18n>lblIntcul}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/intcul}" width="100%"/>
@@ -218,22 +137,22 @@
                                         <Input value="{scheme>/0/dsturb}" width="100%"/>
                                         <Label text="{i18n>lblIterur}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/iterur}" width="100%"/>
-                                        <Label text="{i18n>lblTitori}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblTitori}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/titori}" width="100%">
                                             <core:Item key="SI" text="Sì"/>
                                             <core:Item key="NO" text="No"/>
                                         </Select>
-                                        <Label text="{i18n>lblAnte67}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblAnte67}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/ante67}" width="100%">
                                             <core:Item key="SI" text="Sì"/>
                                             <core:Item key="NO" text="No"/>
                                         </Select>
-                                        <Label text="{i18n>lblAnte42}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblAnte42}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/ante42}" width="100%">
                                             <core:Item key="SI" text="Sì"/>
                                             <core:Item key="NO" text="No"/>
                                         </Select>
-                                        <Label text="{i18n>lblCorcat}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblCorcat}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/corcat}" width="100%">
                                             <core:Item key="SI" text="Sì"/>
                                             <core:Item key="NO" text="No"/>
@@ -246,12 +165,12 @@
                                         <Input value="{scheme>/0/collst}" width="100%"/>
                                         <Label text="{i18n>lblDocamb}" class="sapUiSmallMarginTop"/>
                                         <Input value="{scheme>/0/docamb}" width="100%"/>
-                                        <Label text="{i18n>lblVulssm}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblVulssm}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/vulssm}" width="100%">
                                             <core:Item key="00" text="No"/>
                                             <core:Item key="01" text="Sì"/>
                                         </Select>
-                                        <Label text="{i18n>lblVulamb}" class="sapUiSmallMarginTop"/>
+                                        <Label text="{i18n>lblVulamb}" class="sapUiSmallMarginTop" required="true"/>
                                         <Select selectedKey="{scheme>/0/vulamb}" width="100%">
                                             <core:Item key="00" text="No"/>
                                             <core:Item key="01" text="Sì"/>
@@ -277,16 +196,230 @@
                             </VBox>
                         </content>
                     </Panel>
+
+                    <Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOANew}" class="sapUiSmallMarginBottom">
+    <content>
+        <VBox class="sapUiSmallMargin">
+            <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+                <VBox>
+    <Label text="{i18n>lblSwenr}"/>
+    <Input id="inputSwenr" value="{create>/filters/uEco}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpUEcoRequest"/>
+</VBox>
+               <VBox>
+    <Label text="{i18n>lblSgrnr}"/>
+    <Input id="inputSgrnr" value="{create>/filters/terr}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpTerrRequest"/>
+</VBox>
+               <VBox>
+    <Label text="{i18n>lblSgenr}"/>
+    <Input id="inputSgenr" value="{create>/filters/edif}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpEdifRequest"/>
+</VBox>
+            </HBox>
+            <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+                <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
+            </HBox>
+          <Table id="tableOA" items="{create>/risultatiOA}" mode="MultiSelect" class="sapUiSmallMarginTop">
+    <headerToolbar>
+        <OverflowToolbar>
+            <Title text="{i18n>titleAvailablePositions}" level="H5"/>
+            <ToolbarSpacer/>
+            <Button id="btnAddPositions" text="{i18n>btnAddPositions}" type="Emphasized" press=".onAddSelectedPositions"/>
+        </OverflowToolbar>
+    </headerToolbar>
+    <columns>
+        <Column>
+            <header>
+                <Text text="{i18n>lblBukrs}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSwenr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSgrnr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSgenr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblAoid}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblStreet}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblHouseNum}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblCity}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblRegion}"/>
+            </header>
+        </Column>
+    </columns>
+    <items>
+        <ColumnListItem>
+            <cells>
+                <Text text="{create>soc}"/>
+                <Text text="{create>uEco}"/>
+                <Text text="{create>terr}"/>
+                <Text text="{create>edif}"/>
+                <Text text="{create>idOggArch}"/>
+                <Text text="{create>indirVia}"/>
+                <Text text="{create>numCivico}"/>
+                <Text text="{create>localita}"/>
+                <Text text="{create>provincia}"/>
+            </cells>
+        </ColumnListItem>
+    </items>
+</Table>
+            <Table id="tableOASelected" items="{create>/posizioniSelezionate}" mode="MultiSelect" class="sapUiSmallMarginTop">
+    <headerToolbar>
+        <OverflowToolbar>
+            <Text text="{= ${i18n>lblCurrentPositions} + ' ' + ${create>/posizioniSelezionate}.length }"/>
+            <ToolbarSpacer/>
+            <Button id="btnRemovePositions" text="{i18n>btnRemovePositions}" type="Default" press=".onRemoveSelectedPositions"/>
+        </OverflowToolbar>
+    </headerToolbar>
+    <columns>
+        <Column>
+            <header>
+                <Text text="{i18n>lblBukrs}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSwenr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSgrnr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSgenr}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblAoid}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblUnitLocaz}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblNumIndir}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblTpCatas}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblTpEdTer}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblCodBelf}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblFoglio}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSezUrb}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblPartic}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblSub}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblDenom}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblTpPart}"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="{i18n>lblCodComCat}"/>
+            </header>
+        </Column>
+    </columns>
+    <items>
+        <ColumnListItem>
+            <cells>
+                <Text text="{create>soc}"/>
+                <Text text="{create>uEco}"/>
+                <Text text="{create>terr}"/>
+                <Text text="{create>edif}"/>
+                <Text text="{create>idOggArch}"/>
+                <Text text="{create>unitLocaz}"/>
+                <Text text="{create>numIndir}"/>
+                <Text text="{create>tpCatas}"/>
+                <Text text="{create>tpEdTer}"/>
+                <Text text="{create>codBelf}"/>
+                <Text text="{create>foglio}"/>
+                <Text text="{create>sezUrb}"/>
+                <Text text="{create>partic}"/>
+                <Text text="{create>sub}"/>
+                <Text text="{create>denom}"/>
+                <Text text="{create>tpPart}"/>
+                <Text text="{create>codComCat}"/>
+            </cells>
+        </ColumnListItem>
+    </items>
+</Table>
+        </VBox>
+    </content>
+</Panel>
                 </VBox>
             </ScrollContainer>
         </content>
         <footer>
             <OverflowToolbar>
                 <ToolbarSpacer/>
-                <Button id="btnSave" text="{i18n>btnSave}" type="Emphasized" press=".onSave"/>
+                <Button id="btnSaveDraft" text="{i18n>btnSaveDraft}" type="Emphasized" press=".onSaveDraft"/>
+                <Button id="btnSaveFinal" text="{i18n>btnSaveFinal}" type="Default" press=".onSaveFinal"/>
                 <Button id="btnCancel" text="{i18n>btnCancel}" type="Default" press=".onCancel"/>
             </OverflowToolbar>
         </footer>
     </Page>
->>>>>>> caf075185c26bba6e2d5dbf48372d9da35e0a836
 </mvc:View>
