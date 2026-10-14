@@ -10,16 +10,10 @@
                     <Panel id="panelIdenti" expandable="true" expanded="true" headerText="{i18n>sectionIdenti}" class="sapUiSmallMarginBottom">
                         <content>
                             <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
-                                <f:content>
-                                    <Label text="{i18n>lblIdScheda}"/>
-                                    <Text text="{scheme>/0/idscheda}"/>
-                                    <Label text="{i18n>lblStato}"/>
-                                    <Text text="{scheme>/0/stato}"/>
-                                    <Label text="{i18n>lblIdSchedaModello}"/>
-                                    <Input id="inputIdSchedaModello" value="{scheme>/0/idsc_mdl}" width="100%"/>
-                                    <Label text="{i18n>lblDtcomp}"/>
-                                    <Text text="{path: 'scheme>/0/dtcomp', formatter: '.formatter.formatDate'}"/>
-                                </f:content>
+                                <Label text="{i18n>lblIdSchedaModello}" visible="{= !!${scheme>/0/idsc_mdl} }"/>
+                                <Input id="inputIdSchedaModello" value="{scheme>/0/idsc_mdl}" width="100%" editable="false" visible="{= !!${scheme>/0/idsc_mdl} }"/>
+                                <Label text="{i18n>lblDtcomp}"/>
+                                <Text text="{path: 'scheme>/0/dtcomp', formatter: '.formatter.formatDate'}" />
                             </f:SimpleForm>
                         </content>
                     </Panel>

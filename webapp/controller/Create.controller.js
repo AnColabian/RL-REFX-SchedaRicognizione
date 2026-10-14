@@ -3,8 +3,10 @@ sap.ui.define([
     "sap/ui/core/routing/History",
     "sap/m/MessageBox",
     "sap/m/MessageToast",
-    "schedaricognizione/model/formatter"
-], (Controller, History, MessageBox, MessageToast, formatter) => {
+    "schedaricognizione/model/formatter",
+    "sap/ui/model/json/JSONModel",
+
+], (Controller, History, MessageBox, MessageToast, formatter, JSONModel) => {
     "use strict";
     return Controller.extend("schedaricognizione.controller.Create", {
         formatter: formatter,
@@ -30,7 +32,7 @@ sap.ui.define([
             Object.keys(aSchemes[0] || {}).forEach(function (sProperty) {
                 oNewScheme[sProperty] = "";
             });
-            oNewScheme.idscheda = "";
+            oNewScheme.idscheda = "99999999";
             oNewScheme.stato = "";
             oNewScheme.idsc_mdl = "";
             oNewScheme.dtcomp = this._getCurrentDate();
@@ -45,6 +47,31 @@ sap.ui.define([
             this.byId("inputSgenr").setValue("");
             this.byId("tableOA").removeSelections(true);
             this._bOpenTemplateDialog = true;
+        },
+        _applyTemplateHeader: function (oDetail) {
+            var oModel = this.getView().getModel("scheme");
+            var oScheme = oModel.getProperty("/0");
+            var aExcluded = ["idscheda", "stato", "idsc_mdl", "ernam", "erdat", "erzet", "aenam", "aedat", "aezet", "dtcomp"];
+            Object.keys(oDetail).forEach(function (sProperty) {
+                if (aExcluded.indexOf(sProperty) === -1) {
+                    oScheme[sProperty] = oDetail[sProperty];
+                }
+            });
+            oScheme.idscheda = "99999999";
+            oScheme.stato = "";
+            oScheme.idsc_mdl = oDetail.idscheda;
+            oScheme.dtcomp = this._getCurrentDate();
+            oModel.refresh(true);
+        },
+        onCreateWithoutTemplate: function () {
+            this.getView().getModel("templateSelection").setProperty("/idscheda", "");
+            this.getView().getModel("scheme").setProperty("/0/idsc_mdl", "");
+            this.getView().getModel("scheme").setProperty("/0/idscheda", "99999999");
+            this.getView().getModel("scheme").setProperty("/0/stato", "");
+            this.getView().getModel("scheme").setProperty("/0/dtcomp", this._getCurrentDate());
+            this.byId("comboTemplateScheme").setSelectedKey("");
+            this.byId("comboTemplateScheme").setValue("");
+            this.byId("dialogImportTemplate").close();
         },
         _onCreateAfterShow: function () {
             this._bCreateViewVisible = true;
@@ -142,25 +169,6 @@ sap.ui.define([
             }.bind(this)).finally(function () {
                 oDialog.setBusy(false);
             });
-        },
-        _applyTemplateHeader: function (oDetail) {
-            var oModel = this.getView().getModel("scheme");
-            var oScheme = oModel.getProperty("/0");
-            var aExcluded = ["idscheda", "stato", "idsc_mdl", "ernam", "erdat", "erzet", "aenam", "aedat", "aezet", "dtcomp"];
-            Object.keys(oDetail).forEach(function (sProperty) {
-                if (aExcluded.indexOf(sProperty) === -1) {
-                    oScheme[sProperty] = oDetail[sProperty];
-                }
-            });
-            oScheme.idsc_mdl = oDetail.idscheda;
-            oModel.refresh(true);
-        },
-        onCreateWithoutTemplate: function () {
-            this.getView().getModel("templateSelection").setProperty("/idscheda", "");
-            this.getView().getModel("scheme").setProperty("/0/idsc_mdl", "");
-            this.byId("comboTemplateScheme").setSelectedKey("");
-            this.byId("comboTemplateScheme").setValue("");
-            this.byId("dialogImportTemplate").close();
         },
         onExit: function () {
             this._bCreateViewVisible = false;
