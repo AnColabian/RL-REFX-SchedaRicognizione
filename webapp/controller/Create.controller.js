@@ -59,15 +59,16 @@ sap.ui.define([
             if (this.byId("tableOASelected")) {
                 this.byId("tableOASelected").removeSelections(true);
             }
-            this._loadTemplateHelp().then(function () {
-                return this._loadCreateFragment("ImportTemplate");
-            }.bind(this)).then(function (oDialog) {
+            this._loadCreateFragment("ImportTemplate").then(function (oDialog) {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
                 }
                 this.byId("comboTemplateScheme").setSelectedKey("");
                 this.byId("comboTemplateScheme").setValue("");
                 oDialog.open();
+                return this._loadTemplateHelp().catch(function () {
+                    MessageToast.show("Impossibile caricare l'elenco delle Schede Modello.");
+                });
             }.bind(this)).catch(function () {
                 if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
                     MessageBox.error("Impossibile aprire la selezione della Scheda Modello.");

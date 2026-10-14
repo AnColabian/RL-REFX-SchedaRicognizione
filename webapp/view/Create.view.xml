@@ -10,10 +10,12 @@
                     <Panel id="panelIdenti" expandable="true" expanded="true" headerText="{i18n>sectionIdenti}" class="sapUiSmallMarginBottom">
                         <content>
                             <f:SimpleForm editable="true" layout="ResponsiveGridLayout">
-                                <Label text="{i18n>lblIdSchedaModello}" visible="{= !!${scheme>/0/idsc_mdl} }"/>
-                                <Input id="inputIdSchedaModello" value="{scheme>/0/idsc_mdl}" width="100%" editable="false" visible="{= !!${scheme>/0/idsc_mdl} }"/>
-                                <Label text="{i18n>lblDtcomp}"/>
-                                <Text text="{path: 'scheme>/0/dtcomp', formatter: '.formatter.formatDate'}" />
+                                <f:content>
+                                    <Label text="{i18n>lblIdSchedaModello}" visible="{= !!${create>/scheda/idSchModel} }"/>
+                                    <Input id="inputIdSchedaModello" value="{create>/scheda/idSchModel}" width="100%" editable="false" visible="{= !!${create>/scheda/idSchModel} }"/>
+                                    <Label text="{i18n>lblDtcomp}"/>
+                                    <Text text="{path: 'create>/scheda/dtCompil', formatter: '.formatter.formatDate'}"/>
+                                </f:content>
                             </f:SimpleForm>
                         </content>
                     </Panel>
@@ -198,218 +200,218 @@
                     </Panel>
 
                     <Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOANew}" class="sapUiSmallMarginBottom">
-    <content>
-        <VBox class="sapUiSmallMargin">
-            <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-                <VBox>
-    <Label text="{i18n>lblSwenr}"/>
-    <Input id="inputSwenr" value="{create>/filters/uEco}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpUEcoRequest"/>
-</VBox>
-               <VBox>
-    <Label text="{i18n>lblSgrnr}"/>
-    <Input id="inputSgrnr" value="{create>/filters/terr}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpTerrRequest"/>
-</VBox>
-               <VBox>
-    <Label text="{i18n>lblSgenr}"/>
-    <Input id="inputSgenr" value="{create>/filters/edif}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpEdifRequest"/>
-</VBox>
-            </HBox>
-            <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-                <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
-            </HBox>
-          <Table id="tableOA" items="{create>/risultatiOA}" mode="MultiSelect" class="sapUiSmallMarginTop">
-    <headerToolbar>
-        <OverflowToolbar>
-            <Title text="{i18n>titleAvailablePositions}" level="H5"/>
-            <ToolbarSpacer/>
-            <Button id="btnAddPositions" text="{i18n>btnAddPositions}" type="Emphasized" press=".onAddSelectedPositions"/>
-        </OverflowToolbar>
-    </headerToolbar>
-    <columns>
-        <Column>
-            <header>
-                <Text text="{i18n>lblBukrs}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSwenr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSgrnr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSgenr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblAoid}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblStreet}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblHouseNum}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblCity}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblRegion}"/>
-            </header>
-        </Column>
-    </columns>
-    <items>
-        <ColumnListItem>
-            <cells>
-                <Text text="{create>soc}"/>
-                <Text text="{create>uEco}"/>
-                <Text text="{create>terr}"/>
-                <Text text="{create>edif}"/>
-                <Text text="{create>idOggArch}"/>
-                <Text text="{create>indirVia}"/>
-                <Text text="{create>numCivico}"/>
-                <Text text="{create>localita}"/>
-                <Text text="{create>provincia}"/>
-            </cells>
-        </ColumnListItem>
-    </items>
-</Table>
-            <Table id="tableOASelected" items="{create>/posizioniSelezionate}" mode="MultiSelect" class="sapUiSmallMarginTop">
-    <headerToolbar>
-        <OverflowToolbar>
-            <Text text="{= ${i18n>lblCurrentPositions} + ' ' + ${create>/posizioniSelezionate}.length }"/>
-            <ToolbarSpacer/>
-            <Button id="btnRemovePositions" text="{i18n>btnRemovePositions}" type="Default" press=".onRemoveSelectedPositions"/>
-        </OverflowToolbar>
-    </headerToolbar>
-    <columns>
-        <Column>
-            <header>
-                <Text text="{i18n>lblBukrs}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSwenr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSgrnr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSgenr}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblAoid}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblUnitLocaz}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblNumIndir}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblTpCatas}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblTpEdTer}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblCodBelf}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblFoglio}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSezUrb}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblPartic}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblSub}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblDenom}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblTpPart}"/>
-            </header>
-        </Column>
-        <Column>
-            <header>
-                <Text text="{i18n>lblCodComCat}"/>
-            </header>
-        </Column>
-    </columns>
-    <items>
-        <ColumnListItem>
-            <cells>
-                <Text text="{create>soc}"/>
-                <Text text="{create>uEco}"/>
-                <Text text="{create>terr}"/>
-                <Text text="{create>edif}"/>
-                <Text text="{create>idOggArch}"/>
-                <Text text="{create>unitLocaz}"/>
-                <Text text="{create>numIndir}"/>
-                <Text text="{create>tpCatas}"/>
-                <Text text="{create>tpEdTer}"/>
-                <Text text="{create>codBelf}"/>
-                <Text text="{create>foglio}"/>
-                <Text text="{create>sezUrb}"/>
-                <Text text="{create>partic}"/>
-                <Text text="{create>sub}"/>
-                <Text text="{create>denom}"/>
-                <Text text="{create>tpPart}"/>
-                <Text text="{create>codComCat}"/>
-            </cells>
-        </ColumnListItem>
-    </items>
-</Table>
-        </VBox>
-    </content>
-</Panel>
+                        <content>
+                            <VBox class="sapUiSmallMargin">
+                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+                                    <VBox>
+                                        <Label text="{i18n>lblSwenr}"/>
+                                        <Input id="inputSwenr" value="{create>/filters/uEco}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpUEcoRequest"/>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="{i18n>lblSgrnr}"/>
+                                        <Input id="inputSgrnr" value="{create>/filters/terr}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpTerrRequest"/>
+                                    </VBox>
+                                    <VBox>
+                                        <Label text="{i18n>lblSgenr}"/>
+                                        <Input id="inputSgenr" value="{create>/filters/edif}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpEdifRequest"/>
+                                    </VBox>
+                                </HBox>
+                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
+                                    <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
+                                </HBox>
+                                <Table id="tableOA" items="{create>/risultatiOA}" mode="MultiSelect" class="sapUiSmallMarginTop">
+                                    <headerToolbar>
+                                        <OverflowToolbar>
+                                            <Title text="{i18n>titleAvailablePositions}" level="H5"/>
+                                            <ToolbarSpacer/>
+                                            <Button id="btnAddPositions" text="{i18n>btnAddPositions}" type="Emphasized" press=".onAddSelectedPositions"/>
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+                                    <columns>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblBukrs}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSwenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgrnr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblAoid}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblStreet}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblHouseNum}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblCity}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblRegion}"/>
+                                            </header>
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{create>soc}"/>
+                                                <Text text="{create>uEco}"/>
+                                                <Text text="{create>terr}"/>
+                                                <Text text="{create>edif}"/>
+                                                <Text text="{create>idOggArch}"/>
+                                                <Text text="{create>indirVia}"/>
+                                                <Text text="{create>numCivico}"/>
+                                                <Text text="{create>localita}"/>
+                                                <Text text="{create>provincia}"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                                <Table id="tableOASelected" items="{create>/posizioniSelezionate}" mode="MultiSelect" class="sapUiSmallMarginTop">
+                                    <headerToolbar>
+                                        <OverflowToolbar>
+                                            <Text text="{= ${i18n>lblCurrentPositions} + ' ' + ${create>/posizioniSelezionate}.length }"/>
+                                            <ToolbarSpacer/>
+                                            <Button id="btnRemovePositions" text="{i18n>btnRemovePositions}" type="Default" press=".onRemoveSelectedPositions"/>
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+                                    <columns>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblBukrs}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSwenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgrnr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSgenr}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblAoid}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblUnitLocaz}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblNumIndir}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblTpCatas}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblTpEdTer}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblCodBelf}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblFoglio}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSezUrb}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblPartic}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblSub}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblDenom}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblTpPart}"/>
+                                            </header>
+                                        </Column>
+                                        <Column>
+                                            <header>
+                                                <Text text="{i18n>lblCodComCat}"/>
+                                            </header>
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{create>soc}"/>
+                                                <Text text="{create>uEco}"/>
+                                                <Text text="{create>terr}"/>
+                                                <Text text="{create>edif}"/>
+                                                <Text text="{create>idOggArch}"/>
+                                                <Text text="{create>unitLocaz}"/>
+                                                <Text text="{create>numIndir}"/>
+                                                <Text text="{create>tpCatas}"/>
+                                                <Text text="{create>tpEdTer}"/>
+                                                <Text text="{create>codBelf}"/>
+                                                <Text text="{create>foglio}"/>
+                                                <Text text="{create>sezUrb}"/>
+                                                <Text text="{create>partic}"/>
+                                                <Text text="{create>sub}"/>
+                                                <Text text="{create>denom}"/>
+                                                <Text text="{create>tpPart}"/>
+                                                <Text text="{create>codComCat}"/>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </VBox>
+                        </content>
+                    </Panel>
                 </VBox>
             </ScrollContainer>
         </content>
