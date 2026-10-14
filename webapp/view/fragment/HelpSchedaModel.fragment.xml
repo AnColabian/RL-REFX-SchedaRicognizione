@@ -1,0 +1,67 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Dialog id="dialogHelpSchedaModel" title="Seleziona Scheda Modello" contentWidth="80rem" contentHeight="30rem" stretchOnPhone="true">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <SearchField id="searchFieldHelpSchedaModel" width="100%" liveChange=".onSearchHelpSchedaModel" search=".onSearchHelpSchedaModel"/>
+                <Table id="tableHelpSchedaModel" mode="SingleSelectLeft" items="{create>/helpScheda}" class="sapUiSmallMarginTop" growing="true" growingScrollToLoad="true">
+                    <columns>
+                        <Column>
+                            <header>
+                                <Text text="Scheda Modello"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="Stato"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="Doc. Valorizzazione"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="ID Bene"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="Denominazione Bene"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="Autore"/>
+                            </header>
+                        </Column>
+                        <Column>
+                            <header>
+                                <Text text="Data Creazione"/>
+                            </header>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem type="Active">
+                            <cells>
+                                <Text text="{create>idSchMdl}"/>
+                                <Text text="{create>stato}"/>
+                                <Text text="{create>docVal}"/>
+                                <Text text="{create>idBene}"/>
+                                <Text text="{create>denBene}"/>
+                                <Text text="{create>autore}"/>
+                                <Text text="{path: 'create>dtCre', formatter: '.formatter.formatDate'}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Conferma" type="Emphasized" press=".onConfirmHelpSchedaModel"/>
+        </beginButton>
+        <endButton>
+            <Button text="Annulla" press=".onCloseHelpSchedaModel"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

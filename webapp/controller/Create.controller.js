@@ -198,21 +198,7 @@ sap.ui.define([
             oScheda.dtCompil = this._getCurrentDate();
             return oScheda;
         },
-        _applyTemplateHeader: function (oDetail) {
-            var oModel = this.getView().getModel("scheme");
-            var oScheme = oModel.getProperty("/0");
-            var aExcluded = ["idscheda", "stato", "idsc_mdl", "ernam", "erdat", "erzet", "aenam", "aedat", "aezet", "dtcomp"];
-            Object.keys(oDetail).forEach(function (sProperty) {
-                if (aExcluded.indexOf(sProperty) === -1) {
-                    oScheme[sProperty] = oDetail[sProperty];
-                }
-            });
-            oScheme.idscheda = "99999999";
-            oScheme.stato = "";
-            oScheme.idsc_mdl = oDetail.idscheda;
-            oScheme.dtcomp = this._getCurrentDate();
-            oModel.refresh(true);
-        },
+
         onCreateWithoutTemplate: function () {
             var oCreateModel = this.getView().getModel("create");
             oCreateModel.setProperty("/scheda", this._createEmptyScheda());
@@ -243,18 +229,52 @@ sap.ui.define([
             return this._mCreateFragments[sFragmentName];
         },
         onTemplateValueHelp: function () {
-            this._loadCreateFragment("TemplateValueHelp").then(function (oDialog) {
-                if (!this._bCreateViewVisible) {
-                    return;
-                }
-                oDialog.getBinding("items").filter([]);
-                oDialog.open("");
-            }.bind(this)).catch(function () {
-                if (this._bCreateViewVisible) {
-                    MessageBox.error("Impossibile aprire il matchcode della Scheda Modello.");
-                }
-            }.bind(this));
-        },
+    this._loadCreateFragment("HelpSchedaModel").then(function (oDialog) {
+        return this._loadTemplateHelp().then(function () {
+            this.byId("searchFieldHelpSchedaModel").setValue("");
+            this.byId("tableHelpSchedaModel").getBinding("items").filter([]);
+            oDialog.open();
+        }.bind(this));
+    }.bind(this)).catch(function () {
+        MessageBox.error("Impossibile aprire il ValueHelp della Scheda Modello.");
+    });
+},
+onSearchHelpSchedaModel: function (oEvent) {
+    var sValue = (oEvent.getParameter("newValue") || oEvent.getParameter("query") || "").trim();
+    var aFilters = [];
+    if (sValue) {
+        aFilters.push(new Filter({
+            filters: [
+                new Filter("idSchMdl", FilterOperator.Contains, sValue),
+                new Filter("stato", FilterOperator.Contains, sValue),
+                new Filter("docVal", FilterOperator.Contains, sValue),
+                new Filter("idBene", FilterOperator.Contains, sValue),
+                new Filter("denBene", FilterOperator.Contains, sValue),
+                new Filter("autore", FilterOperator.Contains, sValue)
+            ],
+            and: false
+        }));
+    }
+    this.byId("tableHelpSchedaModel").getBinding("items").filter(aFilters);
+},
+onConfirmHelpSchedaModel: function () {
+    var oTable = this.byId("tableHelpSchedaModel");
+    var oSelectedItem = oTable.getSelectedItem();
+    if (!oSelectedItem) {
+        MessageBox.error("Selezionare una scheda modello valida.");
+        return;
+    }
+    var oSelectedObject = oSelectedItem.getBindingContext("create").getObject();
+    this.getView().getModel("templateSelection").setData({
+        idScheda: oSelectedObject.idScheda,
+        text: oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || "")
+    });
+    this.byId("comboTemplateScheme").setValue(oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || ""));
+    this.byId("dialogHelpSchedaModel").close();
+},
+onCloseHelpSchedaModel: function () {
+    this.byId("dialogHelpSchedaModel").close();
+},
         onSearchTemplateValueHelp: function (oEvent) {
             var sValue = (oEvent.getParameter("value") || "").trim();
             var aFilters = [];
@@ -381,19 +401,14 @@ sap.ui.define([
             this._bCreateViewVisible = false;
             this.getOwnerComponent().getRouter().getRoute("RouteCreate").detachPatternMatched(this._onCreateRouteMatched, this);
             this.getView().removeEventDelegate(this._oNavigationDelegate);
-            ["create", "templateSelection"].forEach(function (sModelName) {
-                this.getView().getModel(sModelName).destroy();
+            ["create", "templateSelection", "helpUEco", "helpTerr", "helpEdif"].forEach(function (sModelName) {
+                var oModel = this.getView().getModel(sModelName);
+                if (oModel) {
+                    oModel.destroy();
+                }
             }, this);
         },
-        onNavBack: function () {
-            var oHistory = History.getInstance();
-            var sPreviousHash = oHistory.getPreviousHash();
-            if (sPreviousHash !== undefined) {
-                window.history.go(-1);
-            } else {
-                this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
-            }
-        },
+
         onSearchOA: function () {
             var oFiltersModel = this.getView().getModel("create");
             var sSwenr = (oFiltersModel.getProperty("/filters/uEco") || "").trim();
@@ -561,51 +576,21 @@ sap.ui.define([
             this.getView().getModel("create").setProperty("/filters/edif", oSelectedObject.edif || "");
         },
         onSelectAllOA: function () {
-            var oTable = this.getView().byId("tableOA");
-            var aItems = oTable.getItems();
-            aItems.forEach(function (oItem) {
-                var aSelectedIndices = oTable.getSelectedIndices();
+            var oTable = this.byId("tableOA");
+            if (oTable) {
                 oTable.selectAll();
-            });
+            }
         },
         onDeselectAllOA: function () {
-            var oTable = this.getView().byId("tableOA");
-            oTable.clearSelection();
+            var oTable = this.byId("tableOA");
+            if (oTable) {
+                oTable.removeSelections(true);
+            }
         },
         onRemoveOA: function () {
             this.onRemoveSelectedPositions();
         },
-        onSave: function () {
-            var oModel = this.getView().getModel("scheme");
-            var aData = oModel.getData();
-            var oScheme = aData[0];
-            if (!oScheme.coogis || !oScheme.fabter || !oScheme.numedi || !oScheme.numfuo || !oScheme.nument) {
-                MessageBox.error("Compilare tutti i campi obbligatori");
-                return;
-            }
-            var oTable = this.getView().byId("tableOA");
-            var aTableItems = oTable.getItems();
-            if (aTableItems.length === 0) {
-                MessageBox.error("Inserire almeno un Oggetto Architettonico");
-                return;
-            }
-            oScheme.stato = "B";
-            oScheme.ernam = "USER001";
-            oScheme.erdat = this._getCurrentDate();
-            oScheme.erzet = this._getCurrentTime();
-            oModel.refresh(true);
-            MessageBox.success("Scheda salvata con successo", {
-                onClose: function () {
-                    MessageBox.confirm("Desideri generare il PDF della scheda?", {
-                        onClose: function (sAction) {
-                            if (sAction === MessageBox.Action.OK) {
-                                MessageToast.show("Generazione PDF - Funzionalità da implementare");
-                            }
-                        }.bind(this)
-                    });
-                }.bind(this)
-            });
-        },
+
         onCancel: function () {
             MessageBox.confirm("Sei sicuro di voler annullare? I dati non salvati andranno persi.", {
                 onClose: function (sAction) {
@@ -629,79 +614,7 @@ sap.ui.define([
             var iSeconds = ("0" + oDate.getSeconds()).slice(-2);
             return iHours + iMinutes + iSeconds;
         },
-        onSaveDraft: function () {
-            this._onSave("B");
-        },
-        onSaveFinal: function () {
-            this._onSave("D");
-        },
-        _onSave: function (sTargetStatus) {
-            var aMissingFields = this._getMissingRequiredFields();
-            if (aMissingFields.length > 0) {
-                this._showMissingRequiredFields(aMissingFields);
-                return;
-            }
-            var aSelectedPositions = this.getView().getModel("oaSelected").getData();
-            if (!aSelectedPositions || aSelectedPositions.length === 0) {
-                MessageBox.error("Inserire almeno un Oggetto Architettonico");
-                return;
-            }
-            var oModel = this.getView().getModel("scheme");
-            var oScheme = oModel.getProperty("/0");
-            oScheme.stato = sTargetStatus;
-            oScheme.ernam = "USER001";
-            oScheme.erdat = this._getCurrentDate();
-            oScheme.erzet = this._getCurrentTime();
-            oModel.refresh(true);
-            MessageToast.show(sTargetStatus === "D" ? "Rilascio definitivo pronto per l'integrazione col servizio." : "Salvataggio provvisorio pronto per l'integrazione col servizio.");
-        },
-        _getMissingRequiredFields: function () {
-            var oScheme = this.getView().getModel("scheme").getProperty("/0") || {};
-            var aRequiredFields = [
-                { path: "coogis", labelKey: "lblCoogis" },
-                { path: "fabter", labelKey: "lblFabter" },
-                { path: "usofab", labelKey: "lblUsofab" },
-                { path: "usoter", labelKey: "lblUsoter" },
-                { path: "numedi", labelKey: "lblNumedi" },
-                { path: "numfuo", labelKey: "lblNumfuo" },
-                { path: "nument", labelKey: "lblNument" },
-                { path: "supcop", labelKey: "lblSupcop" },
-                { path: "supsco", labelKey: "lblSupsco" },
-                { path: "ape", labelKey: "lblApe" },
-                { path: "clsene", labelKey: "lblClsene" },
-                { path: "stgene", labelKey: "lblStgene" },
-                { path: "stspor", labelKey: "lblStspor" },
-                { path: "stcope", labelKey: "lblStcope" },
-                { path: "sttamp", labelKey: "lblSttamp" },
-                { path: "stches", labelKey: "lblStches" },
-                { path: "stpart", labelKey: "lblStpart" },
-                { path: "stfini", labelKey: "lblStfini" },
-                { path: "stimpi", labelKey: "lblStimpi" },
-                { path: "stoccu", labelKey: "lblStoccu" },
-                { path: "natocc", labelKey: "lblNatocc" },
-                { path: "tipocc", labelKey: "lblTipocc" },
-                { path: "vincol", labelKey: "lblVincol" },
-                { path: "titori", labelKey: "lblTitori" },
-                { path: "ante67", labelKey: "lblAnte67" },
-                { path: "ante42", labelKey: "lblAnte42" },
-                { path: "corcat", labelKey: "lblCorcat" },
-                { path: "vulssm", labelKey: "lblVulssm" },
-                { path: "vulamb", labelKey: "lblVulamb" }
-            ];
-            var oResourceBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
-            return aRequiredFields.filter(function (oField) {
-                var vValue = oScheme[oField.path];
-                return vValue === undefined || vValue === null || vValue === "";
-            }).map(function (oField) {
-                return oResourceBundle.getText(oField.labelKey);
-            });
-        },
-        _showMissingRequiredFields: function (aMissingFields) {
-            var oResourceBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
-            MessageBox.error(oResourceBundle.getText("msgRequiredFieldsListIntro") + "\n\n- " + aMissingFields.join("\n- "), {
-                title: oResourceBundle.getText("msgRequiredFieldsTitle")
-            });
-        },
+
         onAddSelectedPositions: function () {
             var oTable = this.byId("tableOA");
             var aSelectedItems = oTable.getSelectedItems();
@@ -750,14 +663,6 @@ sap.ui.define([
             this.getView().getModel("create").setProperty("/posizioniSelezionate", aRemainingPositions);
             oTable.removeSelections(true);
         },
-        _applyTemplatePositions: function (sIdSchedaModello) {
-            var aAllPositions = this.getOwnerComponent().getModel("oa").getData() || [];
-            var aTemplatePositions = aAllPositions.filter(function (oItem) {
-                return oItem.idscheda === sIdSchedaModello && oItem.statopos === "A";
-            }).map(function (oItem) {
-                return JSON.parse(JSON.stringify(oItem));
-            });
-            this.getView().getModel("oaSelected").setData(aTemplatePositions);
-        },
+
     });
 });
