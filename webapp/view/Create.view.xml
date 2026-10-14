@@ -178,22 +178,22 @@
                     <Panel id="panelOA" expandable="true" expanded="true" headerText="{i18n>sectionOANew}" class="sapUiSmallMarginBottom">
                         <content>
                             <VBox class="sapUiSmallMargin">
-                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-                                    <VBox>
+                                <HBox class="sapUiSmallMarginBottom" justifyContent="Start">
+                                    <VBox justifyContent="End" class="sapUiSmallMarginBegin" >
                                         <Label text="{i18n>lblSwenr}"/>
-                                        <Input id="inputSwenr" value="{create>/filters/uEco}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpUEcoRequest"/>
+                                        <Input  id="inputSwenr" value="{create>/filters/uEco}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpUEcoRequest"/>
                                     </VBox>
-                                    <VBox>
+                                    <VBox justifyContent="End" class="sapUiSmallMarginBegin" >
                                         <Label text="{i18n>lblSgrnr}"/>
-                                        <Input id="inputSgrnr" value="{create>/filters/terr}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpTerrRequest"/>
+                                        <Input  id="inputSgrnr" value="{create>/filters/terr}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpTerrRequest"/>
                                     </VBox>
-                                    <VBox>
+                                    <VBox justifyContent="End" class="sapUiSmallMarginBegin" >
                                         <Label text="{i18n>lblSgenr}"/>
-                                        <Input id="inputSgenr" value="{create>/filters/edif}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpEdifRequest"/>
+                                        <Input  id="inputSgenr" value="{create>/filters/edif}" width="200px" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpEdifRequest"/>
                                     </VBox>
-                                </HBox>
-                                <HBox class="sapUiSmallMarginBottom" justifyContent="SpaceBetween">
-                                    <Button id="btnSearchOA" text="{i18n>btnSearch}" type="Default" press=".onSearchOA" width="150px"/>
+                                    <VBox justifyContent="End" class="sapUiSmallMarginBegin" >
+                                        <Button  id="btnSearchOA" text="{i18n>btnSearch}" type="Emphasized" press=".onSearchOA" width="auto"/>
+                                    </VBox>
                                 </HBox>
                                 <Table id="tableOA" items="{create>/risultatiOA}" mode="MultiSelect" class="sapUiSmallMarginTop">
                                     <headerToolbar>

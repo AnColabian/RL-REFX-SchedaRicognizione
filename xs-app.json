@@ -3,6 +3,13 @@
   "authenticationMethod": "route",
   "routes": [
     {
+      "source": "^/sap/opu/odata/(.*)$",
+      "target": "/sap/opu/odata/$1",
+      "authenticationType": "xsuaa",
+      "destination": "S4_PRINCIPAL_PROPAGATION",
+      "csrfProtection": false
+    },
+    {
       "source": "^/resources/(.*)$",
       "target": "/resources/$1",
       "authenticationType": "none",

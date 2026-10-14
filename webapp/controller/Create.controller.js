@@ -63,15 +63,14 @@ sap.ui.define([
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
                 }
-                this.byId("comboTemplateScheme").setSelectedKey("");
                 this.byId("comboTemplateScheme").setValue("");
+                oDialog.setBusy(false);
                 oDialog.open();
-                return this._loadTemplateHelp().catch(function () {
-                    MessageToast.show("Impossibile caricare l'elenco delle Schede Modello.");
-                });
-            }.bind(this)).catch(function () {
+            }.bind(this)).catch(function (oError) {
                 if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                    MessageBox.error("Impossibile aprire la selezione della Scheda Modello.");
+                    MessageBox.error("Impossibile aprire la selezione della Scheda Modello.", {
+                        details: oError && oError.message ? oError.message : String(oError)
+                    });
                 }
             }.bind(this));
         },
@@ -157,11 +156,21 @@ sap.ui.define([
             };
         },
         _loadTemplateHelp: function () {
+            var oODataModel = this.getOwnerComponent().getModel();
+            var oCreateModel = this.getView().getModel("create");
+            var iRouteRequest = this._iCreateRouteRequest;
             return new Promise(function (resolve, reject) {
-                this.getOwnerComponent().getModel().read("/helpScheda", {
+                if (!oODataModel || typeof oODataModel.read !== "function") {
+                    reject(new Error("Modello OData V2 non disponibile."));
+                    return;
+                }
+                oODataModel.read("/helpScheda", {
                     success: function (oData) {
-                        var aResults = (oData && oData.results) ? oData.results : [];
-                        this.getView().getModel("create").setProperty("/helpScheda", aResults);
+                        var aResults = oData && Array.isArray(oData.results) ? oData.results : [];
+                        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                            oCreateModel.setSizeLimit(Math.max(oCreateModel.getSizeLimit(), aResults.length));
+                            oCreateModel.setProperty("/helpScheda", aResults);
+                        }
                         resolve(aResults);
                     }.bind(this),
                     error: function (oError) {
@@ -204,13 +213,12 @@ sap.ui.define([
             oCreateModel.setProperty("/scheda", this._createEmptyScheda());
             oCreateModel.setProperty("/posizioniSelezionate", []);
             this.getView().getModel("templateSelection").setData({ idScheda: "", text: "" });
-            this.byId("comboTemplateScheme").setSelectedKey("");
             this.byId("comboTemplateScheme").setValue("");
             this.byId("dialogImportTemplate").close();
         },
         _onCreateBeforeHide: function () {
             this._bCreateViewVisible = false;
-            ["dialogTemplateValueHelp", "dialogImportTemplate"].forEach(function (sId) {
+            ["dialogImportTemplate", "dialogHelpSchedaModel", "dialogHelpUEco", "dialogHelpTerr", "dialogHelpEdif"].forEach(function (sId) {
                 var oDialog = this.byId(sId);
                 if (oDialog) {
                     oDialog.close();
@@ -229,78 +237,76 @@ sap.ui.define([
             return this._mCreateFragments[sFragmentName];
         },
         onTemplateValueHelp: function () {
-    this._loadCreateFragment("HelpSchedaModel").then(function (oDialog) {
-        return this._loadTemplateHelp().then(function () {
-            this.byId("searchFieldHelpSchedaModel").setValue("");
-            this.byId("tableHelpSchedaModel").getBinding("items").filter([]);
-            oDialog.open();
-        }.bind(this));
-    }.bind(this)).catch(function () {
-        MessageBox.error("Impossibile aprire il ValueHelp della Scheda Modello.");
-    });
-},
-onSearchHelpSchedaModel: function (oEvent) {
-    var sValue = (oEvent.getParameter("newValue") || oEvent.getParameter("query") || "").trim();
-    var aFilters = [];
-    if (sValue) {
-        aFilters.push(new Filter({
-            filters: [
-                new Filter("idSchMdl", FilterOperator.Contains, sValue),
-                new Filter("stato", FilterOperator.Contains, sValue),
-                new Filter("docVal", FilterOperator.Contains, sValue),
-                new Filter("idBene", FilterOperator.Contains, sValue),
-                new Filter("denBene", FilterOperator.Contains, sValue),
-                new Filter("autore", FilterOperator.Contains, sValue)
-            ],
-            and: false
-        }));
-    }
-    this.byId("tableHelpSchedaModel").getBinding("items").filter(aFilters);
-},
-onConfirmHelpSchedaModel: function () {
-    var oTable = this.byId("tableHelpSchedaModel");
-    var oSelectedItem = oTable.getSelectedItem();
-    if (!oSelectedItem) {
-        MessageBox.error("Selezionare una scheda modello valida.");
-        return;
-    }
-    var oSelectedObject = oSelectedItem.getBindingContext("create").getObject();
-    this.getView().getModel("templateSelection").setData({
-        idScheda: oSelectedObject.idScheda,
-        text: oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || "")
-    });
-    this.byId("comboTemplateScheme").setValue(oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || ""));
-    this.byId("dialogHelpSchedaModel").close();
-},
-onCloseHelpSchedaModel: function () {
-    this.byId("dialogHelpSchedaModel").close();
-},
-        onSearchTemplateValueHelp: function (oEvent) {
-            var sValue = (oEvent.getParameter("value") || "").trim();
+            var iRouteRequest = this._iCreateRouteRequest;
+            this._loadCreateFragment("HelpSchedaModel").then(function (oDialog) {
+                if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+                    return;
+                }
+                var oTable = this.byId("tableHelpSchedaModel");
+                if (oTable.getBusy()) {
+                    return;
+                }
+                this.byId("searchFieldHelpSchedaModel").setValue("");
+                oTable.removeSelections(true);
+                oTable.getBinding("items").filter([]);
+                this.getView().getModel("create").setProperty("/helpScheda", []);
+                oTable.setBusyIndicatorDelay(0);
+                oTable.setBusy(true);
+                oDialog.open();
+                this._loadTemplateHelp().catch(function (oError) {
+                    if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                        MessageBox.error("Impossibile caricare le Schede Modello.", {
+                            details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                        });
+                    }
+                }.bind(this)).finally(function () {
+                    if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                        oTable.setBusy(false);
+                    }
+                }.bind(this));
+            }.bind(this)).catch(function (oError) {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    MessageBox.error("Impossibile aprire il ValueHelp della Scheda Modello.", {
+                        details: oError && oError.message ? oError.message : String(oError)
+                    });
+                }
+            }.bind(this));
+        },
+        onSearchHelpSchedaModel: function (oEvent) {
+            var sValue = (oEvent.getParameter("newValue") || oEvent.getParameter("query") || "").trim();
             var aFilters = [];
             if (sValue) {
                 aFilters.push(new Filter({
                     filters: [
-                        new Filter("idScheda", FilterOperator.Contains, sValue),
-                        new Filter("denBene", FilterOperator.Contains, sValue)
+                        new Filter("idSchMdl", FilterOperator.Contains, sValue),
+                        new Filter("stato", FilterOperator.Contains, sValue),
+                        new Filter("docVal", FilterOperator.Contains, sValue),
+                        new Filter("idBene", FilterOperator.Contains, sValue),
+                        new Filter("denBene", FilterOperator.Contains, sValue),
+                        new Filter("autore", FilterOperator.Contains, sValue)
                     ],
                     and: false
                 }));
             }
-            oEvent.getSource().getBinding("items").filter(aFilters);
+            this.byId("tableHelpSchedaModel").getBinding("items").filter(aFilters);
         },
-        onConfirmTemplateValueHelp: function (oEvent) {
-            var oSelectedItem = oEvent.getParameter("selectedItem");
+        onConfirmHelpSchedaModel: function () {
+            var oTable = this.byId("tableHelpSchedaModel");
+            var oSelectedItem = oTable.getSelectedItem();
             if (!oSelectedItem) {
+                MessageBox.error("Selezionare una scheda modello valida.");
                 return;
             }
             var oSelectedObject = oSelectedItem.getBindingContext("create").getObject();
             this.getView().getModel("templateSelection").setData({
                 idScheda: oSelectedObject.idScheda,
-                text: oSelectedObject.idScheda + " - " + (oSelectedObject.denBene || "")
+                text: oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || "")
             });
-            this.byId("comboTemplateScheme").setSelectedKey(oSelectedObject.idScheda);
-            this.byId("comboTemplateScheme").setValue(oSelectedObject.idScheda + " - " + (oSelectedObject.denBene || ""));
+            this.byId("comboTemplateScheme").setValue(oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || ""));
+            this.byId("dialogHelpSchedaModel").close();
+        },
+        onCloseHelpSchedaModel: function () {
+            this.byId("dialogHelpSchedaModel").close();
         },
         onImportTemplate: function () {
             var sIdScheda = this.getView().getModel("templateSelection").getProperty("/idScheda");

@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "4.0"
 metadata:
   name: schedaricognizione
@@ -9,12 +7,16 @@ server:
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:
-        ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        ignoreCertErrors: false
         ui5:
           path:
             - /resources
             - /test-resources
           url: https://ui5.sap.com
+        backend:
+          - path: /sap/opu/odata
+            destination: S4_PRINCIPAL_PROPAGATION
+            scp: true
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
@@ -31,3 +33,6 @@ builder:
     excludes:
       - /test/**
       - /localService/**
+resources:
+  configuration:
+    propertiesFileSourceEncoding: UTF-8
