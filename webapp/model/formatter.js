@@ -70,5 +70,21 @@ sap.ui.define([], () => {
             }
             return Number(sValue.replace(",", "."));
         },
+        formatDisplayValue: function (vValue) {
+            if (vValue === null || vValue === undefined) {
+                return "";
+            }
+            var sValue = String(vValue).trim();
+            return /^0+$/.test(sValue) ? "" : sValue;
+        },
+        formatSchedaState: function (vValue) {
+            var sValue = vValue === null || vValue === undefined ? "" : String(vValue).trim();
+            var mStates = {
+                B: "Provvisorio",
+                D: "Definitivo",
+                E: "Eliminato"
+            };
+            return mStates[sValue] || sValue;
+        }
     };
 });
