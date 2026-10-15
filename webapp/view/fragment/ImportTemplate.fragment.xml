@@ -1,13 +1,10 @@
-<core:FragmentDefinition xmlns:core="sap.ui.core"
-    xmlns="sap.m">
-    <Dialog id="dialogImportTemplate" title="Importare Scheda Modello" contentWidth="32rem" initialFocus="comboTemplateScheme">
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Dialog id="dialogImportTemplate" title="Nuova Scheda Ricognizione" contentWidth="32rem" initialFocus="comboTemplateScheme">
         <content>
             <VBox class="sapUiSmallMargin">
-                <Text text="Vuoi selezionare una Scheda Modello di Riferimento?"/>
-                <Label text="Scheda Modello" labelFor="comboTemplateScheme" class="sapUiSmallMarginTop"/>
-                <HBox alignItems="Center" width="100%">
-                    <Input id="comboTemplateScheme" value="{templateSelection>/text}" width="100%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onTemplateValueHelp"/>
-                </HBox>
+                <Text text="Seleziona una Scheda Modello da importare oppure procedi con una nuova scheda senza modello."/>
+                <Label text="ID Scheda Modello" labelFor="comboTemplateScheme" class="sapUiSmallMarginTop"/>
+                <Input id="comboTemplateScheme" value="{templateSelection>/text}" width="100%" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onTemplateValueHelp"/>
             </VBox>
         </content>
         <beginButton>

@@ -220,10 +220,10 @@ sap.ui.define([
         _onViewBeforeHide: function () {
             this._bViewActive = false;
             this._iViewRequest += 1;
-            ["dialogHelpScheda", "dialogSelectScheda"].forEach(function (sId) {
-                var oDialog = this.byId(sId);
-                if (oDialog) {
-                    oDialog.close();
+            ["dialogSelectScheda", "dialogHelpScheda"].forEach(function (sId) {
+                var oControl = this.byId(sId);
+                if (oControl && typeof oControl.close === "function" && oControl.isOpen && oControl.isOpen()) {
+                    oControl.close();
                 }
             }, this);
         },

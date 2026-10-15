@@ -5,6 +5,9 @@ sap.ui.define([
     "use strict";
     return Controller.extend("schedaricognizione.controller.BaseController", {
         formatter: formatter,
+        _navToMain: function () {
+            this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+        },
         _readOData: function (sPath, mParameters) {
             var oModel = this.getOwnerComponent().getModel();
             return new Promise(function (resolve, reject) {

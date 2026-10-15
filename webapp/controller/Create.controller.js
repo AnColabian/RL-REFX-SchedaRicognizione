@@ -221,17 +221,13 @@ sap.ui.define([
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
                 }
-                var oTable = this.byId("tableHelpSchedaModel");
-                if (oTable.getBusy()) {
+                if (oDialog.getBusy()) {
                     return;
                 }
-                this.byId("searchFieldHelpSchedaModel").setValue("");
-                oTable.removeSelections(true);
-                oTable.getBinding("items").filter([]);
+                oDialog.getBinding("items").filter([]);
                 this.getView().getModel("create").setProperty("/helpScheda", []);
-                oTable.setBusyIndicatorDelay(0);
-                oTable.setBusy(true);
-                oDialog.open();
+                oDialog.setBusyIndicatorDelay(0);
+                oDialog.setBusy(true);
                 this._loadTemplateHelp().catch(function (oError) {
                     if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
                         MessageBox.error("Impossibile caricare le Schede Modello.", {
@@ -240,9 +236,10 @@ sap.ui.define([
                     }
                 }.bind(this)).finally(function () {
                     if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                        oTable.setBusy(false);
+                        oDialog.setBusy(false);
                     }
                 }.bind(this));
+                oDialog.open("");
             }.bind(this)).catch(function (oError) {
                 if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
                     MessageBox.error("Impossibile aprire il ValueHelp della Scheda Modello.", {
@@ -252,7 +249,7 @@ sap.ui.define([
             }.bind(this));
         },
         onSearchHelpSchedaModel: function (oEvent) {
-            var sValue = (oEvent.getParameter("newValue") || oEvent.getParameter("query") || "").trim();
+            var sValue = (oEvent.getParameter("value") || "").trim();
             var aFilters = [];
             if (sValue) {
                 aFilters.push(new Filter({
@@ -267,12 +264,11 @@ sap.ui.define([
                     and: false
                 }));
             }
-            this.byId("tableHelpSchedaModel").getBinding("items").filter(aFilters);
+            oEvent.getSource().getBinding("items").filter(aFilters);
         },
-        onConfirmHelpSchedaModel: function () {
-            var oSelectedItem = this.byId("tableHelpSchedaModel").getSelectedItem();
+        onConfirmHelpSchedaModel: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem");
             if (!oSelectedItem) {
-                MessageBox.error("Selezionare una scheda modello.");
                 return;
             }
             var oSelectedObject = oSelectedItem.getBindingContext("create").getObject();
@@ -289,10 +285,12 @@ sap.ui.define([
                 text: sText
             });
             this.byId("comboTemplateScheme").setValue(sText);
-            this.byId("dialogHelpSchedaModel").close();
         },
         onCloseHelpSchedaModel: function () {
-            this.byId("dialogHelpSchedaModel").close();
+            var oDialog = this.byId("dialogHelpSchedaModel");
+            if (oDialog) {
+                oDialog.close();
+            }
         },
         onImportTemplate: function () {
             var sIdScheda = this.getView().getModel("templateSelection").getProperty("/idScheda");
@@ -613,12 +611,17 @@ sap.ui.define([
         onRemoveOA: function () {
             this.onRemoveSelectedPositions();
         },
-
+        onNavBack: function () {
+            this.onCancel();
+        },
         onCancel: function () {
+            if (this._bSavingScheda) {
+                return;
+            }
             MessageBox.confirm("Sei sicuro di voler annullare? I dati non salvati andranno persi.", {
                 onClose: function (sAction) {
                     if (sAction === MessageBox.Action.OK) {
-                        this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                        this._navToMain();
                     }
                 }.bind(this)
             });
