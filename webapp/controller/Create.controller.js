@@ -57,7 +57,7 @@ sap.ui.define([
                 this.byId("tableOA").removeSelections(true);
             }
             if (this.byId("tableOASelected")) {
-                this.byId("tableOASelected").removeSelections(true);
+                this.byId("tableOASelected").clearSelection();
             }
             this._loadCreateFragment("ImportTemplate").then(function (oDialog) {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
@@ -166,12 +166,16 @@ sap.ui.define([
                 }
                 oODataModel.read("/helpScheda", {
                     success: function (oData) {
-                        var aResults = oData && Array.isArray(oData.results) ? oData.results : [];
-                        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                            oCreateModel.setSizeLimit(Math.max(oCreateModel.getSizeLimit(), aResults.length));
-                            oCreateModel.setProperty("/helpScheda", aResults);
+                        try {
+                            var aResults = oData && Array.isArray(oData.results) ? oData.results : [];
+                            if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                                oCreateModel.setSizeLimit(Math.max(100, aResults.length));
+                                oCreateModel.setProperty("/helpScheda", aResults);
+                            }
+                            resolve(aResults);
+                        } catch (oError) {
+                            reject(oError);
                         }
-                        resolve(aResults);
                     }.bind(this),
                     error: function (oError) {
                         reject(oError);
@@ -180,19 +184,42 @@ sap.ui.define([
             }.bind(this));
         },
         _readSchedaDetail: function (sIdScheda) {
+            var oODataModel = this.getOwnerComponent().getModel();
             return new Promise(function (resolve, reject) {
-                this.getOwnerComponent().getModel().read("/scheda('" + encodeURIComponent(sIdScheda) + "')", {
-                    urlParameters: {
-                        "$expand": "toPosizioni"
-                    },
-                    success: function (oData) {
-                        resolve(oData);
-                    },
-                    error: function (oError) {
-                        reject(oError);
+                if (!oODataModel || typeof oODataModel.read !== "function") {
+                    reject(new Error("Modello OData V2 non disponibile."));
+                    return;
+                }
+                if (!sIdScheda) {
+                    reject(new Error("ID Scheda Modello non valorizzato."));
+                    return;
+                }
+                try {
+                    if (!oODataModel.getServiceMetadata()) {
+                        throw new Error("Metadata OData non disponibile. Ricaricare l'applicazione.");
                     }
-                });
-            }.bind(this));
+                    var sPath = "/" + oODataModel.createKey("scheda", {
+                        idScheda: sIdScheda
+                    });
+                    oODataModel.read(sPath, {
+                        urlParameters: {
+                            "$expand": "toPosizioni"
+                        },
+                        success: function (oData) {
+                            if (!oData || oData.idScheda !== sIdScheda) {
+                                reject(new Error("Il servizio non ha restituito il dettaglio della scheda richiesta."));
+                                return;
+                            }
+                            resolve(oData);
+                        },
+                        error: function (oError) {
+                            reject(oError);
+                        }
+                    });
+                } catch (oError) {
+                    reject(oError);
+                }
+            });
         },
         _mapSchedaDetailToCreateModel: function (oData) {
             var oScheda = this._createEmptyScheda();
@@ -205,6 +232,12 @@ sap.ui.define([
             oScheda.stato = "";
             oScheda.idSchModel = oData.idScheda || "";
             oScheda.dtCompil = this._getCurrentDate();
+            ["supLU", "supFond", "supCop", "supScop", "stimaVal"].forEach(function (sProperty) {
+                oScheda[sProperty] = this.formatter.normalizeDecimalValue(oScheda[sProperty]);
+            }, this);
+            ["numEdif", "numLivFuo", "numLivEnt", "annoValor"].forEach(function (sProperty) {
+                oScheda[sProperty] = this.formatter.normalizeIntegerLikeValue(oScheda[sProperty]);
+            }, this);
             return oScheda;
         },
 
@@ -291,18 +324,25 @@ sap.ui.define([
             this.byId("tableHelpSchedaModel").getBinding("items").filter(aFilters);
         },
         onConfirmHelpSchedaModel: function () {
-            var oTable = this.byId("tableHelpSchedaModel");
-            var oSelectedItem = oTable.getSelectedItem();
+            var oSelectedItem = this.byId("tableHelpSchedaModel").getSelectedItem();
             if (!oSelectedItem) {
-                MessageBox.error("Selezionare una scheda modello valida.");
+                MessageBox.error("Selezionare una scheda modello.");
                 return;
             }
             var oSelectedObject = oSelectedItem.getBindingContext("create").getObject();
+            if (!oSelectedObject.idScheda) {
+                MessageBox.error("La scheda selezionata non contiene un ID valido.");
+                return;
+            }
+            var sText = oSelectedObject.idScheda;
+            if (oSelectedObject.denBene) {
+                sText += " - " + oSelectedObject.denBene;
+            }
             this.getView().getModel("templateSelection").setData({
                 idScheda: oSelectedObject.idScheda,
-                text: oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || "")
+                text: sText
             });
-            this.byId("comboTemplateScheme").setValue(oSelectedObject.idSchMdl + " - " + (oSelectedObject.denBene || ""));
+            this.byId("comboTemplateScheme").setValue(sText);
             this.byId("dialogHelpSchedaModel").close();
         },
         onCloseHelpSchedaModel: function () {
@@ -311,25 +351,49 @@ sap.ui.define([
         onImportTemplate: function () {
             var sIdScheda = this.getView().getModel("templateSelection").getProperty("/idScheda");
             var oDialog = this.byId("dialogImportTemplate");
-            if (!sIdScheda) {
-                MessageBox.error("Selezionare una scheda modello valida.");
+            var iRouteRequest = this._iCreateRouteRequest;
+            if (oDialog.getBusy()) {
                 return;
             }
+            if (!sIdScheda) {
+                MessageBox.error("Selezionare una scheda modello.");
+                return;
+            }
+            oDialog.setBusyIndicatorDelay(0);
             oDialog.setBusy(true);
             this._readSchedaDetail(sIdScheda).then(function (oDetail) {
-                if (!this._bCreateViewVisible) {
+                if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
                 }
-                this.getView().getModel("create").setProperty("/scheda", this._mapSchedaDetailToCreateModel(oDetail));
-                this.getView().getModel("create").setProperty("/posizioniSelezionate", this._mapTemplatePositions(oDetail.toPosizioni && oDetail.toPosizioni.results ? oDetail.toPosizioni.results : []));
-                this.byId("dialogImportTemplate").close();
-            }.bind(this)).catch(function () {
-                if (this._bCreateViewVisible) {
-                    MessageBox.error("Impossibile leggere il dettaglio della Scheda Modello.");
+                var aSourcePositions = oDetail.toPosizioni && oDetail.toPosizioni.results;
+                if (!Array.isArray(aSourcePositions)) {
+                    throw new Error("La risposta non contiene la raccolta toPosizioni espansa.");
+                }
+                var oScheda = this._mapSchedaDetailToCreateModel(oDetail);
+                var aPositions = this._mapTemplatePositions(aSourcePositions);
+                var oCreateModel = this.getView().getModel("create");
+                oCreateModel.setSizeLimit(Math.max(100, aPositions.length, (oCreateModel.getProperty("/helpScheda") || []).length));
+                oCreateModel.setProperty("/scheda", oScheda);
+                oCreateModel.setProperty("/posizioniSelezionate", aPositions);
+                var oPositionsTable = this.byId("tableOASelected");
+                if (oPositionsTable) {
+                    oPositionsTable.clearSelection(true);
+                }
+                oDialog.close();
+            }.bind(this)).catch(function (oError) {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    MessageBox.error("Impossibile importare la Scheda Modello.", {
+                        details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                    });
                 }
             }.bind(this)).finally(function () {
-                oDialog.setBusy(false);
-            });
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    oDialog.setBusy(false);
+                }
+            }.bind(this));
+        },
+        _getDefaultSocieta: function () {
+            return "1000";
         },
         _readPosizioneDetail: function (oOA) {
             return new Promise(function (resolve, reject) {
@@ -414,39 +478,50 @@ sap.ui.define([
                 }
             }, this);
         },
-
         onSearchOA: function () {
-            var oFiltersModel = this.getView().getModel("create");
-            var sSwenr = (oFiltersModel.getProperty("/filters/uEco") || "").trim();
-            var sSgrnr = (oFiltersModel.getProperty("/filters/terr") || "").trim();
-            var sSgenr = (oFiltersModel.getProperty("/filters/edif") || "").trim();
-            var aFilters = [];
-            if (sSwenr) {
-                aFilters.push(new Filter("uEco", FilterOperator.EQ, sSwenr));
+            var aFilters = [
+                new Filter("soc", FilterOperator.EQ, this._getDefaultSocieta())
+            ];
+            var sUEco = (this.getView().getModel("create").getProperty("/filters/uEco") || "").trim();
+            var sTerr = (this.getView().getModel("create").getProperty("/filters/terr") || "").trim();
+            var sEdif = (this.getView().getModel("create").getProperty("/filters/edif") || "").trim();
+            if (sUEco) {
+                aFilters.push(new Filter("uEco", FilterOperator.EQ, sUEco));
             }
-            if (sSgrnr) {
-                aFilters.push(new Filter("terr", FilterOperator.EQ, sSgrnr));
+            if (sTerr) {
+                aFilters.push(new Filter("terr", FilterOperator.EQ, sTerr));
             }
-            if (sSgenr) {
-                aFilters.push(new Filter("edif", FilterOperator.EQ, sSgenr));
+            if (sEdif) {
+                aFilters.push(new Filter("edif", FilterOperator.EQ, sEdif));
             }
             this.getOwnerComponent().getModel().read("/oggettiArch", {
                 filters: aFilters,
                 success: function (oData) {
-                    this.getView().getModel("create").setProperty("/risultatiOA", (oData && oData.results) ? oData.results : []);
-                    this.byId("tableOA").removeSelections(true);
+                    var aResults = oData && oData.results ? oData.results : [];
+                    this.getView().getModel("create").setProperty("/risultatiOA", aResults);
+                    if (this.byId("tableOA")) {
+                        this.byId("tableOA").removeSelections(true);
+                    }
                 }.bind(this),
-                error: function () {
-                    MessageBox.error("Errore durante la ricerca degli Oggetti Architettonici.");
+                error: function (oError) {
+                    MessageBox.error("Errore durante la ricerca degli Oggetti Architettonici.", {
+                        details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                    });
                 }
             });
         },
-        _loadHelpValues: function (sEntitySetPath, aFilters, sModelName) {
+        _loadHelpValues: function (sEntitySetPath, aAdditionalFilters, sModelName) {
+            var aFilters = [
+                new Filter("soc", FilterOperator.EQ, this._getDefaultSocieta())
+            ];
+            (aAdditionalFilters || []).forEach(function (oFilter) {
+                aFilters.push(oFilter);
+            });
             return new Promise(function (resolve, reject) {
                 this.getOwnerComponent().getModel().read(sEntitySetPath, {
-                    filters: aFilters || [],
+                    filters: aFilters,
                     success: function (oData) {
-                        var aResults = (oData && oData.results) ? oData.results : [];
+                        var aResults = oData && oData.results ? oData.results : [];
                         this.getView().getModel(sModelName).setData(aResults);
                         resolve(aResults);
                     }.bind(this),
@@ -456,6 +531,16 @@ sap.ui.define([
                 });
             }.bind(this));
         },
+        _applyTableRowLimit: function (sModelName, sPath, sTableId) {
+    var oTable = this.byId(sTableId);
+    if (!oTable || !oTable.isA("sap.ui.table.Table")) {
+        return;
+    }
+    var oModel = this.getView().getModel(sModelName);
+    var aRows = oModel.getProperty(sPath) || [];
+    oTable.setVisibleRowCountMode("Fixed");
+    oTable.setVisibleRowCount(Math.max(1, Math.min(10, aRows.length)));
+}
         onValueHelpUEcoRequest: function () {
             this._loadHelpValues("/helpUEco", [], "helpUEco").then(function () {
                 return this._loadCreateFragment("HelpUEco");
@@ -652,22 +737,22 @@ sap.ui.define([
         },
         onRemoveSelectedPositions: function () {
             var oTable = this.byId("tableOASelected");
-            var aSelectedItems = oTable.getSelectedItems();
-            if (!aSelectedItems || aSelectedItems.length === 0) {
+            var aSelectedIndices = oTable.getSelectedIndices();
+            if (!aSelectedIndices || aSelectedIndices.length === 0) {
                 MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgNoOAToRemove"));
                 return;
             }
-            var aSelectedKeys = aSelectedItems.map(function (oItem) {
-                var oObject = oItem.getBindingContext("create").getObject();
+            var aCurrentPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
+            var aKeysToRemove = aSelectedIndices.map(function (iIndex) {
+                var oObject = oTable.getContextByIndex(iIndex).getObject();
                 return oObject.idOggArch + "|" + oObject.soc + "|" + oObject.uEco + "|" + oObject.terr + "|" + oObject.edif;
             });
-            var aCurrentPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
             var aRemainingPositions = aCurrentPositions.filter(function (oItem) {
                 var sKey = oItem.idOggArch + "|" + oItem.soc + "|" + oItem.uEco + "|" + oItem.terr + "|" + oItem.edif;
-                return aSelectedKeys.indexOf(sKey) === -1;
+                return aKeysToRemove.indexOf(sKey) === -1;
             });
             this.getView().getModel("create").setProperty("/posizioniSelezionate", aRemainingPositions);
-            oTable.removeSelections(true);
+            oTable.clearSelection();
         },
 
     });
