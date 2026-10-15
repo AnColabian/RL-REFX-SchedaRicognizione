@@ -77,85 +77,7 @@ sap.ui.define([
             }.bind(this));
         },
         _createEmptyScheda: function () {
-            return {
-                idScheda: "99999999",
-                stato: "",
-                idSchModel: "",
-                dtCompil: this._getCurrentDate(),
-                via: "",
-                numCivico: "",
-                cap: "",
-                localita: "",
-                provincia: "",
-                docValorizz: "",
-                idBene: "",
-                entePropr: "",
-                denomBene: "",
-                coorGIS: "",
-                tipologia: "",
-                usoEdif: "",
-                usoTerr: "",
-                supLU: "",
-                supFond: "",
-                accessib: "",
-                porzEdif: "",
-                numEdif: "",
-                numLivFuo: "",
-                numLivEnt: "",
-                collegam: "",
-                strPort: "",
-                tampon: "",
-                copert: "",
-                serram: "",
-                partInt: "",
-                finiture: "",
-                impianti: "",
-                pertin: "",
-                supCop: "",
-                supScop: "",
-                zonOMI: "",
-                presApe: "",
-                clsEnerg: "",
-                titProv: "",
-                annoAcquis: "",
-                attiLimit: "",
-                annoCostr: "",
-                stGener: "",
-                stStrPort: "",
-                stCopert: "",
-                stTampon: "",
-                stChiusEst: "",
-                stInter: "",
-                stFinit: "",
-                stImpian: "",
-                stConsNote: "",
-                stOccup: "",
-                soggOccup: "",
-                natOccup: "",
-                tipOccup: "",
-                vincoli: "",
-                intCultMIB: "",
-                autMibAli: "",
-                destUrb: "",
-                iterUrb: "",
-                titOrig: "",
-                ante67: "",
-                ante42: "",
-                corrCat: "",
-                certAgib: "",
-                collStat: "",
-                docAmbien: "",
-                vulnRSism: "",
-                vulnRIdro: "",
-                stimaVal: "",
-                stimaNote: "",
-                annoValor: "",
-                canLocaz: "",
-                progPrec: "",
-                delinInsPDA: "",
-                garaVend: "",
-                esitoAsta: ""
-            };
+            return this._createEmptySchedaData();
         },
         _loadTemplateHelp: function () {
             var oCreateModel = this.getView().getModel("create");
@@ -174,23 +96,12 @@ sap.ui.define([
             }.bind(this));
         },
         _mapSchedaDetailToCreateModel: function (oData) {
-            var oScheda = this._createEmptyScheda();
-            Object.keys(oScheda).forEach(function (sProperty) {
-                if (Object.prototype.hasOwnProperty.call(oData, sProperty) && oData[sProperty] !== null && oData[sProperty] !== undefined) {
-                    oScheda[sProperty] = oData[sProperty];
-                }
+            return this._mapSchedaDetailToFormModel(oData, {
+                preserveId: false,
+                preserveState: false,
+                preserveModelId: false,
+                preserveDate: false
             });
-            oScheda.idScheda = "99999999";
-            oScheda.stato = "";
-            oScheda.idSchModel = oData.idScheda || "";
-            oScheda.dtCompil = this._getCurrentDate();
-            ["supLU", "supFond", "supCop", "supScop", "stimaVal"].forEach(function (sProperty) {
-                oScheda[sProperty] = this.formatter.normalizeDecimalValue(oScheda[sProperty]);
-            }, this);
-            ["numEdif", "numLivFuo", "numLivEnt", "annoValor"].forEach(function (sProperty) {
-                oScheda[sProperty] = this.formatter.normalizeIntegerLikeValue(oScheda[sProperty]);
-            }, this);
-            return oScheda;
         },
 
         onCreateWithoutTemplate: function () {
@@ -206,9 +117,9 @@ sap.ui.define([
         _onCreateBeforeHide: function () {
             this._bCreateViewVisible = false;
             ["dialogImportTemplate", "dialogHelpSchedaModel", "dialogHelpUEco", "dialogHelpTerr", "dialogHelpEdif"].forEach(function (sId) {
-                var oDialog = this.byId(sId);
-                if (oDialog) {
-                    oDialog.close();
+                var oControl = this.byId(sId);
+                if (oControl && typeof oControl.close === "function" && oControl.isOpen && oControl.isOpen()) {
+                    oControl.close();
                 }
             }, this);
         },
@@ -342,65 +253,20 @@ sap.ui.define([
             return "1000";
         },
         _mapTemplatePositions: function (aPositions) {
-            return aPositions.map(function (oItem) {
-                return {
-                    idScheda: "99999999",
-                    chIntOA: oItem.chIntOA || "",
-                    idOggArch: oItem.idOggArch || "",
-                    objnrOA: oItem.objnrOA || "",
-                    objnrUL: oItem.objnrUL || "",
-                    chIntUL: oItem.chIntUL || "",
-                    soc: oItem.soc || "",
-                    uEco: oItem.uEco || "",
-                    terr: oItem.terr || "",
-                    edif: oItem.edif || "",
-                    unitLocaz: oItem.unitLocaz || "",
-                    numIndir: oItem.numIndir || "",
-                    tpCatas: oItem.tpCatas || "",
-                    tpEdTer: oItem.tpEdTer || "",
-                    codBelf: oItem.codBelf || "",
-                    foglio: oItem.foglio || "",
-                    sezUrb: oItem.sezUrb || "",
-                    partic: oItem.partic || "",
-                    sub: oItem.sub || "",
-                    denom: oItem.denom || "",
-                    tpPart: oItem.tpPart || "",
-                    codComCat: oItem.codComCat || ""
-                };
-            });
+            return this._mapSchedaPositions(aPositions, "99999999");
         },
         _mergeSelectedPositions: function (aPositionsToAdd) {
+            var iAdded = BaseController.prototype._mergeSelectedPositions.call(this, "create", "/posizioniSelezionate", "tableOASelected", aPositionsToAdd);
             var oCreateModel = this.getView().getModel("create");
-            var aCurrentPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
-            var aMergedPositions = aCurrentPositions.slice();
-            var oKnownIds = new Set(aCurrentPositions.map(function (oPosition) {
-                return String(oPosition.idOggArch || "").trim();
-            }));
-            var iAdded = 0;
-
-            aPositionsToAdd.forEach(function (oPosition) {
-                var sIdOA = String(oPosition.idOggArch || "").trim();
-
-                if (sIdOA && !oKnownIds.has(sIdOA)) {
-                    oKnownIds.add(sIdOA);
-                    aMergedPositions.push(oPosition);
-                    iAdded += 1;
-                }
-            });
-
             var aResults = oCreateModel.getProperty("/risultatiOA") || [];
             var aHelpScheda = oCreateModel.getProperty("/helpScheda") || [];
-
+            var aPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
             oCreateModel.setSizeLimit(Math.max(
                 100,
-                aMergedPositions.length,
+                aPositions.length,
                 aResults.length,
                 aHelpScheda.length
             ));
-            oCreateModel.setProperty("/posizioniSelezionate", aMergedPositions);
-
-            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
-
             return iAdded;
         },
         onExit: function () {
@@ -711,41 +577,13 @@ sap.ui.define([
             }.bind(this));
         },
         onRemoveSelectedPositions: function () {
-            var oTable = this.byId("tableOASelected");
-            var aSelectedIndices = oTable.getSelectedIndices();
-            if (!aSelectedIndices || aSelectedIndices.length === 0) {
+            var bRemoved = BaseController.prototype._removeSelectedPositions.call(this, "create", "/posizioniSelezionate", "tableOASelected");
+            if (!bRemoved) {
                 MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgNoOAToRemove"));
-                return;
             }
-            var aCurrentPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
-            var aKeysToRemove = aSelectedIndices.map(function (iIndex) {
-                var oObject = oTable.getContextByIndex(iIndex).getObject();
-                return oObject.idOggArch + "|" + oObject.soc + "|" + oObject.uEco + "|" + oObject.terr + "|" + oObject.edif;
-            });
-            var aRemainingPositions = aCurrentPositions.filter(function (oItem) {
-                var sKey = oItem.idOggArch + "|" + oItem.soc + "|" + oItem.uEco + "|" + oItem.terr + "|" + oItem.edif;
-                return aKeysToRemove.indexOf(sKey) === -1;
-            });
-            this.getView().getModel("create").setProperty("/posizioniSelezionate", aRemainingPositions);
-            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
-            oTable.clearSelection();
         },
         _getRequiredTestataFields: function () {
-            var aControls = this.byId("panelTestata").findAggregatedObjects(true);
-            var aLabels = aControls.filter(function (oControl) {
-                return oControl.isA("sap.m.Label");
-            });
-            return aControls.filter(function (oControl) {
-                return oControl.isA("sap.m.Input") && oControl.getRequired();
-            }).map(function (oInput) {
-                var oLabel = aLabels.find(function (oCandidate) {
-                    return oCandidate.getLabelFor() === oInput.getId();
-                });
-                return {
-                    input: oInput,
-                    label: oLabel ? oLabel.getText() : oInput.getId()
-                };
-            });
+            return BaseController.prototype._getRequiredTestataFields.call(this, "panelTestata");
         },
         onRequiredTestataChange: function (oEvent) {
             var oInput = oEvent.getSource();
@@ -772,69 +610,16 @@ sap.ui.define([
             }
         },
         _resetCreateValidation: function () {
-            this._getRequiredTestataFields().forEach(function (oField) {
-                oField.input.setValueState("None");
-                oField.input.setValueStateText("");
-            });
+            BaseController.prototype._resetSchedaValidation.call(this, "panelTestata", ["inputSupCop", "inputSupScop"]);
         },
         _validateCreateBeforeSave: function () {
-            var aMissing = [];
-
-            this._getRequiredTestataFields().forEach(function (oField) {
-                var bMissing = oField.input.getValue().trim() === "";
-                oField.input.setValueState(bMissing ? "Error" : "None");
-                oField.input.setValueStateText(bMissing ? "Compilare " + oField.label : "");
-                if (bMissing) {
-                    aMissing.push(oField.label);
-                }
+            return BaseController.prototype._validateSchedaBeforeSave.call(this, {
+                panelId: "panelTestata",
+                positionsModelName: "create",
+                positionsPath: "/posizioniSelezionate",
+                panelOAId: "panelOA",
+                surfaceFieldIds: ["inputSupCop", "inputSupScop"]
             });
-
-            var oSupCop = this.byId("inputSupCop");
-            var oSupScop = this.byId("inputSupScop");
-            var fSupCop = this.formatter.parseNumericValue(oSupCop ? oSupCop.getValue() : "");
-            var fSupScop = this.formatter.parseNumericValue(oSupScop ? oSupScop.getValue() : "");
-            var bSurfacePairValid = fSupCop > 0 || fSupScop > 0;
-
-            if (!bSurfacePairValid) {
-                if (oSupCop) {
-                    oSupCop.setValueState("Error");
-                    oSupCop.setValueStateText("Compilare Superficie Coperta o Superficie Scoperta con un valore maggiore di 0.");
-                }
-                if (oSupScop) {
-                    oSupScop.setValueState("Error");
-                    oSupScop.setValueStateText("Compilare Superficie Coperta o Superficie Scoperta con un valore maggiore di 0.");
-                }
-                aMissing.push("Superficie Coperta o Superficie Scoperta con valore maggiore di 0");
-            } else {
-                if (oSupCop) {
-                    oSupCop.setValueState("None");
-                    oSupCop.setValueStateText("");
-                }
-                if (oSupScop) {
-                    oSupScop.setValueState("None");
-                    oSupScop.setValueStateText("");
-                }
-            }
-
-            var aPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
-            var bHasOA = aPositions.some(function (oPosition) {
-                return oPosition && String(oPosition.idOggArch || "").trim() !== "";
-            });
-
-            if (!bHasOA) {
-                aMissing.push("Inserire almeno un Oggetto Architettonico nella tabella Posizioni correnti");
-            }
-
-            if (aMissing.length > 0) {
-                this.byId("panelTestata").setExpanded(true);
-                if (!bHasOA) {
-                    this.byId("panelOA").setExpanded(true);
-                }
-                MessageBox.warning("Completare i seguenti dati prima del salvataggio:\n\n• " + aMissing.join("\n• "));
-                return false;
-            }
-
-            return true;
         },
         onSaveDraft: function () {
             this._saveNewScheda("B");
@@ -843,101 +628,19 @@ sap.ui.define([
             this._saveNewScheda("D");
         },
         _buildCreatePayload: function (sStato) {
-            var oCreateModel = this.getView().getModel("create");
-            var oSource = oCreateModel.getProperty("/scheda");
-            var oHeader = {};
-            Object.keys(this._createEmptyScheda()).forEach(function (sProperty) {
-                var vValue = oSource[sProperty];
-                oHeader[sProperty] = vValue === null || vValue === undefined ? "" : vValue;
+            var oModel = this.getView().getModel("create");
+            var oHeader = Object.assign({}, oModel.getProperty("/scheda"), {
+                idScheda: "99999999"
             });
-
-            oHeader.idScheda = "99999999";
-            oHeader.stato = sStato;
-
-            if (!(oHeader.dtCompil instanceof Date)) {
-                var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(String(oHeader.dtCompil));
-                if (!aDateParts) {
-                    throw new Error("Data compilazione non valida.");
-                }
-                oHeader.dtCompil = new Date(Date.UTC(
-                    Number(aDateParts[1]),
-                    Number(aDateParts[2]) - 1,
-                    Number(aDateParts[3])
-                ));
-            }
-            if (isNaN(oHeader.dtCompil.getTime())) {
-                throw new Error("Data compilazione non valida.");
-            }
-
-            var aPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
-            if (aPositions.some(function (oPosition) {
-                return !oPosition || !String(oPosition.idOggArch || "").trim();
-            })) {
-                throw new Error("La tabella Posizioni contiene una riga priva di ID Oggetto Architettonico.");
-            }
-
-            return {
-                header: oHeader,
-                positions: this._mapTemplatePositions(aPositions)
-            };
+            return this._buildSchedaPayload(
+                oHeader,
+                oModel.getProperty("/posizioniSelezionate") || [],
+                sStato,
+                Object.keys(this._createEmptyScheda())
+            );
         },
         _postNewScheda: function (oPayload) {
-            var oModel = this.getOwnerComponent().getModel();
-            var sGroupId = "createScheda";
-            return new Promise(function (resolve, reject) {
-                var oRootContext;
-
-                function cleanup() {
-                    if (oRootContext && oRootContext.isTransient()) {
-                        oModel.deleteCreatedEntry(oRootContext);
-                    }
-                }
-
-                try {
-                    if (!oModel.getServiceMetadata()) {
-                        throw new Error("Metadata OData non disponibile.");
-                    }
-                    var aGroups = oModel.getDeferredGroups();
-                    if (aGroups.indexOf(sGroupId) === -1) {
-                        oModel.setDeferredGroups(aGroups.concat([sGroupId]));
-                    }
-
-                    oRootContext = oModel.createEntry("/scheda", {
-                        groupId: sGroupId,
-                        refreshAfterChange: false,
-                        properties: oPayload.header,
-                        success: function (oData) {
-                            resolve(oData);
-                        },
-                        error: function (oError) {
-                            cleanup();
-                            reject(oError);
-                        }
-                    });
-
-                    oRootContext.created().catch(function () {
-                        // Il reset di una creazione fallita rifiuta questa Promise.
-                    });
-
-                    oPayload.positions.forEach(function (oPosition) {
-                        oModel.createEntry("toPosizioni", {
-                            context: oRootContext,
-                            properties: oPosition
-                        });
-                    });
-
-                    oModel.submitChanges({
-                        groupId: sGroupId,
-                        error: function (oError) {
-                            cleanup();
-                            reject(oError);
-                        }
-                    });
-                } catch (oError) {
-                    cleanup();
-                    reject(oError);
-                }
-            });
+            return this._postScheda(oPayload);
         },
 
         _saveNewScheda: function (sStato) {

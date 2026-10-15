@@ -283,8 +283,9 @@
         <footer>
             <OverflowToolbar>
                 <ToolbarSpacer/>
-               <!--  <Button id="btnExportPDF" text="{i18n>btnExportPDF}" type="Default" enabled="{display>/loaded}" press=".onExportPDF"/>
-                --> <Button id="btnExportExcel" text="{i18n>btnExportExcel}" type="Default" enabled="{display>/loaded}" press=".onExportExcel"/>
+                <!--  <Button id="btnExportPDF" text="{i18n>btnExportPDF}" type="Default" enabled="{display>/loaded}" press=".onExportPDF"/>
+                -->
+                <Button id="btnExportExcel" text="{i18n>btnExportExcel}" type="Default" enabled="{display>/loaded}" press=".onExportExcel"/>
                 <Button id="btnBack" text="Indietro" type="Default" press=".onNavBack"/>
             </OverflowToolbar>
         </footer>

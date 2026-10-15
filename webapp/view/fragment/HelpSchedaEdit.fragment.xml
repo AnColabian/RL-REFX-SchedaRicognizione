@@ -1,0 +1,55 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <TableSelectDialog id="dialogHelpSchedaEdit" title="Seleziona Scheda Ricognizione" contentWidth="80rem" multiSelect="false" rememberSelections="false" items="{edit>/helpScheda}" search=".onSearchHelpSchedaEdit" liveChange=".onSearchHelpSchedaEdit" confirm=".onConfirmHelpSchedaEdit">
+        <columns>
+            <Column>
+                <header>
+                    <Text text="ID Scheda"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Stato"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Doc. Valorizzazione"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="ID Bene"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Denominazione Bene"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Autore"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Data Creazione"/>
+                </header>
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <Text text="{edit>idScheda}"/>
+                    <Text text="{path: 'edit>stato', formatter: '.formatter.formatSchedaState'}"/>
+                    <Text text="{path: 'edit>docVal', formatter: '.formatter.formatDisplayValue'}"/>
+                    <Text text="{path: 'edit>idBene', formatter: '.formatter.formatDisplayValue'}"/>
+                    <Text text="{path: 'edit>denBene', formatter: '.formatter.formatDisplayValue'}"/>
+                    <Text text="{edit>autore}"/>
+                    <Text text="{path: 'edit>dtCre', formatter: '.formatter.formatDate'}"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </TableSelectDialog>
+</core:FragmentDefinition>

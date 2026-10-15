@@ -1,0 +1,18 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+    <Dialog id="dialogSelectSchedaEdit" title="Modifica Scheda Ricognizione" contentWidth="32rem" initialFocus="inputSelectSchedaEdit" afterClose=".onAfterCloseSelectSchedaEdit">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Text text="Seleziona la Scheda Ricognizione da modificare."/>
+                <Label text="ID Scheda" labelFor="inputSelectSchedaEdit" required="true" class="sapUiSmallMarginTop"/>
+                <Input id="inputSelectSchedaEdit" value="{editSelection>/text}" width="100%" required="true" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onSchedaValueHelpEdit"/>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Modifica" type="Emphasized" enabled="{= !!${editSelection>/idScheda} }" press=".onLoadSelectedSchedaForEdit"/>
+        </beginButton>
+        <endButton>
+            <Button text="Annulla" press=".onCancelSelectSchedaEdit"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
