@@ -1,9 +1,9 @@
 sap.ui.define([
     "schedaricognizione/controller/BaseController",
-    +    "sap/ui/model/json/JSONModel",
-    +    "sap/ui/model/Filter",
-    +    "sap/ui/model/FilterOperator",
-    +    "sap/m/MessageBox",
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/m/MessageBox",
     "sap/m/MessageToast",
 ], (BaseController, JSONModel, Filter, FilterOperator, MessageBox, MessageToast) => {
     "use strict";
