@@ -43,6 +43,7 @@ sap.ui.define([
             oCreateModel.setProperty("/scheda", this._createEmptyScheda());
             oCreateModel.setProperty("/helpScheda", []);
             oCreateModel.setProperty("/risultatiOA", []);
+            this._applyTableRowLimit("create", "/risultatiOA", "tableOA");
             oCreateModel.setProperty("/posizioniSelezionate", []);
             this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             oCreateModel.setProperty("/filters", {
@@ -55,7 +56,7 @@ sap.ui.define([
             this.getView().getModel("helpEdif").setData([]);
             this.getView().getModel("templateSelection").setData({ idScheda: "", text: "" });
             if (this.byId("tableOA")) {
-                this.byId("tableOA").removeSelections(true);
+                this.byId("tableOA").clearSelection();
             }
             if (this.byId("tableOASelected")) {
                 this.byId("tableOASelected").clearSelection();
@@ -74,6 +75,8 @@ sap.ui.define([
                     });
                 }
             }.bind(this));
+            this._bCreateSaved = false;
+this._resetCreateValidation();
         },
         _createEmptyScheda: function () {
             return {
@@ -503,8 +506,9 @@ sap.ui.define([
                 success: function (oData) {
                     var aResults = oData && oData.results ? oData.results : [];
                     this.getView().getModel("create").setProperty("/risultatiOA", aResults);
+                    this._applyTableRowLimit("create", "/risultatiOA", "tableOA");
                     if (this.byId("tableOA")) {
-                        this.byId("tableOA").removeSelections(true);
+                        this.byId("tableOA").clearSelection();
                     }
                 }.bind(this),
                 error: function (oError) {
@@ -679,7 +683,7 @@ sap.ui.define([
         onDeselectAllOA: function () {
             var oTable = this.byId("tableOA");
             if (oTable) {
-                oTable.removeSelections(true);
+                this.byId("tableOA").clearSelection();
             }
         },
         onRemoveOA: function () {
@@ -733,7 +737,7 @@ sap.ui.define([
                     }
                 });
                 this._mergeSelectedPositions(aLoadedPositions);
-                oTable.removeSelections(true);
+                this.byId("tableOA").clearSelection();
                 if (bHasErrors) {
                     MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgPositionLoadPartialError"));
                 }
@@ -759,6 +763,224 @@ sap.ui.define([
             this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             oTable.clearSelection();
         },
+        _getRequiredTestataFields: function () {
+    var aControls = this.byId("panelTestata").findAggregatedObjects(true);
+    var aLabels = aControls.filter(function (oControl) {
+        return oControl.isA("sap.m.Label");
+    });
+    return aControls.filter(function (oControl) {
+        return oControl.isA("sap.m.Input") && oControl.getRequired();
+    }).map(function (oInput) {
+        var oLabel = aLabels.find(function (oCandidate) {
+            return oCandidate.getLabelFor() === oInput.getId();
+        });
+        return {
+            input: oInput,
+            label: oLabel ? oLabel.getText() : oInput.getId()
+        };
+    });
+},
+
+onRequiredTestataChange: function (oEvent) {
+    var oInput = oEvent.getSource();
+    if (oInput.getValue().trim() !== "") {
+        oInput.setValueState("None");
+        oInput.setValueStateText("");
+    }
+},
+
+_resetCreateValidation: function () {
+    this._getRequiredTestataFields().forEach(function (oField) {
+        oField.input.setValueState("None");
+        oField.input.setValueStateText("");
+    });
+},
+
+_validateCreateBeforeSave: function () {
+    var aMissing = [];
+    this._getRequiredTestataFields().forEach(function (oField) {
+        var bMissing = oField.input.getValue().trim() === "";
+        oField.input.setValueState(bMissing ? "Error" : "None");
+        oField.input.setValueStateText(bMissing ? "Compilare " + oField.label : "");
+        if (bMissing) {
+            aMissing.push(oField.label);
+        }
+    });
+    var aPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
+    var bHasOA = aPositions.some(function (oPosition) {
+        return oPosition && String(oPosition.idOggArch || "").trim() !== "";
+    });
+    if (!bHasOA) {
+        aMissing.push("Inserire almeno un Oggetto Architettonico nella tabella Posizioni correnti");
+    }
+    if (aMissing.length > 0) {
+        this.byId("panelTestata").setExpanded(true);
+        if (!bHasOA) {
+            this.byId("panelOA").setExpanded(true);
+        }
+        MessageBox.warning("Completare i seguenti dati prima del salvataggio:\n\n• " + aMissing.join("\n• "));
+        return false;
+    }
+    return true;
+},
+
+onSaveDraft: function () {
+    this._saveNewScheda("B");
+},
+
+onSaveFinal: function () {
+    this._saveNewScheda("D");
+},
+_buildCreatePayload: function (sStato) {
+    var oCreateModel = this.getView().getModel("create");
+    var oSource = oCreateModel.getProperty("/scheda");
+    var oHeader = {};
+    Object.keys(this._createEmptyScheda()).forEach(function (sProperty) {
+        var vValue = oSource[sProperty];
+        oHeader[sProperty] = vValue === null || vValue === undefined ? "" : vValue;
+    });
+
+    oHeader.idScheda = "99999999";
+    oHeader.stato = sStato;
+
+    if (!(oHeader.dtCompil instanceof Date)) {
+        var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(String(oHeader.dtCompil));
+        if (!aDateParts) {
+            throw new Error("Data compilazione non valida.");
+        }
+        oHeader.dtCompil = new Date(Date.UTC(
+            Number(aDateParts[1]),
+            Number(aDateParts[2]) - 1,
+            Number(aDateParts[3])
+        ));
+    }
+    if (isNaN(oHeader.dtCompil.getTime())) {
+        throw new Error("Data compilazione non valida.");
+    }
+
+    var aPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
+    if (aPositions.some(function (oPosition) {
+        return !oPosition || !String(oPosition.idOggArch || "").trim();
+    })) {
+        throw new Error("La tabella Posizioni contiene una riga priva di ID Oggetto Architettonico.");
+    }
+
+    return {
+        header: oHeader,
+        positions: this._mapTemplatePositions(aPositions)
+    };
+},
+_postNewScheda: function (oPayload) {
+    var oModel = this.getOwnerComponent().getModel();
+    var sGroupId = "createScheda";
+    return new Promise(function (resolve, reject) {
+        var oRootContext;
+
+        function cleanup() {
+            if (oRootContext && oRootContext.isTransient()) {
+                oModel.deleteCreatedEntry(oRootContext);
+            }
+        }
+
+        try {
+            if (!oModel.getServiceMetadata()) {
+                throw new Error("Metadata OData non disponibile.");
+            }
+            var aGroups = oModel.getDeferredGroups();
+            if (aGroups.indexOf(sGroupId) === -1) {
+                oModel.setDeferredGroups(aGroups.concat([sGroupId]));
+            }
+
+            oRootContext = oModel.createEntry("/scheda", {
+                groupId: sGroupId,
+                refreshAfterChange: false,
+                properties: oPayload.header,
+                success: function (oData) {
+                    resolve(oData);
+                },
+                error: function (oError) {
+                    cleanup();
+                    reject(oError);
+                }
+            });
+
+            oRootContext.created().catch(function () {
+                // Il reset di una creazione fallita rifiuta questa Promise.
+            });
+
+            oPayload.positions.forEach(function (oPosition) {
+                oModel.createEntry("toPosizioni", {
+                    context: oRootContext,
+                    properties: oPosition
+                });
+            });
+
+            oModel.submitChanges({
+                groupId: sGroupId,
+                error: function (oError) {
+                    cleanup();
+                    reject(oError);
+                }
+            });
+        } catch (oError) {
+            cleanup();
+            reject(oError);
+        }
+    });
+},
+
+_saveNewScheda: function (sStato) {
+    if (this._bSavingScheda || this._bCreateSaved) {
+        return;
+    }
+    if (!this._validateCreateBeforeSave()) {
+        return;
+    }
+
+    var oPayload;
+    try {
+        oPayload = this._buildCreatePayload(sStato);
+    } catch (oError) {
+        MessageBox.warning(oError.message);
+        return;
+    }
+
+    this._bSavingScheda = true;
+    var oView = this.getView();
+    var iRouteRequest = this._iCreateRouteRequest;
+    oView.setBusy(true);
+
+    this._postNewScheda(oPayload).then(function (oData) {
+        if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+            return;
+        }
+        this._bCreateSaved = true;
+        var sMessage = sStato === "B"
+            ? "Scheda salvata in stato Provvisorio."
+            : "Scheda rilasciata in stato Definitivo.";
+        if (oData && oData.idScheda) {
+            sMessage += "\nNumero scheda: " + oData.idScheda;
+        }
+        MessageBox.success(sMessage, {
+            onClose: function () {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                }
+            }.bind(this)
+        });
+    }.bind(this)).catch(function (oError) {
+        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+            MessageBox.error("Salvataggio della Scheda Ricognizione non riuscito.", {
+                details: oError && (oError.responseText || oError.message)
+                    ? oError.responseText || oError.message
+                    : String(oError)
+            });
+        }
+    }.bind(this)).finally(function () {
+        this._bSavingScheda = false;
+        oView.setBusy(false);
+    }.bind(this));
+},
 
     });
 });
