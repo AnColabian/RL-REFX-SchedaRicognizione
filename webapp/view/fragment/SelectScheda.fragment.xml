@@ -1,0 +1,17 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Dialog id="dialogSelectScheda" title="Visualizza Scheda Ricognizione" contentWidth="32rem" initialFocus="inputSelectScheda" afterClose=".onAfterCloseSelectScheda">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <Text text="Seleziona la Scheda Ricognizione da visualizzare."/>
+                <Label text="ID Scheda" labelFor="inputSelectScheda" required="true" class="sapUiSmallMarginTop"/>
+                <Input id="inputSelectScheda" value="{schedaSelection>/text}" width="100%" required="true" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onSchedaValueHelp"/>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button text="Visualizza" type="Emphasized" enabled="{= !!${schedaSelection>/idScheda} }" press=".onDisplayScheda"/>
+        </beginButton>
+        <endButton>
+            <Button text="Annulla" press=".onCancelSelectScheda"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
