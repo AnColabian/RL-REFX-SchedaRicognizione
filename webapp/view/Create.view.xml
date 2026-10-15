@@ -26,150 +26,217 @@
                             <VBox class="sapUiSmallMargin">
                                 <HBox class="sapUiSmallMarginBottom">
                                     <VBox class="sapUiSmallMarginEnd" width="50%">
-                                        <Label text="{i18n>lblDocval}"/>
-                                        <Input value="{create>/scheda/docValorizz}" width="100%"/>
-                                        <Label text="{i18n>lblIdbene}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/idBene}" width="100%"/>
-                                        <Label text="{i18n>lblEnteprop}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/entePropr}" width="100%"/>
-                                        <Label text="{i18n>lblCoogis}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/coorGIS}" width="100%"/>
-                                        <Label text="{i18n>lblFabter}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/tipologia}" width="100%"/>
-                                        <Label text="{i18n>lblUsofab}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/usoEdif}" width="100%"/>
-                                        <Label text="{i18n>lblUsoter}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/usoTerr}" width="100%"/>
-                                        <Label text="{i18n>lblSuplut}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/supLU}" width="100%"/>
-                                        <Label text="{i18n>lblSupfon}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/supFond}" width="100%"/>
-                                        <Label text="{i18n>lblAccess}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/accessib}" width="100%"/>
-                                        <Label text="{i18n>lblPorzed}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/porzEdif}" width="100%"/>
-                                        <Label text="{i18n>lblNumedi}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/numEdif}" width="100%"/>
-                                        <Label text="{i18n>lblNumfuo}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/numLivFuo}" width="100%"/>
-                                        <Label text="{i18n>lblNument}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/numLivEnt}" width="100%"/>
-                                        <Label text="{i18n>lblColleg}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/collegam}" width="100%"/>
-                                        <Label text="{i18n>lblStport}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/strPort}" width="100%"/>
-                                        <Label text="{i18n>lblTampon}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/tampon}" width="100%"/>
-                                        <Label text="{i18n>lblCopert}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/copert}" width="100%"/>
-                                        <Label text="{i18n>lblSerram}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/serram}" width="100%"/>
-                                        <Label text="{i18n>lblPartiz}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/partInt}" width="100%"/>
-                                        <Label text="{i18n>lblFinitu}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/finiture}" width="100%"/>
+                                        <Label text="{i18n>lblDocval}" labelFor="inputDocValorizz"/>
+                                        <Input id="inputDocValorizz" value="{create>/scheda/docValorizz}" width="100%"/>
+
+                                        <Label text="{i18n>lblIdbene}" labelFor="inputIdBene" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputIdBene" value="{create>/scheda/idBene}" width="100%"/>
+
+                                        <Label text="{i18n>lblEnteprop}" labelFor="inputEntePropr" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputEntePropr" value="{create>/scheda/entePropr}" width="100%"/>
+
+                                        <Label text="{i18n>lblCoogis}" labelFor="inputCoorGIS" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCoorGIS" value="{create>/scheda/coorGIS}" width="100%"/>
+
+                                        <Label text="{i18n>lblFabter}" labelFor="inputTipologia" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputTipologia" value="{create>/scheda/tipologia}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblUsofab}" labelFor="inputUsoEdif" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputUsoEdif" value="{create>/scheda/usoEdif}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblUsoter}" labelFor="inputUsoTerr" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputUsoTerr" value="{create>/scheda/usoTerr}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblSuplut}" labelFor="inputSupLU" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSupLU" value="{create>/scheda/supLU}" width="100%"/>
+
+                                        <Label text="{i18n>lblSupfon}" labelFor="inputSupFond" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSupFond" value="{create>/scheda/supFond}" width="100%"/>
+
+                                        <Label text="{i18n>lblAccess}" labelFor="inputAccessib" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAccessib" value="{create>/scheda/accessib}" width="100%"/>
+
+                                        <Label text="{i18n>lblPorzed}" labelFor="inputPorzEdif" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputPorzEdif" value="{create>/scheda/porzEdif}" width="100%"/>
+
+                                        <Label text="{i18n>lblNumedi}" labelFor="inputNumEdif" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputNumEdif" value="{create>/scheda/numEdif}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblNumfuo}" labelFor="inputNumLivFuo" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputNumLivFuo" value="{create>/scheda/numLivFuo}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblNument}" labelFor="inputNumLivEnt" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputNumLivEnt" value="{create>/scheda/numLivEnt}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblColleg}" labelFor="inputCollegam" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCollegam" value="{create>/scheda/collegam}" width="100%"/>
+
+                                        <Label text="{i18n>lblStport}" labelFor="inputStrPort" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStrPort" value="{create>/scheda/strPort}" width="100%"/>
+
+                                        <Label text="{i18n>lblTampon}" labelFor="inputTampon" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputTampon" value="{create>/scheda/tampon}" width="100%"/>
+
+                                        <Label text="{i18n>lblCopert}" labelFor="inputCopert" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCopert" value="{create>/scheda/copert}" width="100%"/>
+
+                                        <Label text="{i18n>lblSerram}" labelFor="inputSerram" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSerram" value="{create>/scheda/serram}" width="100%"/>
+
+                                        <Label text="{i18n>lblPartiz}" labelFor="inputPartInt" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputPartInt" value="{create>/scheda/partInt}" width="100%"/>
+
+                                        <Label text="{i18n>lblFinitu}" labelFor="inputFiniture" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputFiniture" value="{create>/scheda/finiture}" width="100%"/>
                                     </VBox>
+
                                     <VBox width="50%">
-                                        <Label text="{i18n>lblTxbene}"/>
-                                        <Input value="{create>/scheda/denomBene}" width="100%"/>
-                                        <Label text="{i18n>lblImpian}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/impianti}" width="100%"/>
-                                        <Label text="{i18n>lblPertin}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/pertin}" width="100%"/>
-                                        <Label text="{i18n>lblSupcop}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/supCop}" width="100%"/>
-                                        <Label text="{i18n>lblSupsco}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/supScop}" width="100%"/>
-                                        <Label text="{i18n>lblZonomi}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/zonOMI}" width="100%"/>
-                                        <Label text="{i18n>lblApe}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/presApe}" width="100%"/>
-                                        <Label text="{i18n>lblClsene}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/clsEnerg}" width="100%"/>
-                                        <Label text="{i18n>lblTitolo}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/titProv}" width="100%"/>
-                                        <Label text="{i18n>lblAnnopr}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/annoAcquis}" width="100%"/>
-                                        <Label text="{i18n>lblLimiti}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/attiLimit}" width="100%"/>
-                                        <Label text="{i18n>lblAnnocs}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/annoCostr}" width="100%"/>
-                                        <Label text="{i18n>lblStgene}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stGener}" width="100%"/>
-                                        <Label text="{i18n>lblStspor}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stStrPort}" width="100%"/>
-                                        <Label text="{i18n>lblStcope}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stCopert}" width="100%"/>
-                                        <Label text="{i18n>lblSttamp}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stTampon}" width="100%"/>
-                                        <Label text="{i18n>lblStches}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stChiusEst}" width="100%"/>
-                                        <Label text="{i18n>lblStpart}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stInter}" width="100%"/>
-                                        <Label text="{i18n>lblStfini}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stFinit}" width="100%"/>
-                                        <Label text="{i18n>lblStimpi}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stImpian}" width="100%"/>
+                                        <Label text="{i18n>lblTxbene}" labelFor="inputDenomBene"/>
+                                        <Input id="inputDenomBene" value="{create>/scheda/denomBene}" width="100%"/>
+
+                                        <Label text="{i18n>lblImpian}" labelFor="inputImpianti" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputImpianti" value="{create>/scheda/impianti}" width="100%"/>
+
+                                        <Label text="{i18n>lblPertin}" labelFor="inputPertin" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputPertin" value="{create>/scheda/pertin}" width="100%"/>
+
+                                        <Label text="{i18n>lblSupcop}" labelFor="inputSupCop" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSupCop" value="{create>/scheda/supCop}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblSupsco}" labelFor="inputSupScop" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSupScop" value="{create>/scheda/supScop}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblZonomi}" labelFor="inputZonOMI" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputZonOMI" value="{create>/scheda/zonOMI}" width="100%"/>
+
+                                        <Label text="{i18n>lblApe}" labelFor="inputPresApe" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputPresApe" value="{create>/scheda/presApe}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblClsene}" labelFor="inputClsEnerg" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputClsEnerg" value="{create>/scheda/clsEnerg}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblTitolo}" labelFor="inputTitProv" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputTitProv" value="{create>/scheda/titProv}" width="100%"/>
+
+                                        <Label text="{i18n>lblAnnopr}" labelFor="inputAnnoAcquis" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAnnoAcquis" value="{create>/scheda/annoAcquis}" width="100%"/>
+
+                                        <Label text="{i18n>lblLimiti}" labelFor="inputAttiLimit" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAttiLimit" value="{create>/scheda/attiLimit}" width="100%"/>
+
+                                        <Label text="{i18n>lblAnnocs}" labelFor="inputAnnoCostr" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAnnoCostr" value="{create>/scheda/annoCostr}" width="100%"/>
+
+                                        <Label text="{i18n>lblStgene}" labelFor="inputStGener" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStGener" value="{create>/scheda/stGener}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStspor}" labelFor="inputStStrPort" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStStrPort" value="{create>/scheda/stStrPort}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStcope}" labelFor="inputStCopert" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStCopert" value="{create>/scheda/stCopert}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblSttamp}" labelFor="inputStTampon" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStTampon" value="{create>/scheda/stTampon}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStches}" labelFor="inputStChiusEst" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStChiusEst" value="{create>/scheda/stChiusEst}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStpart}" labelFor="inputStInter" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStInter" value="{create>/scheda/stInter}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStfini}" labelFor="inputStFinit" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStFinit" value="{create>/scheda/stFinit}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStimpi}" labelFor="inputStImpian" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStImpian" value="{create>/scheda/stImpian}" required="true" change=".onRequiredTestataChange" width="100%"/>
                                     </VBox>
                                 </HBox>
+
                                 <HBox>
                                     <VBox class="sapUiSmallMarginEnd" width="50%">
-                                        <Label text="{i18n>lblStnote}"/>
-                                        <Input value="{create>/scheda/stConsNote}" width="100%"/>
-                                        <Label text="{i18n>lblStoccu}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stOccup}" width="100%"/>
-                                        <Label text="{i18n>lblSogocc}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/soggOccup}" width="100%"/>
-                                        <Label text="{i18n>lblNatocc}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/natOccup}" width="100%"/>
-                                        <Label text="{i18n>lblTipocc}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/tipOccup}" width="100%"/>
-                                        <Label text="{i18n>lblVincol}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/vincoli}" width="100%"/>
-                                        <Label text="{i18n>lblIntcul}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/intCultMIB}" width="100%"/>
-                                        <Label text="{i18n>lblAutali}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/autMibAli}" width="100%"/>
-                                        <Label text="{i18n>lblDsturb}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/destUrb}" width="100%"/>
-                                        <Label text="{i18n>lblIterur}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/iterUrb}" width="100%"/>
-                                        <Label text="{i18n>lblTitori}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/titOrig}" width="100%"/>
-                                        <Label text="{i18n>lblAnte67}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/ante67}" width="100%"/>
-                                        <Label text="{i18n>lblAnte42}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/ante42}" width="100%"/>
-                                        <Label text="{i18n>lblCorcat}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/corrCat}" width="100%"/>
+                                        <Label text="{i18n>lblStnote}" labelFor="inputStConsNote"/>
+                                        <Input id="inputStConsNote" value="{create>/scheda/stConsNote}" width="100%"/>
+
+                                        <Label text="{i18n>lblStoccu}" labelFor="inputStOccup" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStOccup" value="{create>/scheda/stOccup}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblSogocc}" labelFor="inputSoggOccup" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputSoggOccup" value="{create>/scheda/soggOccup}" width="100%"/>
+
+                                        <Label text="{i18n>lblNatocc}" labelFor="inputNatOccup" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputNatOccup" value="{create>/scheda/natOccup}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblTipocc}" labelFor="inputTipOccup" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputTipOccup" value="{create>/scheda/tipOccup}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblVincol}" labelFor="inputVincoli" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputVincoli" value="{create>/scheda/vincoli}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblIntcul}" labelFor="inputIntCultMIB" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputIntCultMIB" value="{create>/scheda/intCultMIB}" width="100%"/>
+
+                                        <Label text="{i18n>lblAutali}" labelFor="inputAutMibAli" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAutMibAli" value="{create>/scheda/autMibAli}" width="100%"/>
+
+                                        <Label text="{i18n>lblDsturb}" labelFor="inputDestUrb" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputDestUrb" value="{create>/scheda/destUrb}" width="100%"/>
+
+                                        <Label text="{i18n>lblIterur}" labelFor="inputIterUrb" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputIterUrb" value="{create>/scheda/iterUrb}" width="100%"/>
+
+                                        <Label text="{i18n>lblTitori}" labelFor="inputTitOrig" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputTitOrig" value="{create>/scheda/titOrig}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblAnte67}" labelFor="inputAnte67" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAnte67" value="{create>/scheda/ante67}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblAnte42}" labelFor="inputAnte42" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAnte42" value="{create>/scheda/ante42}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblCorcat}" labelFor="inputCorrCat" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCorrCat" value="{create>/scheda/corrCat}" required="true" change=".onRequiredTestataChange" width="100%"/>
                                     </VBox>
+
                                     <VBox width="50%">
-                                        <Label text="{i18n>lblCeragi}"/>
-                                        <Input value="{create>/scheda/certAgib}" width="100%"/>
-                                        <Label text="{i18n>lblCollst}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/collStat}" width="100%"/>
-                                        <Label text="{i18n>lblDocamb}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/docAmbien}" width="100%"/>
-                                        <Label text="{i18n>lblVulssm}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/vulnRSism}" width="100%"/>
-                                        <Label text="{i18n>lblVulamb}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/vulnRIdro}" width="100%"/>
-                                        <Label text="{i18n>lblStimav}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stimaVal}" width="100%"/>
-                                        <Label text="{i18n>lblStimnt}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/stimaNote}" width="100%"/>
-                                        <Label text="{i18n>lblAnnovl}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/annoValor}" width="100%"/>
-                                        <Label text="{i18n>lblCanloc}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/canLocaz}" width="100%"/>
-                                        <Label text="{i18n>lblPrgprc}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/progPrec}" width="100%"/>
-                                        <Label text="{i18n>lblDelibe}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/delinInsPDA}" width="100%"/>
-                                        <Label text="{i18n>lblEspgar}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/garaVend}" width="100%"/>
-                                        <Label text="{i18n>lblEsitoa}" class="sapUiSmallMarginTop"/>
-                                        <Input value="{create>/scheda/esitoAsta}" width="100%"/>
+                                        <Label text="{i18n>lblCeragi}" labelFor="inputCertAgib"/>
+                                        <Input id="inputCertAgib" value="{create>/scheda/certAgib}" width="100%"/>
+
+                                        <Label text="{i18n>lblCollst}" labelFor="inputCollStat" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCollStat" value="{create>/scheda/collStat}" width="100%"/>
+
+                                        <Label text="{i18n>lblDocamb}" labelFor="inputDocAmbien" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputDocAmbien" value="{create>/scheda/docAmbien}" width="100%"/>
+
+                                        <Label text="{i18n>lblVulssm}" labelFor="inputVulnRSism" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputVulnRSism" value="{create>/scheda/vulnRSism}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblVulamb}" labelFor="inputVulnRIdro" required="true" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputVulnRIdro" value="{create>/scheda/vulnRIdro}" required="true" change=".onRequiredTestataChange" width="100%"/>
+
+                                        <Label text="{i18n>lblStimav}" labelFor="inputStimaVal" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStimaVal" value="{create>/scheda/stimaVal}" width="100%"/>
+
+                                        <Label text="{i18n>lblStimnt}" labelFor="inputStimaNote" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputStimaNote" value="{create>/scheda/stimaNote}" width="100%"/>
+
+                                        <Label text="{i18n>lblAnnovl}" labelFor="inputAnnoValor" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputAnnoValor" value="{create>/scheda/annoValor}" width="100%"/>
+
+                                        <Label text="{i18n>lblCanloc}" labelFor="inputCanLocaz" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputCanLocaz" value="{create>/scheda/canLocaz}" width="100%"/>
+
+                                        <Label text="{i18n>lblPrgprc}" labelFor="inputProgPrec" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputProgPrec" value="{create>/scheda/progPrec}" width="100%"/>
+
+                                        <Label text="{i18n>lblDelibe}" labelFor="inputDelinInsPDA" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputDelinInsPDA" value="{create>/scheda/delinInsPDA}" width="100%"/>
+
+                                        <Label text="{i18n>lblEspgar}" labelFor="inputGaraVend" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputGaraVend" value="{create>/scheda/garaVend}" width="100%"/>
+
+                                        <Label text="{i18n>lblEsitoa}" labelFor="inputEsitoAsta" class="sapUiSmallMarginTop"/>
+                                        <Input id="inputEsitoAsta" value="{create>/scheda/esitoAsta}" width="100%"/>
                                     </VBox>
                                 </HBox>
                             </VBox>

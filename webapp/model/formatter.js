@@ -59,6 +59,16 @@ sap.ui.define([], () => {
                 return "";
             }
             return String(iValue);
-        }
+        },
+        parseNumericValue: function (vValue) {
+            if (vValue === null || vValue === undefined) {
+                return NaN;
+            }
+            var sValue = String(vValue).trim();
+            if (!sValue) {
+                return NaN;
+            }
+            return Number(sValue.replace(",", "."));
+        },
     };
 });

@@ -61,6 +61,8 @@ sap.ui.define([
             if (this.byId("tableOASelected")) {
                 this.byId("tableOASelected").clearSelection();
             }
+            this._bCreateSaved = false;
+            this._resetCreateValidation();
             this._loadCreateFragment("ImportTemplate").then(function (oDialog) {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
@@ -75,8 +77,6 @@ sap.ui.define([
                     });
                 }
             }.bind(this));
-            this._bCreateSaved = false;
-this._resetCreateValidation();
         },
         _createEmptyScheda: function () {
             return {
@@ -250,6 +250,7 @@ this._resetCreateValidation();
             oCreateModel.setProperty("/scheda", this._createEmptyScheda());
             oCreateModel.setProperty("/posizioniSelezionate", []);
             this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
+            this._resetCreateValidation();
             this.getView().getModel("templateSelection").setData({ idScheda: "", text: "" });
             this.byId("comboTemplateScheme").setValue("");
             this.byId("dialogImportTemplate").close();
@@ -381,9 +382,10 @@ this._resetCreateValidation();
                 oCreateModel.setProperty("/scheda", oScheda);
                 oCreateModel.setProperty("/posizioniSelezionate", aPositions);
                 this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
+                this._resetCreateValidation();
                 var oPositionsTable = this.byId("tableOASelected");
                 if (oPositionsTable) {
-                    oPositionsTable.clearSelection(true);
+                    oPositionsTable.clearSelection();
                 }
                 oDialog.close();
             }.bind(this)).catch(function (oError) {
@@ -402,29 +404,25 @@ this._resetCreateValidation();
             return "1000";
         },
         _readPosizioneDetail: function (oOA) {
+            var oModel = this.getOwnerComponent().getModel();
             return new Promise(function (resolve, reject) {
-                var aFilters = [
-                    new Filter("soc", FilterOperator.EQ, oOA.soc),
-                    new Filter("uEco", FilterOperator.EQ, oOA.uEco),
-                    new Filter("terr", FilterOperator.EQ, oOA.terr),
-                    new Filter("edif", FilterOperator.EQ, oOA.edif),
-                    new Filter("idOggArch", FilterOperator.EQ, oOA.idOggArch)
-                ];
-                this.getOwnerComponent().getModel().read("/posizioni", {
-                    filters: aFilters,
-                    success: function (oData) {
-                        var aResults = (oData && oData.results) ? oData.results : [];
-                        if (aResults.length > 0) {
-                            resolve(aResults[0]);
-                            return;
+                try {
+                    var sPath = "/" + oModel.createKey("posizioni", {
+                        idScheda: "99999999",
+                        idOggArch: oOA.idOggArch
+                    });
+                    oModel.read(sPath, {
+                        success: function (oData) {
+                            resolve(oData);
+                        },
+                        error: function (oError) {
+                            reject(oError);
                         }
-                        reject();
-                    },
-                    error: function (oError) {
-                        reject(oError);
-                    }
-                });
-            }.bind(this));
+                    });
+                } catch (oError) {
+                    reject(oError);
+                }
+            });
         },
         _mapTemplatePositions: function (aPositions) {
             return aPositions.map(function (oItem) {
@@ -457,22 +455,36 @@ this._resetCreateValidation();
         _mergeSelectedPositions: function (aPositionsToAdd) {
             var oCreateModel = this.getView().getModel("create");
             var aCurrentPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
-            var bDuplicateFound = false;
+            var aMergedPositions = aCurrentPositions.slice();
+            var oKnownIds = new Set(aCurrentPositions.map(function (oPosition) {
+                return String(oPosition.idOggArch || "").trim();
+            }));
+            var iAdded = 0;
+
             aPositionsToAdd.forEach(function (oPosition) {
-                var bAlreadyPresent = aCurrentPositions.some(function (oCurrentItem) {
-                    return oCurrentItem.idOggArch === oPosition.idOggArch && oCurrentItem.soc === oPosition.soc && oCurrentItem.uEco === oPosition.uEco && oCurrentItem.terr === oPosition.terr && oCurrentItem.edif === oPosition.edif;
-                });
-                if (bAlreadyPresent) {
-                    bDuplicateFound = true;
-                    return;
+                var sIdOA = String(oPosition.idOggArch || "").trim();
+
+                if (sIdOA && !oKnownIds.has(sIdOA)) {
+                    oKnownIds.add(sIdOA);
+                    aMergedPositions.push(oPosition);
+                    iAdded += 1;
                 }
-                aCurrentPositions.push(oPosition);
             });
-            oCreateModel.setProperty("/posizioniSelezionate", aCurrentPositions);
+
+            var aResults = oCreateModel.getProperty("/risultatiOA") || [];
+            var aHelpScheda = oCreateModel.getProperty("/helpScheda") || [];
+
+            oCreateModel.setSizeLimit(Math.max(
+                100,
+                aMergedPositions.length,
+                aResults.length,
+                aHelpScheda.length
+            ));
+            oCreateModel.setProperty("/posizioniSelezionate", aMergedPositions);
+
             this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
-            if (bDuplicateFound) {
-                MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgPositionAlreadyPresent"));
-            }
+
+            return iAdded;
         },
         onExit: function () {
             this._bCreateViewVisible = false;
@@ -713,33 +725,87 @@ this._resetCreateValidation();
             var iSeconds = ("0" + oDate.getSeconds()).slice(-2);
             return iHours + iMinutes + iSeconds;
         },
-
         onAddSelectedPositions: function () {
             var oTable = this.byId("tableOA");
-            var aSelectedItems = oTable.getSelectedItems();
-            if (!aSelectedItems || aSelectedItems.length === 0) {
-                MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgNoOAToAdd"));
+            var oPositionsTable = this.byId("tableOASelected");
+
+            if (oTable.getBusy() || this._bSavingScheda || this._bCreateSaved) {
                 return;
             }
-            var aSelectedObjects = aSelectedItems.map(function (oItem) {
-                return oItem.getBindingContext("create").getObject();
-            });
-            Promise.allSettled(aSelectedObjects.map(function (oItem) {
-                return this._readPosizioneDetail(oItem);
-            }.bind(this))).then(function (aResults) {
-                var aLoadedPositions = [];
-                var bHasErrors = false;
-                aResults.forEach(function (oResult) {
-                    if (oResult.status === "fulfilled" && oResult.value) {
-                        aLoadedPositions.push(oResult.value);
-                    } else {
-                        bHasErrors = true;
+
+            var aSelectedIndices = oTable.getSelectedIndices();
+            if (aSelectedIndices.length === 0) {
+                MessageToast.show("Selezionare almeno un Oggetto Architettonico da aggiungere.");
+                return;
+            }
+
+            var oCreateModel = this.getView().getModel("create");
+            var aCurrentPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
+            var oKnownIds = new Set(aCurrentPositions.map(function (oPosition) {
+                return String(oPosition.idOggArch || "").trim();
+            }));
+            var aMissingObjects = [];
+
+            try {
+                aSelectedIndices.forEach(function (iIndex) {
+                    var oContext = oTable.getContextByIndex(iIndex);
+                    if (!oContext) {
+                        throw new Error("Una delle righe selezionate non è disponibile. Ripetere la selezione.");
+                    }
+
+                    var oObject = oContext.getObject();
+                    var sIdOA = String(oObject.idOggArch || "").trim();
+
+                    if (!sIdOA) {
+                        throw new Error("Una delle righe selezionate non contiene un ID OA valido.");
+                    }
+
+                    if (!oKnownIds.has(sIdOA)) {
+                        oKnownIds.add(sIdOA);
+                        aMissingObjects.push(Object.assign({}, oObject));
                     }
                 });
-                this._mergeSelectedPositions(aLoadedPositions);
-                this.byId("tableOA").clearSelection();
-                if (bHasErrors) {
-                    MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgPositionLoadPartialError"));
+            } catch (oError) {
+                MessageBox.warning(oError.message);
+                return;
+            }
+
+            if (aMissingObjects.length === 0) {
+                oTable.clearSelection();
+                MessageToast.show("Gli Oggetti Architettonici selezionati sono già presenti nelle Posizioni correnti.");
+                return;
+            }
+
+            var iRouteRequest = this._iCreateRouteRequest;
+            oTable.setBusyIndicatorDelay(0);
+            oTable.setBusy(true);
+            oPositionsTable.setBusyIndicatorDelay(0);
+            oPositionsTable.setBusy(true);
+
+            return Promise.all(aMissingObjects.map(function (oOA) {
+                return this._readPosizioneDetail(oOA);
+            }, this)).then(function (aDetails) {
+                if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+                    return;
+                }
+
+                var aPositions = this._mapTemplatePositions(aDetails);
+                var iAdded = this._mergeSelectedPositions(aPositions);
+
+                oTable.clearSelection();
+                MessageToast.show("Posizioni aggiunte: " + iAdded + ".");
+            }.bind(this)).catch(function (oError) {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    MessageBox.error("Impossibile completare l'aggiunta delle Posizioni. Nessuna nuova posizione è stata aggiunta.", {
+                        details: oError && (oError.responseText || oError.message)
+                            ? oError.responseText || oError.message
+                            : String(oError)
+                    });
+                }
+            }.bind(this)).finally(function () {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    oTable.setBusy(false);
+                    oPositionsTable.setBusy(false);
                 }
             }.bind(this));
         },
@@ -764,223 +830,267 @@ this._resetCreateValidation();
             oTable.clearSelection();
         },
         _getRequiredTestataFields: function () {
-    var aControls = this.byId("panelTestata").findAggregatedObjects(true);
-    var aLabels = aControls.filter(function (oControl) {
-        return oControl.isA("sap.m.Label");
-    });
-    return aControls.filter(function (oControl) {
-        return oControl.isA("sap.m.Input") && oControl.getRequired();
-    }).map(function (oInput) {
-        var oLabel = aLabels.find(function (oCandidate) {
-            return oCandidate.getLabelFor() === oInput.getId();
-        });
-        return {
-            input: oInput,
-            label: oLabel ? oLabel.getText() : oInput.getId()
-        };
-    });
-},
-
-onRequiredTestataChange: function (oEvent) {
-    var oInput = oEvent.getSource();
-    if (oInput.getValue().trim() !== "") {
-        oInput.setValueState("None");
-        oInput.setValueStateText("");
-    }
-},
-
-_resetCreateValidation: function () {
-    this._getRequiredTestataFields().forEach(function (oField) {
-        oField.input.setValueState("None");
-        oField.input.setValueStateText("");
-    });
-},
-
-_validateCreateBeforeSave: function () {
-    var aMissing = [];
-    this._getRequiredTestataFields().forEach(function (oField) {
-        var bMissing = oField.input.getValue().trim() === "";
-        oField.input.setValueState(bMissing ? "Error" : "None");
-        oField.input.setValueStateText(bMissing ? "Compilare " + oField.label : "");
-        if (bMissing) {
-            aMissing.push(oField.label);
-        }
-    });
-    var aPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
-    var bHasOA = aPositions.some(function (oPosition) {
-        return oPosition && String(oPosition.idOggArch || "").trim() !== "";
-    });
-    if (!bHasOA) {
-        aMissing.push("Inserire almeno un Oggetto Architettonico nella tabella Posizioni correnti");
-    }
-    if (aMissing.length > 0) {
-        this.byId("panelTestata").setExpanded(true);
-        if (!bHasOA) {
-            this.byId("panelOA").setExpanded(true);
-        }
-        MessageBox.warning("Completare i seguenti dati prima del salvataggio:\n\n• " + aMissing.join("\n• "));
-        return false;
-    }
-    return true;
-},
-
-onSaveDraft: function () {
-    this._saveNewScheda("B");
-},
-
-onSaveFinal: function () {
-    this._saveNewScheda("D");
-},
-_buildCreatePayload: function (sStato) {
-    var oCreateModel = this.getView().getModel("create");
-    var oSource = oCreateModel.getProperty("/scheda");
-    var oHeader = {};
-    Object.keys(this._createEmptyScheda()).forEach(function (sProperty) {
-        var vValue = oSource[sProperty];
-        oHeader[sProperty] = vValue === null || vValue === undefined ? "" : vValue;
-    });
-
-    oHeader.idScheda = "99999999";
-    oHeader.stato = sStato;
-
-    if (!(oHeader.dtCompil instanceof Date)) {
-        var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(String(oHeader.dtCompil));
-        if (!aDateParts) {
-            throw new Error("Data compilazione non valida.");
-        }
-        oHeader.dtCompil = new Date(Date.UTC(
-            Number(aDateParts[1]),
-            Number(aDateParts[2]) - 1,
-            Number(aDateParts[3])
-        ));
-    }
-    if (isNaN(oHeader.dtCompil.getTime())) {
-        throw new Error("Data compilazione non valida.");
-    }
-
-    var aPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
-    if (aPositions.some(function (oPosition) {
-        return !oPosition || !String(oPosition.idOggArch || "").trim();
-    })) {
-        throw new Error("La tabella Posizioni contiene una riga priva di ID Oggetto Architettonico.");
-    }
-
-    return {
-        header: oHeader,
-        positions: this._mapTemplatePositions(aPositions)
-    };
-},
-_postNewScheda: function (oPayload) {
-    var oModel = this.getOwnerComponent().getModel();
-    var sGroupId = "createScheda";
-    return new Promise(function (resolve, reject) {
-        var oRootContext;
-
-        function cleanup() {
-            if (oRootContext && oRootContext.isTransient()) {
-                oModel.deleteCreatedEntry(oRootContext);
-            }
-        }
-
-        try {
-            if (!oModel.getServiceMetadata()) {
-                throw new Error("Metadata OData non disponibile.");
-            }
-            var aGroups = oModel.getDeferredGroups();
-            if (aGroups.indexOf(sGroupId) === -1) {
-                oModel.setDeferredGroups(aGroups.concat([sGroupId]));
-            }
-
-            oRootContext = oModel.createEntry("/scheda", {
-                groupId: sGroupId,
-                refreshAfterChange: false,
-                properties: oPayload.header,
-                success: function (oData) {
-                    resolve(oData);
-                },
-                error: function (oError) {
-                    cleanup();
-                    reject(oError);
-                }
+            var aControls = this.byId("panelTestata").findAggregatedObjects(true);
+            var aLabels = aControls.filter(function (oControl) {
+                return oControl.isA("sap.m.Label");
             });
-
-            oRootContext.created().catch(function () {
-                // Il reset di una creazione fallita rifiuta questa Promise.
-            });
-
-            oPayload.positions.forEach(function (oPosition) {
-                oModel.createEntry("toPosizioni", {
-                    context: oRootContext,
-                    properties: oPosition
+            return aControls.filter(function (oControl) {
+                return oControl.isA("sap.m.Input") && oControl.getRequired();
+            }).map(function (oInput) {
+                var oLabel = aLabels.find(function (oCandidate) {
+                    return oCandidate.getLabelFor() === oInput.getId();
                 });
+                return {
+                    input: oInput,
+                    label: oLabel ? oLabel.getText() : oInput.getId()
+                };
+            });
+        },
+        onRequiredTestataChange: function (oEvent) {
+            var oInput = oEvent.getSource();
+            var sValue = (oInput.getValue() || "").trim();
+
+            if (sValue !== "") {
+                oInput.setValueState("None");
+                oInput.setValueStateText("");
+            }
+
+            if (oInput.getId().indexOf("inputSupCop") !== -1 || oInput.getId().indexOf("inputSupScop") !== -1) {
+                var oSupCop = this.byId("inputSupCop");
+                var oSupScop = this.byId("inputSupScop");
+                var fSupCop = this.formatter.parseNumericValue(oSupCop ? oSupCop.getValue() : "");
+                var fSupScop = this.formatter.parseNumericValue(oSupScop ? oSupScop.getValue() : "");
+                var bSurfacePairValid = fSupCop > 0 || fSupScop > 0;
+
+                if (bSurfacePairValid) {
+                    oSupCop.setValueState("None");
+                    oSupCop.setValueStateText("");
+                    oSupScop.setValueState("None");
+                    oSupScop.setValueStateText("");
+                }
+            }
+        },
+        _resetCreateValidation: function () {
+            this._getRequiredTestataFields().forEach(function (oField) {
+                oField.input.setValueState("None");
+                oField.input.setValueStateText("");
+            });
+        },
+        _validateCreateBeforeSave: function () {
+            var aMissing = [];
+
+            this._getRequiredTestataFields().forEach(function (oField) {
+                var bMissing = oField.input.getValue().trim() === "";
+                oField.input.setValueState(bMissing ? "Error" : "None");
+                oField.input.setValueStateText(bMissing ? "Compilare " + oField.label : "");
+                if (bMissing) {
+                    aMissing.push(oField.label);
+                }
             });
 
-            oModel.submitChanges({
-                groupId: sGroupId,
-                error: function (oError) {
+            var oSupCop = this.byId("inputSupCop");
+            var oSupScop = this.byId("inputSupScop");
+            var fSupCop = this.formatter.parseNumericValue(oSupCop ? oSupCop.getValue() : "");
+            var fSupScop = this.formatter.parseNumericValue(oSupScop ? oSupScop.getValue() : "");
+            var bSurfacePairValid = fSupCop > 0 || fSupScop > 0;
+
+            if (!bSurfacePairValid) {
+                if (oSupCop) {
+                    oSupCop.setValueState("Error");
+                    oSupCop.setValueStateText("Compilare Superficie Coperta o Superficie Scoperta con un valore maggiore di 0.");
+                }
+                if (oSupScop) {
+                    oSupScop.setValueState("Error");
+                    oSupScop.setValueStateText("Compilare Superficie Coperta o Superficie Scoperta con un valore maggiore di 0.");
+                }
+                aMissing.push("Superficie Coperta o Superficie Scoperta con valore maggiore di 0");
+            } else {
+                if (oSupCop) {
+                    oSupCop.setValueState("None");
+                    oSupCop.setValueStateText("");
+                }
+                if (oSupScop) {
+                    oSupScop.setValueState("None");
+                    oSupScop.setValueStateText("");
+                }
+            }
+
+            var aPositions = this.getView().getModel("create").getProperty("/posizioniSelezionate") || [];
+            var bHasOA = aPositions.some(function (oPosition) {
+                return oPosition && String(oPosition.idOggArch || "").trim() !== "";
+            });
+
+            if (!bHasOA) {
+                aMissing.push("Inserire almeno un Oggetto Architettonico nella tabella Posizioni correnti");
+            }
+
+            if (aMissing.length > 0) {
+                this.byId("panelTestata").setExpanded(true);
+                if (!bHasOA) {
+                    this.byId("panelOA").setExpanded(true);
+                }
+                MessageBox.warning("Completare i seguenti dati prima del salvataggio:\n\n• " + aMissing.join("\n• "));
+                return false;
+            }
+
+            return true;
+        },
+        onSaveDraft: function () {
+            this._saveNewScheda("B");
+        },
+        onSaveFinal: function () {
+            this._saveNewScheda("D");
+        },
+        _buildCreatePayload: function (sStato) {
+            var oCreateModel = this.getView().getModel("create");
+            var oSource = oCreateModel.getProperty("/scheda");
+            var oHeader = {};
+            Object.keys(this._createEmptyScheda()).forEach(function (sProperty) {
+                var vValue = oSource[sProperty];
+                oHeader[sProperty] = vValue === null || vValue === undefined ? "" : vValue;
+            });
+
+            oHeader.idScheda = "99999999";
+            oHeader.stato = sStato;
+
+            if (!(oHeader.dtCompil instanceof Date)) {
+                var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(String(oHeader.dtCompil));
+                if (!aDateParts) {
+                    throw new Error("Data compilazione non valida.");
+                }
+                oHeader.dtCompil = new Date(Date.UTC(
+                    Number(aDateParts[1]),
+                    Number(aDateParts[2]) - 1,
+                    Number(aDateParts[3])
+                ));
+            }
+            if (isNaN(oHeader.dtCompil.getTime())) {
+                throw new Error("Data compilazione non valida.");
+            }
+
+            var aPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
+            if (aPositions.some(function (oPosition) {
+                return !oPosition || !String(oPosition.idOggArch || "").trim();
+            })) {
+                throw new Error("La tabella Posizioni contiene una riga priva di ID Oggetto Architettonico.");
+            }
+
+            return {
+                header: oHeader,
+                positions: this._mapTemplatePositions(aPositions)
+            };
+        },
+        _postNewScheda: function (oPayload) {
+            var oModel = this.getOwnerComponent().getModel();
+            var sGroupId = "createScheda";
+            return new Promise(function (resolve, reject) {
+                var oRootContext;
+
+                function cleanup() {
+                    if (oRootContext && oRootContext.isTransient()) {
+                        oModel.deleteCreatedEntry(oRootContext);
+                    }
+                }
+
+                try {
+                    if (!oModel.getServiceMetadata()) {
+                        throw new Error("Metadata OData non disponibile.");
+                    }
+                    var aGroups = oModel.getDeferredGroups();
+                    if (aGroups.indexOf(sGroupId) === -1) {
+                        oModel.setDeferredGroups(aGroups.concat([sGroupId]));
+                    }
+
+                    oRootContext = oModel.createEntry("/scheda", {
+                        groupId: sGroupId,
+                        refreshAfterChange: false,
+                        properties: oPayload.header,
+                        success: function (oData) {
+                            resolve(oData);
+                        },
+                        error: function (oError) {
+                            cleanup();
+                            reject(oError);
+                        }
+                    });
+
+                    oRootContext.created().catch(function () {
+                        // Il reset di una creazione fallita rifiuta questa Promise.
+                    });
+
+                    oPayload.positions.forEach(function (oPosition) {
+                        oModel.createEntry("toPosizioni", {
+                            context: oRootContext,
+                            properties: oPosition
+                        });
+                    });
+
+                    oModel.submitChanges({
+                        groupId: sGroupId,
+                        error: function (oError) {
+                            cleanup();
+                            reject(oError);
+                        }
+                    });
+                } catch (oError) {
                     cleanup();
                     reject(oError);
                 }
             });
-        } catch (oError) {
-            cleanup();
-            reject(oError);
-        }
-    });
-},
+        },
 
-_saveNewScheda: function (sStato) {
-    if (this._bSavingScheda || this._bCreateSaved) {
-        return;
-    }
-    if (!this._validateCreateBeforeSave()) {
-        return;
-    }
+        _saveNewScheda: function (sStato) {
+            if (this._bSavingScheda || this._bCreateSaved) {
+                return;
+            }
+            if (!this._validateCreateBeforeSave()) {
+                return;
+            }
 
-    var oPayload;
-    try {
-        oPayload = this._buildCreatePayload(sStato);
-    } catch (oError) {
-        MessageBox.warning(oError.message);
-        return;
-    }
+            var oPayload;
+            try {
+                oPayload = this._buildCreatePayload(sStato);
+            } catch (oError) {
+                MessageBox.warning(oError.message);
+                return;
+            }
 
-    this._bSavingScheda = true;
-    var oView = this.getView();
-    var iRouteRequest = this._iCreateRouteRequest;
-    oView.setBusy(true);
+            this._bSavingScheda = true;
+            var oView = this.getView();
+            var iRouteRequest = this._iCreateRouteRequest;
+            oView.setBusy(true);
 
-    this._postNewScheda(oPayload).then(function (oData) {
-        if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
-            return;
-        }
-        this._bCreateSaved = true;
-        var sMessage = sStato === "B"
-            ? "Scheda salvata in stato Provvisorio."
-            : "Scheda rilasciata in stato Definitivo.";
-        if (oData && oData.idScheda) {
-            sMessage += "\nNumero scheda: " + oData.idScheda;
-        }
-        MessageBox.success(sMessage, {
-            onClose: function () {
-                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                    this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+            this._postNewScheda(oPayload).then(function (oData) {
+                if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+                    return;
                 }
-            }.bind(this)
-        });
-    }.bind(this)).catch(function (oError) {
-        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-            MessageBox.error("Salvataggio della Scheda Ricognizione non riuscito.", {
-                details: oError && (oError.responseText || oError.message)
-                    ? oError.responseText || oError.message
-                    : String(oError)
-            });
-        }
-    }.bind(this)).finally(function () {
-        this._bSavingScheda = false;
-        oView.setBusy(false);
-    }.bind(this));
-},
+                this._bCreateSaved = true;
+                var sMessage = sStato === "B"
+                    ? "Scheda salvata in stato Provvisorio."
+                    : "Scheda rilasciata in stato Definitivo.";
+                if (oData && oData.idScheda) {
+                    sMessage += "\nNumero scheda: " + oData.idScheda;
+                }
+                MessageBox.success(sMessage, {
+                    onClose: function () {
+                        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                            this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                        }
+                    }.bind(this)
+                });
+            }.bind(this)).catch(function (oError) {
+                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                    MessageBox.error("Salvataggio della Scheda Ricognizione non riuscito.", {
+                        details: oError && (oError.responseText || oError.message)
+                            ? oError.responseText || oError.message
+                            : String(oError)
+                    });
+                }
+            }.bind(this)).finally(function () {
+                this._bSavingScheda = false;
+                oView.setBusy(false);
+            }.bind(this));
+        },
 
     });
 });
