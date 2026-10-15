@@ -44,6 +44,7 @@ sap.ui.define([
             oCreateModel.setProperty("/helpScheda", []);
             oCreateModel.setProperty("/risultatiOA", []);
             oCreateModel.setProperty("/posizioniSelezionate", []);
+            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             oCreateModel.setProperty("/filters", {
                 uEco: "",
                 terr: "",
@@ -245,6 +246,7 @@ sap.ui.define([
             var oCreateModel = this.getView().getModel("create");
             oCreateModel.setProperty("/scheda", this._createEmptyScheda());
             oCreateModel.setProperty("/posizioniSelezionate", []);
+            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             this.getView().getModel("templateSelection").setData({ idScheda: "", text: "" });
             this.byId("comboTemplateScheme").setValue("");
             this.byId("dialogImportTemplate").close();
@@ -375,6 +377,7 @@ sap.ui.define([
                 oCreateModel.setSizeLimit(Math.max(100, aPositions.length, (oCreateModel.getProperty("/helpScheda") || []).length));
                 oCreateModel.setProperty("/scheda", oScheda);
                 oCreateModel.setProperty("/posizioniSelezionate", aPositions);
+                this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
                 var oPositionsTable = this.byId("tableOASelected");
                 if (oPositionsTable) {
                     oPositionsTable.clearSelection(true);
@@ -463,6 +466,7 @@ sap.ui.define([
                 aCurrentPositions.push(oPosition);
             });
             oCreateModel.setProperty("/posizioniSelezionate", aCurrentPositions);
+            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             if (bDuplicateFound) {
                 MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("msgPositionAlreadyPresent"));
             }
@@ -532,15 +536,15 @@ sap.ui.define([
             }.bind(this));
         },
         _applyTableRowLimit: function (sModelName, sPath, sTableId) {
-    var oTable = this.byId(sTableId);
-    if (!oTable || !oTable.isA("sap.ui.table.Table")) {
-        return;
-    }
-    var oModel = this.getView().getModel(sModelName);
-    var aRows = oModel.getProperty(sPath) || [];
-    oTable.setVisibleRowCountMode("Fixed");
-    oTable.setVisibleRowCount(Math.max(1, Math.min(10, aRows.length)));
-}
+            var oTable = this.byId(sTableId);
+            if (!oTable || !oTable.isA("sap.ui.table.Table")) {
+                return;
+            }
+            var oModel = this.getView().getModel(sModelName);
+            var aRows = oModel.getProperty(sPath) || [];
+            oTable.setVisibleRowCountMode("Fixed");
+            oTable.setVisibleRowCount(Math.max(1, Math.min(10, aRows.length)));
+        },
         onValueHelpUEcoRequest: function () {
             this._loadHelpValues("/helpUEco", [], "helpUEco").then(function () {
                 return this._loadCreateFragment("HelpUEco");
@@ -752,6 +756,7 @@ sap.ui.define([
                 return aKeysToRemove.indexOf(sKey) === -1;
             });
             this.getView().getModel("create").setProperty("/posizioniSelezionate", aRemainingPositions);
+            this._applyTableRowLimit("create", "/posizioniSelezionate", "tableOASelected");
             oTable.clearSelection();
         },
 

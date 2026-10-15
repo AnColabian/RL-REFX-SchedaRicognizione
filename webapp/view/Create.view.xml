@@ -267,7 +267,7 @@
                                         </ColumnListItem>
                                     </items>
                                 </Table>
-                                <t:Table id="tableOASelected" rows="{create>/posizioniSelezionate}" selectionMode="MultiToggle" visibleRowCount="8" minAutoRowCount="5" class="sapUiSmallMarginTop">
+                                <t:Table id="tableOASelected" rows="{create>/posizioniSelezionate}" selectionMode="MultiToggle" visibleRowCount="1" class="sapUiSmallMarginTop">
                                     <t:extension>
                                         <OverflowToolbar>
                                             <Text text="{= ${i18n>lblCurrentPositions} + ' ' + ${create>/posizioniSelezionate}.length }"/>
