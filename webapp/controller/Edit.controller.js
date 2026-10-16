@@ -556,8 +556,10 @@ sap.ui.define([
         },
         _buildEditPayload: function (sStato) {
             var oEditModel = this.getView().getModel("edit");
+            var oScheda = Object.assign({}, oEditModel.getProperty("/scheda"));
+            oScheda.dtModif = this._getCurrentDate();
             return this._buildSchedaPayload(
-                oEditModel.getProperty("/scheda"),
+                oScheda,
                 oEditModel.getProperty("/posizioniSelezionate") || [],
                 sStato,
                 Object.keys(this._createEmptySchedaData())

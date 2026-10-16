@@ -157,9 +157,7 @@ sap.ui.define([
             if (sStato !== "B" && sStato !== "D") {
                 throw new Error("Stato di salvataggio non valido.");
             }
-            var sIdScheda = oSource.idScheda === null || oSource.idScheda === undefined
-                ? ""
-                : String(oSource.idScheda).trim();
+            var sIdScheda = oSource.idScheda === null || oSource.idScheda === undefined ? "" : String(oSource.idScheda).trim();
             if (!sIdScheda) {
                 throw new Error("ID Scheda non valorizzato.");
             }
@@ -170,34 +168,44 @@ sap.ui.define([
             });
             oHeader.idScheda = sIdScheda;
             oHeader.stato = sStato;
-            if (oHeader.dtCompil instanceof Date) {
-                oHeader.dtCompil = new Date(oHeader.dtCompil.getTime());
-            } else {
-                var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(String(oHeader.dtCompil));
-                if (!aDateParts) {
-                    throw new Error("Data compilazione non valida.");
+            ["dtCreaz", "dtModif", "dtCompil"].forEach(function (sProperty) {
+                var vDate = oHeader[sProperty];
+                if (!vDate) {
+                    throw new Error("Data obbligatoria non valorizzata nel campo " + sProperty + ".");
                 }
-                var iYear = Number(aDateParts[1]);
-                var iMonth = Number(aDateParts[2]) - 1;
-                var iDay = Number(aDateParts[3]);
-                oHeader.dtCompil = new Date(Date.UTC(iYear, iMonth, iDay));
-                if (oHeader.dtCompil.getUTCFullYear() !== iYear ||
-                    oHeader.dtCompil.getUTCMonth() !== iMonth ||
-                    oHeader.dtCompil.getUTCDate() !== iDay) {
-                    throw new Error("Data compilazione non valida.");
+                if (vDate instanceof Date) {
+                    oHeader[sProperty] = new Date(vDate.getTime());
+                    return;
                 }
-            }
-            if (isNaN(oHeader.dtCompil.getTime())) {
-                throw new Error("Data compilazione non valida.");
-            }
+                if (typeof vDate === "string") {
+                    var sValue = vDate.trim();
+                    var aDateParts = /^(\d{4})(\d{2})(\d{2})$/.exec(sValue);
+                    if (aDateParts) {
+                        var iYear = Number(aDateParts[1]);
+                        var iMonth = Number(aDateParts[2]) - 1;
+                        var iDay = Number(aDateParts[3]);
+                        var oDate = new Date(Date.UTC(iYear, iMonth, iDay));
+                        if (oDate.getUTCFullYear() !== iYear || oDate.getUTCMonth() !== iMonth || oDate.getUTCDate() !== iDay) {
+                            throw new Error("Data non valida nel campo " + sProperty + ".");
+                        }
+                        oHeader[sProperty] = oDate;
+                        return;
+                    }
+                    var aMatch = /^\/Date\((-?\d+)(?:[+-]\d{4})?\)\/$/.exec(sValue);
+                    if (aMatch) {
+                        oHeader[sProperty] = new Date(Number(aMatch[1]));
+                        return;
+                    }
+                }
+                if (!(oHeader[sProperty] instanceof Date) || isNaN(oHeader[sProperty].getTime())) {
+                    throw new Error("Data non valida nel campo " + sProperty + ".");
+                }
+            });
             if (!Array.isArray(aPositions) || aPositions.length === 0) {
                 throw new Error("Inserire almeno un Oggetto Architettonico nelle Posizioni correnti.");
             }
             if (aPositions.some(function (oPosition) {
-                return !oPosition ||
-                    oPosition.idOggArch === null ||
-                    oPosition.idOggArch === undefined ||
-                    String(oPosition.idOggArch).trim() === "";
+                return !oPosition || oPosition.idOggArch === null || oPosition.idOggArch === undefined || String(oPosition.idOggArch).trim() === "";
             })) {
                 throw new Error("La tabella Posizioni contiene una riga priva di ID Oggetto Architettonico.");
             }
@@ -269,6 +277,8 @@ sap.ui.define([
                 idScheda: "99999999",
                 stato: "",
                 idSchModel: "",
+                dtCreaz: "",
+                dtModif: "",
                 dtCompil: this._getCurrentDate(),
                 via: "",
                 numCivico: "",

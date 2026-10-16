@@ -1,54 +1,58 @@
-<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
-    <TableSelectDialog id="dialogHelpSchedaModel" title="Seleziona Scheda Modello" contentWidth="80rem" multiSelect="false" rememberSelections="false" items="{create>/helpScheda}" search=".onSearchHelpSchedaModel" liveChange=".onSearchHelpSchedaModel" confirm=".onConfirmHelpSchedaModel">
-        <columns>
-            <Column>
-                <header>
-                    <Text text="Scheda Modello"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="Stato"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="Doc. Valorizzazione"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="ID Bene"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="Denominazione Bene"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="Autore"/>
-                </header>
-            </Column>
-            <Column>
-                <header>
-                    <Text text="Data Creazione"/>
-                </header>
-            </Column>
-        </columns>
-        <items>
-            <ColumnListItem>
-                <cells>
-                    <Text text="{create>idSchMdl}"/>
-                    <Text text="{path: 'create>stato', formatter: '.formatter.formatSchedaState'}"/>
-                    <Text text="{path: 'create>docVal', formatter: '.formatter.formatDisplayValue'}"/>
-                    <Text text="{path: 'create>idBene', formatter: '.formatter.formatDisplayValue'}"/>
-                    <Text text="{path: 'create>denBene', formatter: '.formatter.formatDisplayValue'}"/>
-                    <Text text="{create>autore}"/>
-                    <Text text="{path: 'create>dtCre', formatter: '.formatter.formatDate'}"/>
-                </cells>
-            </ColumnListItem>
-        </items>
-    </TableSelectDialog>
-</core:FragmentDefinition>
+<TableSelectDialog id="dialogHelpSchedaModel" title="Seleziona Scheda Modello" contentWidth="80rem" multiSelect="false" rememberSelections="false" items="{create>/helpScheda}" search=".onSearchHelpSchedaModel" liveChange=".onSearchHelpSchedaModel" confirm=".onConfirmHelpSchedaModel">
+    <columns>
+        <Column>
+            <header>
+                <Text text="ID Scheda"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Scheda Modello"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Stato"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Doc. Valorizzazione"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="ID Bene"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Denominazione Bene"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Autore"/>
+            </header>
+        </Column>
+        <Column>
+            <header>
+                <Text text="Data Creazione"/>
+            </header>
+        </Column>
+    </columns>
+    <items>
+        <ColumnListItem>
+            <cells>
+                <Text text="{create>idScheda}"/>
+                <Text text="{create>idSchMdl}"/>
+                <Text text="{path: 'create>stato', formatter: '.formatter.formatSchedaState'}"/>
+                <Text text="{path: 'create>docVal', formatter: '.formatter.formatDisplayValue'}"/>
+                <Text text="{path: 'create>idBene', formatter: '.formatter.formatDisplayValue'}"/>
+                <Text text="{path: 'create>denBene', formatter: '.formatter.formatDisplayValue'}"/>
+                <Text text="{create>autore}"/>
+                <Text text="{path: 'create>dtCre', formatter: '.formatter.formatDate'}"/>
+            </cells>
+        </ColumnListItem>
+    </items>
+</TableSelectDialog>

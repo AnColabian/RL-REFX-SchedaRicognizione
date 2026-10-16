@@ -77,7 +77,9 @@ sap.ui.define([
             }.bind(this));
         },
         _createEmptyScheda: function () {
-            return this._createEmptySchedaData();
+            var oScheda = this._createEmptySchedaData();
+            oScheda.dtCreaz = this._getCurrentDate();
+            return oScheda;
         },
         _loadTemplateHelp: function () {
             var oCreateModel = this.getView().getModel("create");
