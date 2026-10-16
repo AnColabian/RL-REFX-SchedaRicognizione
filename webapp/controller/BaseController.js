@@ -368,13 +368,32 @@ sap.ui.define([
             if (!bPreserveDate) {
                 oScheda.dtCompil = this._getCurrentDate();
             }
-            ["supLU", "supFond", "supCop", "supScop", "stimaVal"].forEach(function (sProperty) {
-                oScheda[sProperty] = this.formatter.normalizeDecimalValue(oScheda[sProperty]);
+            ["supLU", "supFond", "supCop", "supScop"].forEach(function (sProperty) {
+                var sValue = this.formatter.normalizeIntegerLikeValue(oScheda[sProperty]);
+                if (sValue !== "" && !/^[0-9]+$/.test(sValue)) {
+                    throw new Error("Il backend ha restituito una superficie non intera o negativa nel campo " + sProperty + ".");
+                }
+                oScheda[sProperty] = sValue;
             }, this);
+            oScheda.stimaVal = this.formatter.normalizeDecimalValue(oScheda.stimaVal);
             ["numEdif", "numLivFuo", "numLivEnt", "annoValor"].forEach(function (sProperty) {
                 oScheda[sProperty] = this.formatter.normalizeIntegerLikeValue(oScheda[sProperty]);
             }, this);
             return oScheda;
+        },
+        onSurfaceLiveChange: function (oEvent) {
+            var oInput = oEvent.getSource();
+            var sValue = String(oEvent.getParameter("value") || "").replace(/[^0-9]/g, "");
+            oInput.setValue(sValue);
+            var oBinding = oInput.getBinding("value");
+            if (oBinding) {
+                oBinding.getModel().setProperty(oBinding.getPath(), sValue, oBinding.getContext());
+            }
+            oInput.setValueState("None");
+            oInput.setValueStateText("");
+            if (oInput === this.byId("inputSupCop") || oInput === this.byId("inputSupScop")) {
+                this._validateAlternativeSurfaceFields("inputSupCop", "inputSupScop");
+            }
         },
         _getRequiredTestataFields: function (sPanelId) {
             var aControls = this.byId(sPanelId).findAggregatedObjects(true);

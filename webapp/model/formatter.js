@@ -32,6 +32,19 @@ sap.ui.define([], () => {
             var sYear = ("0000" + oDate.getUTCFullYear()).slice(-4);
             return sDay + "/" + sMonth + "/" + sYear;
         },
+        normalizeIntegerLikeValue: function (vValue) {
+            if (vValue === null || vValue === undefined) {
+                return "";
+            }
+            var sValue = String(vValue).trim();
+            if (!sValue) {
+                return "";
+            }
+            if (!/^[0-9]+(?:[.,]0+)?$/.test(sValue)) {
+                return sValue;
+            }
+            return sValue.split(/[.,]/)[0].replace(/^0+(?=[0-9])/, "");
+        },
         normalizeDecimalValue: function (vValue) {
             if (vValue === null || vValue === undefined) {
                 return "";
@@ -41,24 +54,10 @@ sap.ui.define([], () => {
                 return "";
             }
             var fValue = Number(sValue.replace(",", "."));
-            if (!Number.isFinite(fValue) || fValue === 0) {
-                return "";
+            if (!Number.isFinite(fValue)) {
+                return sValue;
             }
-            return fValue.toFixed(2);
-        },
-        normalizeIntegerLikeValue: function (vValue) {
-            if (vValue === null || vValue === undefined) {
-                return "";
-            }
-            var sValue = String(vValue).trim();
-            if (!sValue) {
-                return "";
-            }
-            var iValue = Number(sValue);
-            if (!Number.isInteger(iValue) || iValue === 0) {
-                return "";
-            }
-            return String(iValue);
+            return fValue === 0 ? "0" : fValue.toFixed(2);
         },
         parseNumericValue: function (vValue) {
             if (vValue === null || vValue === undefined) {
