@@ -2,7 +2,8 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.ui.layout.form"
     xmlns:core="sap.ui.core"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table">
     <Page id="pageEdit" title="{i18n>titleEdit}" showNavButton="true" navButtonPress=".onNavBack">
         <content>
             <ScrollContainer vertical="true" horizontal="false" focusable="false">
