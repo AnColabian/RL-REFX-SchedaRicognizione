@@ -73,6 +73,7 @@ sap.ui.define([
             }
             this._bEditSaved = false;
             this._resetEditValidation();
+            this._initDomainFields("panelTestata", "edit", false);
             this._loadViewFragment("SelectSchedaEdit").then(function (oDialog) {
                 if (!this._bEditViewVisible || this._iEditRouteRequest !== iRouteRequest) {
                     return;
@@ -337,8 +338,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Unità Economica.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Unità Economica.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onValueHelpTerrRequest: function () {
@@ -352,8 +355,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Terreno.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Terreno.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onValueHelpEdifRequest: function () {
@@ -379,8 +384,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Edificio.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Edificio.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onSearchHelpUEco: function (oEvent) {

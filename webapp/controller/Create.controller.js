@@ -61,6 +61,7 @@ sap.ui.define([
             }
             this._bCreateSaved = false;
             this._resetCreateValidation();
+            this._initDomainFields("panelTestata", "create", false);
             this._loadCreateFragment("ImportTemplate").then(function (oDialog) {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
@@ -98,12 +99,16 @@ sap.ui.define([
             }.bind(this));
         },
         _mapSchedaDetailToCreateModel: function (oData) {
-            return this._mapSchedaDetailToFormModel(oData, {
+            var oScheda = this._mapSchedaDetailToFormModel(oData, {
                 preserveId: false,
                 preserveState: false,
                 preserveModelId: false,
                 preserveDate: false
             });
+            // La nuova scheda non eredita le date della scheda modello
+            oScheda.dtCreaz = this._getCurrentDate();
+            oScheda.dtModif = "";
+            return oScheda;
         },
 
         onCreateWithoutTemplate: function () {
@@ -167,6 +172,7 @@ sap.ui.define([
             if (sValue) {
                 aFilters.push(new Filter({
                     filters: [
+                        new Filter("idScheda", FilterOperator.Contains, sValue),
                         new Filter("idSchMdl", FilterOperator.Contains, sValue),
                         new Filter("stato", FilterOperator.Contains, sValue),
                         new Filter("docVal", FilterOperator.Contains, sValue),
@@ -345,8 +351,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Unità Economica.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Unità Economica.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onValueHelpTerrRequest: function () {
@@ -360,8 +368,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Terreno.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Terreno.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onValueHelpEdifRequest: function () {
@@ -387,8 +397,10 @@ sap.ui.define([
             }.bind(this)).then(function (oDialog) {
                 oDialog.getBinding("items").filter([]);
                 oDialog.open("");
-            }).catch(function () {
-                MessageBox.error("Impossibile caricare l'help Edificio.");
+            }).catch(function (oError) {
+                MessageBox.error("Impossibile caricare l'help Edificio.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
             });
         },
         onSearchHelpUEco: function (oEvent) {
@@ -631,8 +643,13 @@ sap.ui.define([
         },
         _buildCreatePayload: function (sStato) {
             var oModel = this.getView().getModel("create");
-            var oHeader = Object.assign({}, oModel.getProperty("/scheda"), {
-                idScheda: "99999999"
+            var sToday = this._getCurrentDate();
+            var oScheda = oModel.getProperty("/scheda") || {};
+            // dtModif è Nullable="false" nel metadata: in creazione si valorizza con la data odierna
+            var oHeader = Object.assign({}, oScheda, {
+                idScheda: "99999999",
+                dtCreaz: oScheda.dtCreaz || sToday,
+                dtModif: oScheda.dtModif || sToday
             });
             return this._buildSchedaPayload(
                 oHeader,

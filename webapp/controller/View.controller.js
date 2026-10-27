@@ -46,6 +46,7 @@ sap.ui.define([
                 idScheda: "",
                 text: ""
             });
+            this._initDomainFields("panelTestata", "display", true);
             this._loadViewFragment("SelectScheda").then(function (oDialog) {
                 if (!this._isViewRequestCurrent(iRequest)) {
                     return;

@@ -1,11 +1,204 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageBox",
-    "schedaricognizione/model/formatter"
-], (Controller, MessageBox, formatter) => {
+    "sap/m/SelectDialog",
+    "sap/m/StandardListItem",
+    "sap/ui/model/json/JSONModel",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "sap/base/Log",
+    "schedaricognizione/model/formatter",
+    "schedaricognizione/model/domains"
+], (Controller, MessageBox, SelectDialog, StandardListItem, JSONModel, Filter, FilterOperator, Log, formatter, domains) => {
     "use strict";
     return Controller.extend("schedaricognizione.controller.BaseController", {
         formatter: formatter,
+        domains: domains,
+        /* ------------------------------------------------------------------
+         * Valori di dominio (entity helpValInp)
+         * ------------------------------------------------------------------ */
+        _loadDomainValues: function () {
+            var oComponent = this.getOwnerComponent();
+            if (!oComponent._pDomainValues) {
+                var aProperties = Object.keys(this._createEmptySchedaData());
+                oComponent._pDomainValues = this._readOData("/helpValInp").then(function (oData) {
+                    var aRows = oData && Array.isArray(oData.results) ? oData.results : [];
+                    var oResult = domains.groupByProperty(aRows, aProperties);
+                    if (oResult.unmatched.length) {
+                        Log.warning("helpValInp: nomeCampo non associati a campi della scheda: " + oResult.unmatched.join(", "), null, "schedaricognizione");
+                    }
+                    if (!Object.keys(oResult.domains).length) {
+                        Log.warning("helpValInp: nessun valore di dominio associato (righe lette: " + aRows.length + ")", null, "schedaricognizione");
+                    }
+                    return oResult.domains;
+                }).catch(function (oError) {
+                    delete oComponent._pDomainValues;
+                    throw oError;
+                });
+            }
+            return oComponent._pDomainValues;
+        },
+        _getDomainModel: function () {
+            var oModel = this.getView().getModel("domains");
+            if (!oModel) {
+                oModel = new JSONModel({});
+                this.getView().setModel(oModel, "domains");
+            }
+            return oModel;
+        },
+        _getSchedaPropertyFromBinding: function (oControl, sProperty, sModelName) {
+            var oInfo = oControl.getBindingInfo(sProperty);
+            var oPart = oInfo && (oInfo.parts ? oInfo.parts[0] : oInfo);
+            if (!oPart || oPart.model !== sModelName || typeof oPart.path !== "string") {
+                return null;
+            }
+            var aMatch = /^\/scheda\/(\w+)$/.exec(oPart.path);
+            return aMatch ? { property: aMatch[1], path: oPart.path } : null;
+        },
+        /**
+         * Carica i domini e collega value help (Input) o descrizione (Text)
+         * ai campi del pannello che hanno valori di dominio.
+         * @param {string} sPanelId id del pannello testata
+         * @param {string} sModelName modello della scheda (create / edit / display)
+         * @param {boolean} bReadOnly true per la visualizzazione
+         */
+        _initDomainFields: function (sPanelId, sModelName, bReadOnly) {
+            var oDomainModel = this._getDomainModel();
+            return this._loadDomainValues().then(function (mDomains) {
+                var iMax = Object.keys(mDomains).reduce(function (iAcc, sKey) {
+                    return Math.max(iAcc, mDomains[sKey].length);
+                }, 100);
+                oDomainModel.setSizeLimit(iMax + 1);
+                oDomainModel.setData(mDomains);
+                if (!this._bDomainFieldsPrepared) {
+                    this._bDomainFieldsPrepared = true;
+                    if (bReadOnly) {
+                        this._bindDomainTexts(sPanelId, sModelName, mDomains);
+                    } else {
+                        this._bindDomainInputs(sPanelId, sModelName, mDomains);
+                    }
+                }
+                return mDomains;
+            }.bind(this)).catch(function (oError) {
+                MessageBox.error("Impossibile caricare i valori di dominio dei campi della scheda.", {
+                    details: oError && (oError.responseText || oError.message) ? oError.responseText || oError.message : String(oError)
+                });
+            });
+        },
+        _bindDomainTexts: function (sPanelId, sModelName, mDomains) {
+            this.byId(sPanelId).findAggregatedObjects(true, function (oControl) {
+                return oControl.isA("sap.m.Text");
+            }).forEach(function (oText) {
+                var oField = this._getSchedaPropertyFromBinding(oText, "text", sModelName);
+                if (!oField || !mDomains[oField.property]) {
+                    return;
+                }
+                oText.bindProperty("text", {
+                    parts: [
+                        { model: sModelName, path: oField.path },
+                        { model: "domains", path: "/" + oField.property }
+                    ],
+                    formatter: domains.formatDisplay
+                });
+            }, this);
+        },
+        _bindDomainInputs: function (sPanelId, sModelName, mDomains) {
+            var aControls = this.byId(sPanelId).findAggregatedObjects(true);
+            var aLabels = aControls.filter(function (oControl) {
+                return oControl.isA("sap.m.Label");
+            });
+            aControls.filter(function (oControl) {
+                return oControl.isA("sap.m.Input");
+            }).forEach(function (oInput) {
+                var oField = this._getSchedaPropertyFromBinding(oInput, "value", sModelName);
+                if (!oField || !mDomains[oField.property]) {
+                    return;
+                }
+                var oLabel = aLabels.find(function (oCandidate) {
+                    return oCandidate.getLabelFor() === oInput.getId();
+                });
+                var oConfig = {
+                    input: oInput,
+                    property: oField.property,
+                    path: oField.path,
+                    modelName: sModelName,
+                    title: oLabel ? oLabel.getText() : oField.property
+                };
+                oInput.setShowValueHelp(true);
+                oInput.setValueHelpOnly(true);
+                oInput.setFieldWidth("40%");
+                oInput.bindProperty("description", {
+                    parts: [
+                        { model: sModelName, path: oField.path },
+                        { model: "domains", path: "/" + oField.property }
+                    ],
+                    formatter: domains.formatDescription
+                });
+                oInput.attachValueHelpRequest(function () {
+                    this._openDomainValueHelp(oConfig);
+                }, this);
+            }, this);
+        },
+        _getDomainValueHelpDialog: function () {
+            if (!this._oDomainDialog) {
+                this._oDomainVHModel = new JSONModel({ items: [] });
+                this._oDomainDialog = new SelectDialog({
+                    contentWidth: "36rem",
+                    rememberSelections: false,
+                    items: {
+                        path: "domainVH>/items",
+                        template: new StandardListItem({
+                            title: "{domainVH>descriz}",
+                            description: "{domainVH>valore}"
+                        })
+                    },
+                    search: this._onSearchDomainValueHelp.bind(this),
+                    liveChange: this._onSearchDomainValueHelp.bind(this),
+                    confirm: this._onConfirmDomainValueHelp.bind(this)
+                });
+                this._oDomainDialog.setModel(this._oDomainVHModel, "domainVH");
+                this.getView().addDependent(this._oDomainDialog);
+            }
+            return this._oDomainDialog;
+        },
+        _openDomainValueHelp: function (oConfig) {
+            var oDialog = this._getDomainValueHelpDialog();
+            var aDomain = this._getDomainModel().getProperty("/" + oConfig.property) || [];
+            var aItems = [{ valore: "", descriz: "(nessun valore)" }].concat(aDomain);
+            this._oDomainVHModel.setSizeLimit(Math.max(100, aItems.length));
+            this._oDomainVHModel.setData({ items: aItems });
+            this._oDomainVHConfig = oConfig;
+            oDialog.setTitle(oConfig.title);
+            oDialog.getBinding("items").filter([]);
+            oDialog.open("");
+        },
+        _onSearchDomainValueHelp: function (oEvent) {
+            var sValue = (oEvent.getParameter("value") || "").trim();
+            var aFilters = [];
+            if (sValue) {
+                aFilters.push(new Filter({
+                    filters: [
+                        new Filter({ path: "valore", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false }),
+                        new Filter({ path: "descriz", operator: FilterOperator.Contains, value1: sValue, caseSensitive: false })
+                    ],
+                    and: false
+                }));
+            }
+            oEvent.getSource().getBinding("items").filter(aFilters);
+        },
+        _onConfirmDomainValueHelp: function (oEvent) {
+            var oSelectedItem = oEvent.getParameter("selectedItem");
+            var oConfig = this._oDomainVHConfig;
+            if (!oSelectedItem || !oConfig) {
+                return;
+            }
+            var sValue = oSelectedItem.getBindingContext("domainVH").getProperty("valore") || "";
+            this.getView().getModel(oConfig.modelName).setProperty(oConfig.path, sValue);
+            if (sValue && oConfig.input.getValueState() === "Error") {
+                oConfig.input.setValueState("None");
+                oConfig.input.setValueStateText("");
+            }
+        },
         _navToMain: function () {
             this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
         },
@@ -62,7 +255,10 @@ sap.ui.define([
                     "$expand": "toPosizioni"
                 }
             }).then(function (oData) {
-                if (!oData || String(oData.idScheda) !== sId) {
+                var fnNormId = function (v) {
+                    return String(v === null || v === undefined ? "" : v).trim().replace(/^0+(?=.)/, "");
+                };
+                if (!oData || fnNormId(oData.idScheda) !== fnNormId(sId)) {
                     throw new Error("Il servizio non ha restituito il dettaglio della scheda richiesta.");
                 }
                 return oData;
@@ -379,11 +575,7 @@ sap.ui.define([
                 oScheda.dtCompil = this._getCurrentDate();
             }
             ["supLU", "supFond", "supCop", "supScop"].forEach(function (sProperty) {
-                var sValue = this.formatter.normalizeIntegerLikeValue(oScheda[sProperty]);
-                if (sValue !== "" && !/^[0-9]+$/.test(sValue)) {
-                    throw new Error("Il backend ha restituito una superficie non intera o negativa nel campo " + sProperty + ".");
-                }
-                oScheda[sProperty] = sValue;
+                oScheda[sProperty] = this.formatter.normalizeSurfaceValue(oScheda[sProperty]);
             }, this);
             oScheda.stimaVal = this.formatter.normalizeDecimalValue(oScheda.stimaVal);
             ["numEdif", "numLivFuo", "numLivEnt", "annoValor"].forEach(function (sProperty) {

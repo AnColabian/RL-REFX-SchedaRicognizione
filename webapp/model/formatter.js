@@ -45,6 +45,25 @@ sap.ui.define([], () => {
             }
             return sValue.split(/[.,]/)[0].replace(/^0+(?=[0-9])/, "");
         },
+        normalizeSurfaceValue: function (vValue) {
+            if (vValue === null || vValue === undefined) {
+                return "";
+            }
+            var sValue = String(vValue).replace(/\s/g, "");
+            if (!sValue) {
+                return "";
+            }
+            if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(sValue)) {
+                sValue = sValue.replace(/\./g, "").replace(",", ".");
+            } else {
+                sValue = sValue.replace(",", ".");
+            }
+            var fValue = Number(sValue);
+            if (!Number.isFinite(fValue) || fValue < 0) {
+                return "";
+            }
+            return String(Math.round(fValue));
+        },
         normalizeDecimalValue: function (vValue) {
             if (vValue === null || vValue === undefined) {
                 return "";
