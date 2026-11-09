@@ -397,7 +397,7 @@ sap.ui.define([
                     throw new Error("Data non valida nel campo " + sProperty + ".");
                 }
             });
-            if (!Array.isArray(aPositions) || aPositions.length === 0) {
+            if (!Array.isArray(aPositions) || (aPositions.length === 0 && sStato === "D")) {
                 throw new Error("Inserire almeno un Oggetto Architettonico nelle Posizioni correnti.");
             }
             if (aPositions.some(function (oPosition) {
@@ -691,6 +691,12 @@ sap.ui.define([
                 this.byId(sPanelId).setExpanded(true);
                 if (!bHasOA && sPanelOAId) {
                     this.byId(sPanelOAId).setExpanded(true);
+                }
+                if (mOptions.missingFields) {
+                    mOptions.missingFields.push.apply(mOptions.missingFields, aMissing);
+                }
+                if (mOptions.allowMissingFields) {
+                    return true;
                 }
                 MessageBox.warning("Completare i seguenti dati prima del salvataggio:\n\n• " + aMissing.join("\n• "));
                 return false;

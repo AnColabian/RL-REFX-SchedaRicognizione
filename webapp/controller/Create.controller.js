@@ -549,11 +549,13 @@ sap.ui.define([
                 MessageToast.show("Gli Oggetti Architettonici selezionati sono già presenti nelle Posizioni correnti.");
                 return;
             }
-            var sCurrentUE = aCurrentPositions.length ? String(aCurrentPositions[0].uEco || "").trim() : "";
-            if (aCurrentPositions.length && aMissingObjects.some(function (oObject) {
-                return String(oObject.uEco || "").trim() !== sCurrentUE;
+            var sExpectedUE = String((aCurrentPositions.length ? aCurrentPositions[0] : aMissingObjects[0]).uEco || "").trim();
+            if (aMissingObjects.some(function (oObject) {
+                return String(oObject.uEco || "").trim() !== sExpectedUE;
             })) {
-                MessageToast.show("Impossibile associare Unità Economiche diverse da: " + sCurrentUE);
+                MessageToast.show(aCurrentPositions.length
+                    ? "Impossibile associare Unità Economiche diverse da: " + sExpectedUE
+                    : "Impossibile aggiungere Posizioni appartenenti ad UE differenti");
                 return;
             }
             var iRouteRequest = this._iCreateRouteRequest;
@@ -622,13 +624,15 @@ sap.ui.define([
         _resetCreateValidation: function () {
             BaseController.prototype._resetSchedaValidation.call(this, "panelTestata", ["inputSupCop", "inputSupScop"]);
         },
-        _validateCreateBeforeSave: function () {
+        _validateCreateBeforeSave: function (bAllowMissingFields, aMissingFields) {
             return BaseController.prototype._validateSchedaBeforeSave.call(this, {
                 panelId: "panelTestata",
                 positionsModelName: "create",
                 positionsPath: "/posizioniSelezionate",
                 panelOAId: "panelOA",
-                surfaceFieldIds: ["inputSupCop", "inputSupScop"]
+                surfaceFieldIds: ["inputSupCop", "inputSupScop"],
+                allowMissingFields: bAllowMissingFields,
+                missingFields: aMissingFields
             });
         },
         onSaveDraft: function () {
@@ -662,10 +666,11 @@ sap.ui.define([
             if (this._bSavingScheda || this._bCreateSaved) {
                 return;
             }
-            if (!this._validateCreateBeforeSave()) {
+            var aMissingFields = [];
+            var bAllowMissingFields = sStato === "B";
+            if (!this._validateCreateBeforeSave(bAllowMissingFields, aMissingFields)) {
                 return;
             }
-
             var oPayload;
             try {
                 oPayload = this._buildCreatePayload(sStato);
@@ -673,42 +678,75 @@ sap.ui.define([
                 MessageBox.warning(oError.message);
                 return;
             }
-
-            this._bSavingScheda = true;
-            var oView = this.getView();
             var iRouteRequest = this._iCreateRouteRequest;
-            oView.setBusy(true);
-
-            this._postNewScheda(oPayload).then(function (oData) {
+            var fnSave = function () {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+                    this._bSavingScheda = false;
                     return;
                 }
-                this._bCreateSaved = true;
-                var sMessage = sStato === "B"
-                    ? "Scheda salvata in stato Provvisorio."
-                    : "Scheda rilasciata in stato Definitivo.";
-                if (oData && oData.idScheda) {
-                    sMessage += "\nNumero scheda: " + oData.idScheda;
-                }
-                MessageBox.success(sMessage, {
-                    onClose: function () {
-                        if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                            this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                this._bSavingScheda = true;
+                var oView = this.getView();
+                oView.setBusy(true);
+                this._postNewScheda(oPayload).then(function (oData) {
+                    if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
+                        return;
+                    }
+                    this._bCreateSaved = true;
+                    var sMessage = sStato === "B"
+                        ? "Scheda salvata in stato Provvisorio."
+                        : "Scheda rilasciata in stato Definitivo.";
+                    if (oData && oData.idScheda) {
+                        sMessage += "\nNumero scheda: " + oData.idScheda;
+                    }
+                    MessageBox.success(sMessage, {
+                        onClose: function () {
+                            if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                                this.getOwnerComponent().getRouter().navTo("RouteMain", {}, true);
+                            }
+                        }.bind(this)
+                    });
+                }.bind(this)).catch(function (oError) {
+                    if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
+                        MessageBox.error("Salvataggio della Scheda Ricognizione non riuscito.", {
+                            details: oError && (oError.responseText || oError.message)
+                                ? oError.responseText || oError.message
+                                : String(oError)
+                        });
+                    }
+                }.bind(this)).finally(function () {
+                    this._bSavingScheda = false;
+                    oView.setBusy(false);
+                }.bind(this));
+            }.bind(this);
+            this._bSavingScheda = true;
+            if (sStato === "B") {
+                var sMissingFields = aMissingFields.length
+                    ? "• " + aMissingFields.join("\n• ")
+                    : "Nessun campo obbligatorio mancante.";
+                MessageBox.warning("Salvataggio Scheda ricognizione Provvisoria. Per rilasciare in Definitiva mancano i seguenti campi:\n" + sMissingFields + "\nProcedere?", {
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                    emphasizedAction: MessageBox.Action.YES,
+                    onClose: function (sAction) {
+                        if (sAction === MessageBox.Action.YES) {
+                            fnSave();
+                        } else {
+                            this._bSavingScheda = false;
                         }
                     }.bind(this)
                 });
-            }.bind(this)).catch(function (oError) {
-                if (this._bCreateViewVisible && this._iCreateRouteRequest === iRouteRequest) {
-                    MessageBox.error("Salvataggio della Scheda Ricognizione non riuscito.", {
-                        details: oError && (oError.responseText || oError.message)
-                            ? oError.responseText || oError.message
-                            : String(oError)
-                    });
-                }
-            }.bind(this)).finally(function () {
-                this._bSavingScheda = false;
-                oView.setBusy(false);
-            }.bind(this));
+                return;
+            }
+            MessageBox.confirm("Rilasciare Scheda Ricognizione Definitiva?", {
+                actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                emphasizedAction: MessageBox.Action.OK,
+                onClose: function (sAction) {
+                    if (sAction === MessageBox.Action.OK) {
+                        fnSave();
+                    } else {
+                        this._bSavingScheda = false;
+                    }
+                }.bind(this)
+            });
         },
 
     });
