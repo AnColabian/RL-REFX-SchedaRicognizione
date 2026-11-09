@@ -5,7 +5,8 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
     "sap/m/MessageToast",
-], (BaseController, JSONModel, Filter, FilterOperator, MessageBox, MessageToast) => {
+    "sap/ui/export/Spreadsheet"
+], (BaseController, JSONModel, Filter, FilterOperator, MessageBox, MessageToast, Spreadsheet) => {
     "use strict";
     return BaseController.extend("schedaricognizione.controller.View", {
         onInit: function () {
@@ -77,7 +78,117 @@ sap.ui.define([
             MessageToast.show("Esportazione PDF - Funzionalità da implementare");
         },
         onExportExcel: function () {
-            MessageToast.show("Esportazione Excel - Funzionalità da implementare");
+            if (this._bExportingExcel) {
+                return;
+            }
+            var oView = this.getView();
+            var oModel = oView.getModel("display");
+            if (!oModel.getProperty("/loaded")) {
+                MessageBox.warning("Selezionare e caricare una Scheda Ricognizione prima di esportare.");
+                return;
+            }
+            var oSpreadsheet;
+            this._bExportingExcel = true;
+            oView.setBusy(true);
+            return Promise.resolve().then(function () {
+                var aPositions = oModel.getProperty("/posizioni");
+                if (!Array.isArray(aPositions)) {
+                    throw new Error("Le Posizioni della scheda non sono disponibili.");
+                }
+                var aColumns = this.byId("tableViewPositions").getColumns().map(function (oColumn, iIndex) {
+                    var oInfo = oColumn.getTemplate().getBindingInfo("text");
+                    var oPart = oInfo && (oInfo.parts ? oInfo.parts[0] : oInfo);
+                    if (!oPart || oPart.model !== "display" || !oPart.path) {
+                        throw new Error("Configurazione di esportazione non valida per una colonna delle Posizioni.");
+                    }
+                    return {
+                        label: oColumn.getLabel().getText(),
+                        property: "column" + iIndex,
+                        type: "String",
+                        width: 22,
+                        sourcePath: oPart.path,
+                        formatter: oInfo.formatter
+                    };
+                });
+                var aRows = aPositions.map(function (oPosition) {
+                    var oRow = {};
+                    aColumns.forEach(function (oColumn) {
+                        var vValue = oPosition[oColumn.sourcePath];
+                        var vFormatted = oColumn.formatter ? oColumn.formatter.call(this, vValue) : vValue;
+                        oRow[oColumn.property] = vFormatted === null || vFormatted === undefined ? "" : String(vFormatted);
+                    }, this);
+                    return oRow;
+                }, this);
+                var aHeaderGroups = this._getExcelHeaderGroups();
+                if (!aColumns.length || !aHeaderGroups.length) {
+                    throw new Error("Non sono disponibili i campi da esportare.");
+                }
+                var sIdScheda = String(oModel.getProperty("/scheda/idScheda") || "").replace(/[^a-zA-Z0-9_-]/g, "_");
+                oSpreadsheet = new Spreadsheet({
+                    fileName: "Scheda_Ricognizione_" + sIdScheda + ".xlsx",
+                    workbook: {
+                        columns: aColumns.map(function (oColumn) {
+                            return {
+                                label: oColumn.label,
+                                property: oColumn.property,
+                                type: oColumn.type,
+                                width: oColumn.width
+                            };
+                        }),
+                        context: {
+                            application: "Scheda Ricognizione",
+                            title: "Scheda Ricognizione " + sIdScheda,
+                            sheetName: "Posizioni",
+                            metaSheetName: "Testata",
+                            metainfo: aHeaderGroups
+                        }
+                    },
+                    dataSource: aRows
+                });
+                return oSpreadsheet.build();
+            }.bind(this)).catch(function (oError) {
+                MessageBox.error("Impossibile esportare la Scheda Ricognizione in Excel.", {
+                    details: oError && oError.message ? oError.message : String(oError)
+                });
+            }).finally(function () {
+                if (oSpreadsheet) {
+                    oSpreadsheet.destroy();
+                }
+                this._bExportingExcel = false;
+                if (!oView.isDestroyed()) {
+                    oView.setBusy(false);
+                }
+            }.bind(this));
+        },
+        _getExcelHeaderGroups: function () {
+            return ["panelIdenti", "panelTestata"].map(function (sPanelId) {
+                var oPanel = this.byId(sPanelId);
+                var aItems = [];
+                var sLabel = "";
+                oPanel.findAggregatedObjects(true).forEach(function (oControl) {
+                    if (oControl.isA("sap.m.Label")) {
+                        sLabel = oControl.getText();
+                        return;
+                    }
+                    if (!oControl.isA("sap.m.Text")) {
+                        return;
+                    }
+                    var oField = this._getSchedaPropertyFromBinding(oControl, "text", "display");
+                    if (oField && sLabel) {
+                        aItems.push({
+                            key: sLabel,
+                            value: oControl.getText()
+                        });
+                        sLabel = "";
+                    }
+                }, this);
+                return {
+                    name: oPanel.getHeaderText(),
+                    items: aItems
+                };
+            }, this).filter(function (oGroup) {
+                return oGroup.items.length > 0;
+            });
         },
         onSchedaValueHelp: function () {
             var iRequest = this._iViewRequest;
