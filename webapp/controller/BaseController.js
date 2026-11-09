@@ -673,6 +673,14 @@ sap.ui.define([
                 aMissing.push("Superficie Coperta o Superficie Scoperta con valore maggiore di 0");
             }
             var aPositions = this.getView().getModel(sPositionsModelName).getProperty(sPositionsPath) || [];
+            var sFirstUE = aPositions.length ? String(aPositions[0] && aPositions[0].uEco || "").trim() : "";
+            var bDifferentUE = aPositions.some(function (oPosition) {
+                return String(oPosition && oPosition.uEco || "").trim() !== sFirstUE;
+            });
+            if (bDifferentUE) {
+                MessageBox.error("Impossibile salvare Ogg. Arch. di Unità Economiche differenti");
+                return false;
+            }
             var bHasOA = aPositions.some(function (oPosition) {
                 return oPosition && String(oPosition.idOggArch || "").trim() !== "";
             });

@@ -127,7 +127,8 @@ sap.ui.define([
                     filters: [
                         new Filter("idScheda", FilterOperator.Contains, sValue),
                         new Filter("stato", FilterOperator.Contains, sValue),
-                        new Filter("docVal", FilterOperator.Contains, sValue),
+                        new Filter("uEco", FilterOperator.Contains, sValue),
+                        new Filter("defUEco", FilterOperator.Contains, sValue),
                         new Filter("idBene", FilterOperator.Contains, sValue),
                         new Filter("denBene", FilterOperator.Contains, sValue),
                         new Filter("autore", FilterOperator.Contains, sValue)

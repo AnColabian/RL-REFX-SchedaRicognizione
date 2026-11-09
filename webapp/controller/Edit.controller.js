@@ -187,7 +187,8 @@ sap.ui.define([
                     filters: [
                         new Filter("idScheda", FilterOperator.Contains, sValue),
                         new Filter("stato", FilterOperator.Contains, sValue),
-                        new Filter("docVal", FilterOperator.Contains, sValue),
+                        new Filter("uEco", FilterOperator.Contains, sValue),
+                        new Filter("defUEco", FilterOperator.Contains, sValue),
                         new Filter("idBene", FilterOperator.Contains, sValue),
                         new Filter("denBene", FilterOperator.Contains, sValue),
                         new Filter("autore", FilterOperator.Contains, sValue)
@@ -514,6 +515,13 @@ sap.ui.define([
             if (aMissingObjects.length === 0) {
                 oTable.clearSelection();
                 MessageToast.show("Gli Oggetti Architettonici selezionati sono già presenti nelle Posizioni correnti.");
+                return;
+            }
+            var sCurrentUE = aCurrentPositions.length ? String(aCurrentPositions[0].uEco || "").trim() : "";
+            if (aCurrentPositions.length && aMissingObjects.some(function (oObject) {
+                return String(oObject.uEco || "").trim() !== sCurrentUE;
+            })) {
+                MessageToast.show("Impossibile associare Unità Economiche diverse da: " + sCurrentUE);
                 return;
             }
             var sIdScheda = oEditModel.getProperty("/scheda/idScheda");

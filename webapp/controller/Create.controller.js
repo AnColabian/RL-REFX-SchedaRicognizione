@@ -175,7 +175,8 @@ sap.ui.define([
                         new Filter("idScheda", FilterOperator.Contains, sValue),
                         new Filter("idSchMdl", FilterOperator.Contains, sValue),
                         new Filter("stato", FilterOperator.Contains, sValue),
-                        new Filter("docVal", FilterOperator.Contains, sValue),
+                        new Filter("uEco", FilterOperator.Contains, sValue),
+                        new Filter("defUEco", FilterOperator.Contains, sValue),
                         new Filter("idBene", FilterOperator.Contains, sValue),
                         new Filter("denBene", FilterOperator.Contains, sValue),
                         new Filter("autore", FilterOperator.Contains, sValue)
@@ -509,38 +510,31 @@ sap.ui.define([
         onAddSelectedPositions: function () {
             var oTable = this.byId("tableOA");
             var oPositionsTable = this.byId("tableOASelected");
-
             if (oTable.getBusy() || this._bSavingScheda || this._bCreateSaved) {
                 return;
             }
-
             var aSelectedIndices = oTable.getSelectedIndices();
             if (aSelectedIndices.length === 0) {
                 MessageToast.show("Selezionare almeno un Oggetto Architettonico da aggiungere.");
                 return;
             }
-
             var oCreateModel = this.getView().getModel("create");
             var aCurrentPositions = oCreateModel.getProperty("/posizioniSelezionate") || [];
             var oKnownIds = new Set(aCurrentPositions.map(function (oPosition) {
                 return String(oPosition.idOggArch || "").trim();
             }));
             var aMissingObjects = [];
-
             try {
                 aSelectedIndices.forEach(function (iIndex) {
                     var oContext = oTable.getContextByIndex(iIndex);
                     if (!oContext) {
                         throw new Error("Una delle righe selezionate non è disponibile. Ripetere la selezione.");
                     }
-
                     var oObject = oContext.getObject();
                     var sIdOA = String(oObject.idOggArch || "").trim();
-
                     if (!sIdOA) {
                         throw new Error("Una delle righe selezionate non contiene un ID OA valido.");
                     }
-
                     if (!oKnownIds.has(sIdOA)) {
                         oKnownIds.add(sIdOA);
                         aMissingObjects.push(Object.assign({}, oObject));
@@ -550,29 +544,31 @@ sap.ui.define([
                 MessageBox.warning(oError.message);
                 return;
             }
-
             if (aMissingObjects.length === 0) {
                 oTable.clearSelection();
                 MessageToast.show("Gli Oggetti Architettonici selezionati sono già presenti nelle Posizioni correnti.");
                 return;
             }
-
+            var sCurrentUE = aCurrentPositions.length ? String(aCurrentPositions[0].uEco || "").trim() : "";
+            if (aCurrentPositions.length && aMissingObjects.some(function (oObject) {
+                return String(oObject.uEco || "").trim() !== sCurrentUE;
+            })) {
+                MessageToast.show("Impossibile associare Unità Economiche diverse da: " + sCurrentUE);
+                return;
+            }
             var iRouteRequest = this._iCreateRouteRequest;
             oTable.setBusyIndicatorDelay(0);
             oTable.setBusy(true);
             oPositionsTable.setBusyIndicatorDelay(0);
             oPositionsTable.setBusy(true);
-
             return Promise.all(aMissingObjects.map(function (oOA) {
                 return this._readPosizioneDetail(oOA);
             }, this)).then(function (aDetails) {
                 if (!this._bCreateViewVisible || this._iCreateRouteRequest !== iRouteRequest) {
                     return;
                 }
-
                 var aPositions = this._mapTemplatePositions(aDetails);
                 var iAdded = this._mergeSelectedPositions(aPositions);
-
                 oTable.clearSelection();
                 MessageToast.show("Posizioni aggiunte: " + iAdded + ".");
             }.bind(this)).catch(function (oError) {

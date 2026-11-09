@@ -14,7 +14,12 @@
             </Column>
             <Column>
                 <header>
-                    <Text text="Doc. Valorizzazione"/>
+                    <Text text="Unità Economica"/>
+                </header>
+            </Column>
+            <Column>
+                <header>
+                    <Text text="Descrizione UE"/>
                 </header>
             </Column>
             <Column>
@@ -43,7 +48,8 @@
                 <cells>
                     <Text text="{display>idScheda}"/>
                     <Text text="{path: 'display>stato', formatter: '.formatter.formatSchedaState'}"/>
-                    <Text text="{path: 'display>docVal', formatter: '.formatter.formatDisplayValue'}"/>
+                    <Text text="{path: 'display>uEco', formatter: '.formatter.formatDisplayValue'}"/>
+                    <Text text="{path: 'display>defUEco', formatter: '.formatter.formatDisplayValue'}"/>
                     <Text text="{path: 'display>idBene', formatter: '.formatter.formatDisplayValue'}"/>
                     <Text text="{path: 'display>denBene', formatter: '.formatter.formatDisplayValue'}"/>
                     <Text text="{display>autore}"/>
